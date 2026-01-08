@@ -126,7 +126,7 @@ python -m scripts.generate_scoreboard --task mnist
 
 ## Contact
 
-[Your name/email here]
+[Gabriele Balsamo/gabriele.balsamo30@gmail.com]
 
 ---
 
