@@ -1,0 +1,38 @@
+run:
+  task: "xor"
+  model: "sbm"
+  seed: 42
+
+hardware:
+  device: "cpu"
+  precision: "fp32"
+
+sbm:
+  experts_num: 8
+  experts_top_k: 2
+  tau_start: 2.0
+  tau_end: 0.5
+  tau_schedule: "linear"
+  lambda_entropy: 0.01
+
+data:
+  batch_size: 64
+  num_workers: 0
+
+train:
+  epochs: 30
+  optimizer: "adamw"
+  lr: 0.01
+  weight_decay: 0.0
+
+profiling:
+  enabled: true
+  warmup_steps: 20
+  timed_steps: 50
+  cuda_events: false
+  cuda_events: true
+
+logging:
+  log_every_steps: 20
+  save_checkpoints: false
+  save_model: false

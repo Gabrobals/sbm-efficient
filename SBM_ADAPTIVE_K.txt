@@ -1,0 +1,365 @@
+Di seguito trovi un file unico, pronto da copiare in docs/SBM_ADAPTIVE_K.md. Include teoria, specifica tecnica, codice (skeleton) e una sezione finale “Istruzioni per Opus” per implementare senza ambiguità.
+
+# SBM-Adaptive-K (SBM-Efficient) — Theory + Implementation Spec
+
+## 0. Scopo
+SBM-Adaptive-K estende SBM-Efficient introducendo **controllo dinamico del compute**: invece di usare un Top-K fisso, il modello sceglie **K(x)** in funzione dell’incertezza del routing.
+
+Obiettivo: ottenere un tradeoff migliore tra **Accuracy** e **Compute/Latency** rispetto a:
+- Random routing (K fisso)
+- Static Top-K (K fisso)
+- SBM learnable con K fisso
+
+SBM-Adaptive-K deve dimostrare riduzione di FLOPs/latency **reali eseguiti** mantenendo accuracy comparabile.
+
+---
+
+## 1. Definizioni
+
+### 1.1 Experts bank
+Abbiamo N experts. Per ogni input x, il router produce logits z(x) ∈ ℝ^N e probabilità:
+p_i(x) = softmax(z(x) / tau_router)
+
+### 1.2 Entropia del routing
+H(x) = - ∑_i p_i(x) log(p_i(x) + ε)
+
+Proprietà:
+- H(x) ~ 0 quando p è “one-hot” (router molto certo).
+- H(x) massima quando p è uniforme (router incerto).
+
+### 1.3 K dinamico
+Definiamo una policy K(x) che dipende da H(x) (o da una proxy equivalente: max-prob, margin, ecc.).
+
+Tre famiglie, in ordine di implementazione consigliato:
+1) Threshold (hard, semplice, robusta)
+2) Budgeted-K (constraint su compute medio)
+3) Differentiable expectation (più complessa, opzionale)
+
+---
+
+## 2. Politiche di Adaptive-K
+
+### 2.1 Threshold policy (v1 — consigliata)
+Scegli K in base a soglie su H:
+
+K(x) =
+- K_min se H(x) < h1
+- K_mid se h1 ≤ H(x) < h2
+- K_max se H(x) ≥ h2
+
+Esempio pratico:
+- K_min = 1
+- K_mid = 2
+- K_max = 4
+
+Note:
+- K_max ≤ N
+- Le soglie h1, h2 sono iperparametri (inizialmente fissi)
+
+Vantaggio:
+- Semplice, deterministica, facile da validare.
+- FLOPs scendono davvero perché per molti x userai K=1 o K=2.
+
+### 2.2 Budgeted-K policy (v2 — raccomandata dopo v1)
+Obiettivo: rispettare un budget di compute medio:
+E[K(x)] ≤ K_budget
+
+Meccanismo:
+- usa la threshold policy, ma aggiusta dinamicamente h1/h2 per rispettare K_budget su una finestra mobile.
+
+Vantaggio:
+- controlli direttamente il costo.
+- stabilizza l’uso del compute nel tempo.
+
+### 2.3 Differentiable expected compute (v3 — opzionale)
+Invece di scegliere K hard, definisci un gate continuo:
+g_i(x) ∈ [0,1]
+e fai mixture pesata (ma attenzione anti-pattern: può diventare full compute mascherato).
+
+Questa v3 è opzionale e va implementata solo se la v1/v2 mostrano limite.
+
+---
+
+## 3. Sparse execution (regola anti-pattern)
+È vietato calcolare tutti gli experts e poi mascherare.
+
+Con Adaptive-K:
+- devi calcolare **solo** gli experts selezionati (Top-K variabile per sample/batch).
+
+Se il tuo codice calcola outputs di tutti gli experts, la metrica FLOPs/latency è invalida e la run va marcata INVALID.
+
+---
+
+## 4. Metriche e logging (estensione schema)
+
+Aggiungere ai metrics aggregati e per-run:
+
+### 4.1 Metriche nuove (obbligatorie per Adaptive-K)
+- final.k_mean : float
+- final.k_std : float
+- final.k_histogram : dict (chiavi: K possibili, valori: conteggi o percentuali)
+- final.flops_per_sample_mean : float (se disponibile)
+- final.latency_per_batch_ms : float (se disponibile)
+
+### 4.2 Coerenza attesa
+- active_modules_mean ≈ k_mean
+- flops_executed deve correlare con k_mean (se k scende, flops scendono)
+- se K è spesso 1, latency dovrebbe scendere (anche se non linearmente)
+
+---
+
+## 5. Criteri di successo (Acceptance Criteria)
+
+### 5.1 Accuracy/Compute
+Per MNIST (iniziale):
+- Accuracy_mean(Adaptive-K) ≥ Accuracy_mean(static_topk_k2) − 0.003 (−0.3%)
+- flops_mean(Adaptive-K) ≤ flops_mean(static_topk_k2) * 0.75 (≥ 25% riduzione)  [target minimo]
+- latency_mean(Adaptive-K) < latency_mean(static_topk_k2)  [desiderato; non sempre garantito su CPU]
+
+### 5.2 Controllo compute
+- k_mean deve essere < 2.0 se K_min=1, K_mid=2, K_max=4 e le soglie sono sensate.
+- k_histogram non deve collassare sempre su K_max (altrimenti non stai riducendo compute).
+
+### 5.3 Robustezza statistica
+- minimo 5 seed
+- riportare mean±std
+- postflight deve passare per tutte le run
+
+---
+
+## 6. Implementazione — Design & Interfaces
+
+### 6.1 Nuovo modulo: AdaptiveKPolicy
+File: src/routing/adaptive_k.py
+
+Interfaccia consigliata:
+- compute per-sample entropy H
+- produce per-sample K
+- produce per-sample indices Top-K
+
+Pseudo-signature:
+
+```python
+from dataclasses import dataclass
+import torch
+
+@dataclass
+class AdaptiveKConfig:
+    k_values: list[int]          # es: [1,2,4]
+    h_thresholds: list[float]    # es: [0.5, 1.2] (len = len(k_values)-1)
+    eps: float = 1e-9
+
+class AdaptiveKPolicy:
+    def __init__(self, cfg: AdaptiveKConfig):
+        self.cfg = cfg
+
+    def entropy(self, p: torch.Tensor) -> torch.Tensor:
+        # p: [B, N]
+        eps = self.cfg.eps
+        return -(p * (p + eps).log()).sum(dim=-1)  # [B]
+
+    def k_from_entropy(self, H: torch.Tensor) -> torch.Tensor:
+        # H: [B] -> K: [B] (int64)
+        # threshold policy v1
+        k_vals = self.cfg.k_values
+        thr = self.cfg.h_thresholds
+        # Example for 3 k_values: [1,2,4], thresholds [h1,h2]
+        K = torch.full_like(H, fill_value=k_vals[0], dtype=torch.long)
+        if len(k_vals) >= 2:
+            K = torch.where(H >= thr[0], torch.tensor(k_vals[1], device=H.device), K)
+        if len(k_vals) >= 3:
+            K = torch.where(H >= thr[1], torch.tensor(k_vals[2], device=H.device), K)
+        return K
+
+    def topk_indices(self, logits: torch.Tensor, K: torch.Tensor) -> list[torch.Tensor]:
+        # logits: [B, N], K: [B]
+        # returns list of index tensors per sample to support variable-K execution
+        idx_list = []
+        for b in range(logits.size(0)):
+            kb = int(K[b].item())
+            idx = torch.topk(logits[b], k=kb, dim=-1).indices
+            idx_list.append(idx)
+        return idx_list
+Nota: v1 può essere implementata per-sample. In v2 si può ottimizzare per-group di K (bucket per K uguale).
+
+7. Modifiche a SBM Model
+7.1 Routing
+
+File: src/models/sbm_model.py
+
+Aggiungere:
+
+calcolo p(x)
+
+calcolo H(x)
+
+calcolo K(x)
+
+selezione indices per-sample
+
+esecuzione solo su experts selezionati
+
+Pseudo-flow:
+
+logits = router(x)                 # [B, N]
+p = softmax(logits / tau_router)   # [B, N]
+H = policy.entropy(p)              # [B]
+K = policy.k_from_entropy(H)       # [B]
+idx_list = policy.topk_indices(logits, K)  # list of [K_b]
+y = experts.execute_sparse(x, idx_list)    # sparse per-sample
+
+7.2 Execute sparse per-sample
+
+File: src/models/experts.py
+
+Implementare una funzione che:
+
+itera sui sample in batch
+
+esegue solo gli experts selezionati
+
+aggrega outputs (somma pesata o media)
+
+evita full compute
+
+Pseudo:
+def execute_sparse(self, x, idx_list, weights_list=None):
+    # x: [B,...]
+    outs = []
+    for b, idx in enumerate(idx_list):
+        xb = x[b:b+1]
+        yb = 0
+        for j, e_idx in enumerate(idx.tolist()):
+            out_e = self.experts[e_idx](xb)
+            w = 1.0 if weights_list is None else weights_list[b][j]
+            yb = yb + w * out_e
+        outs.append(yb)
+    return torch.cat(outs, dim=0)
+Nota: è OK essere “non ottimizzato” nella v1. Prima serve correttezza e misure.
+
+8. Training loop
+
+File: src/training/sbm_loops.py (o sbm_adaptive_loops.py)
+
+Aggiornare logging:
+
+loggare k_mean per epoch
+
+loggare histogram K per epoch (opzionale)
+
+mantenere decoherence schedule τ (ASCII-only, no unicode)
+
+9. Config YAML (nuovi file)
+
+Creare:
+
+configs/sbm_adaptive_k_mnist.yaml
+
+configs/sbm_adaptive_k_xor.yaml
+
+Esempio (MNIST):
+
+run:
+  task: mnist
+  model: sbm_adaptive_k
+  seed: 42
+
+data:
+  batch_size: 128
+  num_workers: 0
+
+train:
+  epochs: 5
+  lr: 0.001
+
+profiling:
+  enabled: true
+  warmup_steps: 5
+  timed_steps: 20
+
+sbm:
+  experts_num: 16
+  experts_hidden: 128
+  router_tau_start: 2.0
+  router_tau_end: 0.5
+  entropy_lambda: 0.01
+
+adaptive_k:
+  k_values: [1, 2, 4]
+  h_thresholds: [0.6, 1.2]
+Nota: iniziare con thresholds “ragionevoli”, poi fare grid search.
+
+10. Experiments (obbligatori)
+
+Aggiungere al multiseed script:
+
+sbm_adaptive_k_xor
+
+sbm_adaptive_k_mnist
+
+Confrontare sempre contro:
+
+full (K=N)
+
+static_topk (K fisso = 2)
+
+sbm (K fisso = 2)
+
+random (K fisso = 2)
+
+11. Postflight checks (estensione)
+
+Aggiornare validate_metrics.py per includere:
+
+k_mean, k_std, k_histogram quando model == sbm_adaptive_k
+
+coerenza: abs(active_modules_mean - k_mean) <= tolleranza (es 0.1)
+
+coerenza: flops_executed deve essere minore del K=2 se k_mean < 2
+
+12. Istruzioni per Opus (Implementation Order, vincolante)
+
+Aggiungi nuovo model type: sbm_adaptive_k nel runner/factory (src/experiments/run.py).
+
+Implementa src/routing/adaptive_k.py (threshold policy v1).
+
+Modifica experts.execute_sparse per supportare idx_list per-sample.
+
+Integra in sbm_model.py routing → entropy → K → sparse execute.
+
+Aggiorna training loop per loggare k_mean/k_histogram (ASCII only).
+
+Estendi validate_metrics.py e schema metrics per Adaptive-K.
+
+Crea configs YAML new.
+
+Aggiungi al scripts/run_multiseed la suite adaptive-k e lancia 5 seed.
+
+Produce aggregated_results.json con nuove metriche.
+
+Non procedere alla policy v2 (budget) finché v1 non passa postflight e non mostra flops_mean < baseline K=2.
+
+Deliverable richiesti:
+
+runs validi (postflight PASS)
+
+tabella con Acc, FLOPs, latency, active_modules_mean, k_mean, entropy
+
+confronto esplicito vs static_topk_k2
+
+13. Decisione su “quantum-inspired”
+
+Non implementare Bloch/Cayley/Observable finché:
+
+Adaptive-K non dimostra vantaggio compute misurabile.
+La rappresentazione viene dopo il controllo compute.
+
+## Come procediamo adesso (scelta pratica)
+Dato che vuoi “fare tutto”, io ti consiglio questo ordine immediato:
+
+1) Incolli il file sopra in `docs/SBM_ADAPTIVE_K.md`
+2) Lo usi come “source of truth”
+3) Dai a Opus le “Istruzioni per Opus” (Sezione 12) e fai implementare **solo la v1 (threshold policy)**
+
+Se vuoi, nel prossimo messaggio posso anche scriverti (sempre in `.md`) un file `SBM_ADAPTIVE_K_EXPERIMENTS.md` con una griglia iperparametri minima (h1/h2, K_values, λ, τ) e criteri di stop, così Opus non improvvisa.
+::contentReference[oaicite:0]{index=0}

@@ -1,0 +1,62 @@
+[
+  {
+    "run_id": "2026-01-04_mnist_baseline_seed42_unknown",
+    "task": "mnist",
+    "model": "baseline",
+    "accuracy": 0.9913,
+    "entropy": 0.0,
+    "params": 151306,
+    "latency": 0.5540999991353601,
+    "flops": 29617664
+  },
+  {
+    "run_id": "2026-01-05_mnist_sbm_seed42_unknown",
+    "task": "mnist",
+    "model": "sbm",
+    "accuracy": 0.9875,
+    "entropy": 1.5648653461963316,
+    "params": 85978,
+    "latency": 1.347199984593317,
+    "flops": 2073924
+  },
+  {
+    "run_id": "2026-01-05_mnist_random_routing_seed42_unknown",
+    "task": "mnist",
+    "model": "random_routing",
+    "accuracy": 0.9788,
+    "entropy": 2.772588722239782,
+    "params": 80778,
+    "latency": 1.03270000545308,
+    "flops": 2073924
+  },
+  {
+    "run_id": "2026-01-04_xor_baseline_seed42_unknown",
+    "task": "xor",
+    "model": "baseline",
+    "accuracy": 1.0,
+    "entropy": 0.0,
+    "params": 4482,
+    "latency": 0.04810001701116562,
+    "flops": 8704
+  },
+  {
+    "run_id": "2026-01-05_xor_sbm_seed42_unknown",
+    "task": "xor",
+    "model": "sbm",
+    "accuracy": 0.985,
+    "entropy": 0.5046819746494293,
+    "params": 38538,
+    "latency": 0.513100007083267,
+    "flops": 819200
+  },
+  {
+    "run_id": "2026-01-05_xor_random_routing_seed42_unknown",
+    "task": "xor",
+    "model": "random_routing",
+    "accuracy": 0.95,
+    "entropy": 2.0794415416798357,
+    "params": 33858,
+    "latency": 0.6869000208098441,
+    "flops": 819200
+  }
+]

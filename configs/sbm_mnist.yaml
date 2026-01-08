@@ -1,0 +1,38 @@
+run:
+  task: "mnist"
+  model: "sbm"
+  seed: 42
+
+hardware:
+  device: "cpu"
+  precision: "fp32"
+
+sbm:
+  experts_num: 16
+  experts_top_k: 2
+  tau_start: 2.0
+  tau_end: 0.5
+  tau_schedule: "linear"
+  lambda_entropy: 0.01
+
+data:
+  batch_size: 128
+  num_workers: 0
+
+train:
+  epochs: 10
+  optimizer: "adamw"
+  lr: 0.001
+  weight_decay: 0.0001
+
+profiling:
+  enabled: true
+  warmup_steps: 20
+  timed_steps: 50
+  cuda_events: false
+  cuda_events: true
+
+logging:
+  log_every_steps: 50
+  save_checkpoints: false
+  save_model: false

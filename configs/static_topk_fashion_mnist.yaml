@@ -1,0 +1,49 @@
+# Static Top-K Baseline - MNIST with Input Robustness (B2)
+# Routing variant: always selects same K experts
+# Used to verify that dynamic routing provides benefit
+
+run:
+  task: "fashion_mnist"
+  model: "static_topk"
+  seed: 42
+
+hardware:
+  device: "cpu"  # Change to "cuda" if GPU available
+
+sbm:
+  experts_num: 16      # N = number of experts
+  experts_top_k: 2     # K = experts selected (fixed at init)
+  tau_start: 1.0       # Ignored for static routing
+  tau_end: 1.0         # Ignored for static routing
+  tau_schedule: "constant"
+  lambda_entropy: 0.0  # No entropy regularization
+
+data:
+  batch_size: 128
+  num_workers: 0
+
+train:
+  epochs: 10
+  optimizer: "adamw"
+  lr: 0.001
+  weight_decay: 0.0001
+
+profiling:
+  enabled: true
+  warmup_steps: 20
+  timed_steps: 50
+  cuda_events: false  # Set true if using CUDA
+
+evaluation:
+  noise_sigmas: [0.05, 0.1, 0.2, 0.5, 1.0]  # legacy key kept for compatibility
+  noise_eval:
+    enabled: true
+    sigmas: [0.05, 0.1, 0.2, 0.5, 1.0]
+
+# B2: Input Robustness
+robustness_input:
+  enabled: true
+  gaussian_sigmas: [0.0, 0.1, 0.2, 0.3]
+  salt_pepper_probs: [0.0, 0.05, 0.1]
+  occlusion_ratios: [0.0, 0.15, 0.3]
+  inversion: true

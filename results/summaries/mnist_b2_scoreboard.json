@@ -1,0 +1,95 @@
+{
+  "task": "mnist",
+  "generated_at": "2026-01-08T14:29:08.180023+00:00",
+  "baseline_model": "static_topk",
+  "candidate_model": "sbm_adaptive_k",
+  "headline": {
+    "compute_gain_flops_pct": 17.0,
+    "compute_gain_kmean_pct": 17.0,
+    "robustness_wins_count": 5,
+    "robustness_losses_count": 1,
+    "robustness_ties_count": 5,
+    "baseline_final_accuracy": 0.9796,
+    "candidate_final_accuracy": 0.9799,
+    "accuracy_delta_pct": 0.02
+  },
+  "perturbation_details": [
+    {
+      "perturbation": "gaussian:0.0",
+      "baseline_acc": 0.9796,
+      "candidate_acc": 0.9799,
+      "diff_pct": 0.02,
+      "winner": "tie"
+    },
+    {
+      "perturbation": "gaussian:0.1",
+      "baseline_acc": 0.7503,
+      "candidate_acc": 0.7767,
+      "diff_pct": 2.65,
+      "winner": "candidate"
+    },
+    {
+      "perturbation": "gaussian:0.2",
+      "baseline_acc": 0.741,
+      "candidate_acc": 0.7674,
+      "diff_pct": 2.64,
+      "winner": "candidate"
+    },
+    {
+      "perturbation": "gaussian:0.3",
+      "baseline_acc": 0.6813,
+      "candidate_acc": 0.7163,
+      "diff_pct": 3.49,
+      "winner": "candidate"
+    },
+    {
+      "perturbation": "inversion:1.0",
+      "baseline_acc": 0.143,
+      "candidate_acc": 0.1402,
+      "diff_pct": -0.28,
+      "winner": "tie"
+    },
+    {
+      "perturbation": "occlusion:0.0",
+      "baseline_acc": 0.9796,
+      "candidate_acc": 0.9799,
+      "diff_pct": 0.02,
+      "winner": "tie"
+    },
+    {
+      "perturbation": "occlusion:0.15",
+      "baseline_acc": 0.7971,
+      "candidate_acc": 0.7918,
+      "diff_pct": -0.53,
+      "winner": "baseline"
+    },
+    {
+      "perturbation": "occlusion:0.3",
+      "baseline_acc": 0.498,
+      "candidate_acc": 0.5047,
+      "diff_pct": 0.68,
+      "winner": "candidate"
+    },
+    {
+      "perturbation": "salt_pepper:0.0",
+      "baseline_acc": 0.9796,
+      "candidate_acc": 0.9799,
+      "diff_pct": 0.02,
+      "winner": "tie"
+    },
+    {
+      "perturbation": "salt_pepper:0.05",
+      "baseline_acc": 0.9651,
+      "candidate_acc": 0.9665,
+      "diff_pct": 0.14,
+      "winner": "tie"
+    },
+    {
+      "perturbation": "salt_pepper:0.1",
+      "baseline_acc": 0.9124,
+      "candidate_acc": 0.9179,
+      "diff_pct": 0.55,
+      "winner": "candidate"
+    }
+  ]
+}

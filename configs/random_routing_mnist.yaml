@@ -1,0 +1,35 @@
+# Random Routing Baseline - MNIST
+# Routing variant: selects K random experts per sample
+# Used to verify that learnable routing provides actual benefit
+
+run:
+  task: "mnist"
+  model: "random_routing"
+  seed: 42
+
+hardware:
+  device: "cpu"  # Change to "cuda" if GPU available
+
+sbm:
+  experts_num: 16      # N = number of experts
+  experts_top_k: 2     # K = experts selected per sample
+  tau_start: 1.0       # Ignored for random routing
+  tau_end: 1.0         # Ignored for random routing
+  tau_schedule: "constant"
+  lambda_entropy: 0.0  # No entropy regularization
+
+data:
+  batch_size: 128
+  num_workers: 0
+
+train:
+  epochs: 10
+  optimizer: "adamw"
+  lr: 0.001
+  weight_decay: 0.0001
+
+profiling:
+  enabled: true
+  warmup_steps: 20
+  timed_steps: 50
+  cuda_events: false  # Set true if using CUDA

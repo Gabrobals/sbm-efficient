@@ -1,0 +1,26 @@
+data:
+  batch_size: 64
+  num_workers: 0
+hardware:
+  device: cpu
+profiling:
+  cuda_events: false
+  enabled: true
+  timed_steps: 50
+  warmup_steps: 20
+run:
+  model: static_topk
+  seed: 43
+  task: xor
+sbm:
+  experts_num: 8
+  experts_top_k: 2
+  lambda_entropy: 0.0
+  tau_end: 1.0
+  tau_schedule: constant
+  tau_start: 1.0
+train:
+  epochs: 30
+  lr: 0.01
+  optimizer: adamw
+  weight_decay: 0.0

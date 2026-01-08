@@ -1,0 +1,58 @@
+# SBM Adaptive-K - MNIST with Input Robustness (B2)
+# Dynamic expert routing with entropy-driven K selection
+
+run:
+  task: "fashion_mnist"
+  model: "sbm_adaptive_k"
+  seed: 42
+
+hardware:
+  device: "cpu"
+  precision: "fp32"
+
+sbm:
+  experts_num: 16
+  experts_top_k: 4  # Max K used to size router; actual K is dynamic per sample
+  tau_start: 2.0
+  tau_end: 0.5
+  tau_schedule: "linear"
+  lambda_entropy: 0.01
+
+adaptive_k:
+  k_values: [1, 2, 4]
+  h_thresholds: [0.6, 1.2]
+
+data:
+  batch_size: 128
+  num_workers: 0
+
+train:
+  epochs: 10
+  optimizer: "adamw"
+  lr: 0.001
+  weight_decay: 0.0001
+
+profiling:
+  enabled: true
+  warmup_steps: 20
+  timed_steps: 50
+  cuda_events: false
+
+logging:
+  log_every_steps: 50
+  save_checkpoints: false
+  save_model: false
+
+evaluation:
+  noise_sigmas: [0.05, 0.1, 0.2, 0.5, 1.0]  # legacy key kept for compatibility
+  noise_eval:
+    enabled: true
+    sigmas: [0.05, 0.1, 0.2, 0.5, 1.0]
+
+# B2: Input Robustness
+robustness_input:
+  enabled: true
+  gaussian_sigmas: [0.0, 0.1, 0.2, 0.3]
+  salt_pepper_probs: [0.0, 0.05, 0.1]
+  occlusion_ratios: [0.0, 0.15, 0.3]
+  inversion: true
