@@ -260,8 +260,31 @@ results/summaries/<task>_comparison.json
   "efficiency_gain": 4.5,
   "accuracy_retention": 0.99
 }
-```
-
 ---
+
+## Phase 2 — Adaptive-K Extensions (Not Implemented)
+
+Questa sezione definisce estensioni concettuali pianificate.  
+Non sono implementate in codice e **non fanno parte dei risultati Phase 1**.
+
+Servono a:
+- fissare direzioni di ricerca future,
+- evitare scope creep,
+- rendere esplicito cosa è core vs esplorativo.
+
+### C1 — Risk-aware Adaptive-K
+- Idea: aumentare K quando cresce l’incertezza (entropia routing o incertezza logits).
+- Ipotesi: migliore robustezza sotto input degradati a FLOPs simili.
+- Stato: **non implementato**.
+
+### C2 — Budget-controlled Adaptive-K
+- Idea: imporre un target su k_mean o FLOPs_mean tramite controllo duale.
+- Ipotesi: frontiera Pareto accuracy ↔ compute controllabile.
+- Stato: **non implementato**.
+
+### C3 — Curriculum-based Adaptive-K
+- Idea: esplorazione iniziale (K alto) → sfruttamento finale (K basso).
+- Ipotesi: riduzione varianza tra seed e maggiore stabilità.
+- Stato: **non implementato**.
 
 *Experimental Protocol – SBM-Efficient*
