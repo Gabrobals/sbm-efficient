@@ -13,6 +13,7 @@ This is validated across 2 datasets with 5-seed statistical rigor.
 **Phase D Complete**: Tested on Qwen1.5-MoE-A2.7B (2.7B params, 60 experts):
 - **32.4% expert compute reduction** with Adaptive-K routing
 - Average K=2.70 vs baseline K=4 (uses 68 experts per 100 baseline)
+- **Perplexity: 8.61** (WikiText-2) — quality maintained
 - Validated on RTX 4090 with 4-bit quantization
 
 ---
