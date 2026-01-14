@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --vs-black: #0d0d0d;
+  --vs-bg: #181818;
+  --vs-surface: #1f1f1f;
+  --vs-border: #2d2d2d;
+  --vs-hover: #2a2a2a;
+  --vs-text: #d4d4d4;
+  --vs-muted: #6e7681;
+  --vs-blue: #3794ff;
+  --vs-green: #4ec9b0;
+  --vs-yellow: #dcdcaa;
+  --vs-orange: #ce9178;
+  --vs-purple: #c586c0;
+  --vs-red: #f14c4c;
+  --vs-cyan: #9cdcfe;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--vs-black);
+  color: var(--vs-text);
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* VS Code syntax highlighting classes */
+.code-comment {
+  color: #6a9955;
+}
+
+.code-keyword {
+  color: #c586c0;
+}
+
+.code-function {
+  color: #dcdcaa;
+}
+
+.code-string {
+  color: #ce9178;
+}
+
+.code-number {
+  color: #b5cea8;
+}
+
+.code-type {
+  color: #4ec9b0;
+}
+
+.code-variable {
+  color: #9cdcfe;
+}
+
+.code-operator {
+  color: #d4d4d4;
+}
+
+/* Glow effects */
+.glow-blue {
+  box-shadow: 0 0 20px rgba(55, 148, 255, 0.3), 0 0 40px rgba(55, 148, 255, 0.1);
+}
+
+.glow-green {
+  box-shadow: 0 0 20px rgba(78, 201, 176, 0.3), 0 0 40px rgba(78, 201, 176, 0.1);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(197, 134, 192, 0.3), 0 0 40px rgba(197, 134, 192, 0.1);
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-vs-blue text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300;
+  @apply hover:bg-opacity-90 hover:shadow-lg hover:shadow-vs-blue/30;
+}
+
+.btn-secondary {
+  @apply border border-vs-border text-vs-text px-6 py-3 rounded-lg font-semibold transition-all duration-300;
+  @apply hover:border-vs-blue hover:text-vs-blue;
+}
+
+/* Card styles */
+.card {
+  @apply bg-vs-surface border border-vs-border rounded-lg p-6 transition-all duration-300;
+  @apply hover:border-vs-blue/50 hover:shadow-lg hover:shadow-vs-blue/10;
+}
+
+.card-green:hover {
+  @apply border-vs-green/50 shadow-vs-green/10;
+}
+
+.card-purple:hover {
+  @apply border-vs-purple/50 shadow-vs-purple/10;
+}
+
+/* Code block */
+.code-block {
+  @apply bg-vs-bg border border-vs-border rounded-lg font-mono text-sm p-4;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--vs-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vs-border);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vs-muted);
+}
+
+/* Selection */
+::selection {
+  background-color: rgba(55, 148, 255, 0.3);
+}
+
+/* Stats number styling */
+.stat-number {
+  @apply text-5xl font-bold;
+  background: linear-gradient(135deg, var(--vs-blue), var(--vs-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-number-green {
+  background: linear-gradient(135deg, var(--vs-green), var(--vs-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-number-purple {
+  background: linear-gradient(135deg, var(--vs-purple), var(--vs-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

@@ -1,65 +1,60 @@
 # SBM-Efficient: Quantum-Inspired Sparse Routing
 
-Quantum-inspired ML research using sparse expert routing with decoherence-based training. **Not quantum computing** - uses quantum mechanics math structures on classical PyTorch.
-
-> **Guardrail**: SBM uses superposition as a compute-selection primitive, not as a representation of quantum states. Theory lives in `docs/`, not here.
+Sparse expert routing with decoherence-based training on classical PyTorch. Uses quantum mechanics math (superposition → measurement → collapse) as compute-selection primitives, NOT quantum computing.
 
 ## Quick Commands
 
 ```bash
-# Validate config before running (ALWAYS do this first)
+# 1. Validate config (ALWAYS first)
 python -m src.common.validate_config configs/sbm_mnist.yaml
 
-# Run pre-flight checks (git status, PyTorch, device)
+# 2. Pre-flight checks (git status, device, imports)
 python -m src.experiments.preflight configs/sbm_mnist.yaml
 
-# Run single experiment
+# 3. Single experiment run
 python -m src.experiments.run --config configs/sbm_mnist.yaml
 
-# Run multi-seed validation (5 seeds × all variants) - REQUIRED for results
+# 4. Multi-seed (REQUIRED for publishable results)
 python -m scripts.run_multiseed --config configs/sbm_mnist.yaml --seeds 42,43,44,45,46
 
-# Compare and aggregate results
+# 5. Aggregate and compare
 python scripts/compare_results.py
 ```
 
-## Architecture Flow
+## Architecture
 
 ```
-Input → FeatureExtractor → Router → ExpertPool (sparse) → Classifier
+Input → FeatureExtractor → Router → ExpertPool(sparse) → Classifier → Logits
 ```
 
-**Key components in `src/models/`:**
-- `baseline.py`: MLP/CNN reference models (full compute baseline)
-- `routing.py`: `RandomRouting`, `StaticTopK`, `SBMRouting` (learnable with tau)
-- `experts.py`: `FeatureExtractor`, `ExpertPool` with TRUE sparse execution
-- `sbm_model.py`: `SBMModel` and `SBMAdaptiveKModel` combining all components
+| Component | File | Role |
+|-----------|------|------|
+| Routers | `src/models/routing.py` | `RandomRouting`, `StaticTopK`, `SBMRouting` (learnable) |
+| Experts | `src/models/experts.py` | `ExpertPool` with TRUE sparse execution |
+| Model | `src/models/sbm_model.py` | `SBMModel`, `SBMAdaptiveKModel` |
+| Adaptive-K | `src/routing/adaptive_k.py` | Entropy-threshold K selection |
 
-**Routing module in `src/routing/`:**
-- `adaptive_k.py`: `AdaptiveKPolicy` - entropy-based dynamic K selection
+## Model Types
 
-## Model Types & Configs
+| Model | Config | Behavior |
+|-------|--------|----------|
+| `baseline` | `baseline_*.yaml` | All experts (K=N) |
+| `sbm` | `sbm_*.yaml` | Learnable routing + tau schedule |
+| `sbm_adaptive_k` | `sbm_adaptive_k_*.yaml` | Dynamic K per sample |
+| `random_routing` | `random_routing_*.yaml` | Random K experts |
+| `static_topk` | `static_topk_*.yaml` | Fixed K always |
 
-| Model | Config Pattern | Routing Behavior |
-|-------|---------------|------------------|
-| `baseline` | `baseline_*.yaml` | All experts active (K=N) |
-| `sbm` | `sbm_*.yaml` | Learnable routing with decoherence |
-| `sbm_adaptive_k` | `sbm_adaptive_k_*.yaml` | Dynamic K based on entropy thresholds |
-| `random_routing` | `random_routing_*.yaml` | Random K experts per sample |
-| `static_topk` | `static_topk_*.yaml` | Fixed K experts always |
+**Tasks**: `xor`, `mnist`, `fashion_mnist`, `cifar10`
 
-**Valid tasks**: `xor`, `mnist`, `fashion_mnist`, `cifar10`
+## Config Schema
 
-## Config Structure (YAML)
-
-Required sections - see `configs/sbm_mnist.yaml`:
 ```yaml
 run:
-  task: "mnist"      # xor|mnist|fashion_mnist|cifar10
-  model: "sbm"       # baseline|sbm|sbm_adaptive_k|random_routing|static_topk
-  seed: 42
+  task: "mnist"           # Required
+  model: "sbm"            # Required
+  seed: 42                # Required
 
-sbm:                 # Required for non-baseline models
+sbm:                      # Required for sbm/sbm_adaptive_k/random/static
   experts_num: 16
   experts_top_k: 2
   tau_start: 2.0
@@ -67,75 +62,67 @@ sbm:                 # Required for non-baseline models
   tau_schedule: "linear"  # linear|cosine|constant
   lambda_entropy: 0.01
 
-adaptive_k:          # Required ONLY for sbm_adaptive_k model
+adaptive_k:               # Only for sbm_adaptive_k
   k_values: [1, 2, 4]
-  h_thresholds: [0.5, 1.5]  # len = len(k_values) - 1, ascending
+  h_thresholds: [0.6, 1.2]  # len = k_values - 1, ascending
+
+robustness_input:         # Optional: input robustness testing
+  enabled: true
+  gaussian_sigmas: [0.0, 0.1, 0.2, 0.3]
+  salt_pepper_probs: [0.0, 0.05, 0.1]
+  occlusion_ratios: [0.0, 0.15, 0.3]
+  inversion: true
 ```
-
-## Training with Decoherence
-
-Temperature `tau` controls exploration→exploitation via `src/training/sbm_loops.py`:
-- **High tau** (start): Soft routing, exploration
-- **Low tau** (end): Sharp routing, exploitation
-- Computed by `get_tau_schedule()` - MONOTONIC per epoch, never reset
-
-## Output Structure
-
-Every run creates `results/runs/<run_id>/` where run_id = `{date}_{task}_{model}_seed{N}_{gitsha}`:
-- `config.yaml` - Experiment config copy
-- `metrics.json` - **Mandatory**: accuracy, flops_executed, latency_ms, active_modules_mean, entropy_mean, noise evaluations
-- `stdout.log` - Training output
-
-Aggregated results: `results/aggregated_results.json`
 
 ## Code Patterns
 
 **Router interface** - ALL routers return `(indices, weights, entropy)`:
 ```python
 indices, weights, entropy = self.router(features, tau=tau)
-# indices: (batch, K) expert indices
-# weights: (batch, K) combination weights  
-# entropy: scalar routing entropy
+# indices: (B, K), weights: (B, K), entropy: scalar
 ```
 
-**Creating models** - ALWAYS use factory functions:
+**Model creation** - Use factory functions:
 ```python
-from src.models.sbm_model import create_sbm_model, create_sbm_adaptive_k_model
+from src.models.sbm_model import create_sbm_model
 model = create_sbm_model(task="mnist", config=config)
-model = create_sbm_adaptive_k_model(task="mnist", config=config)  # for adaptive K
 ```
 
-**ExpertPool sparse execution** - executes ONLY selected experts (no masking):
+**ExpertPool** - TRUE sparse (no mask trick):
 ```python
-# In experts.py - iterates unique_experts, processes only samples using each
 for expert_idx in unique_experts:
     selected_x = x[samples_using_expert]
-    expert_output = self.experts[expert_idx](selected_x)  # REAL sparse!
+    output = self.experts[expert_idx](selected_x)  # Only selected!
 ```
 
-## Critical Anti-Patterns (DON'T)
+**Device/Seed** - Set once via utilities:
+```python
+from src.common.device import get_device
+from src.common.seed import set_seed
+```
 
-| Anti-pattern | Correct approach |
-|--------------|------------------|
-| Reset τ per seed/batch | Monotonic schedule via `get_tau_schedule()` |
-| Full compute + mask | Execute ONLY Top-K via `ExpertPool.forward()` |
-| `.to(device)` in loops | Device set once in `src/common/device.py` |
-| Theoretical FLOPs | Real FLOPs from `Expert.count_flops()` |
-| Hardcoded hyperparams | ALL config in YAML, validated by `validate_config.py` |
+## Critical Anti-Patterns
+
+| DON'T | DO |
+|-------|-----|
+| Reset τ per batch | Monotonic via `get_tau_schedule()` |
+| Full compute + mask | Execute ONLY Top-K in `ExpertPool` |
+| `.to(device)` in loops | `get_device()` once at start |
+| Theoretical FLOPs | `Expert.count_flops()` (real) |
+| Hardcoded hyperparams | All in YAML, validated |
 | Print emoji/unicode | ASCII-only logging |
-| Single seed results | Multi-seed (5 minimum) via `run_multiseed.py` |
+| Single seed results | Multi-seed (5+) always |
+
+## Output Structure
+
+`results/runs/{date}_{task}_{model}_seed{N}_{gitsha}/`:
+- `config.yaml` - Experiment config
+- `metrics.json` - **Required**: accuracy, flops_executed, latency_ms, active_modules_mean, entropy_mean
+- `stdout.log` - Training log
 
 ## Development Rules
 
-- **Theory-first**: Update `docs/*.md` BEFORE changing architecture
-- **Config-driven**: All hyperparameters in YAML, never hardcoded
-- **Reproducible**: Fixed seeds via `src/common/seed.py`, JSON logging
-- **Validate before run**: Always `python -m src.common.validate_config <yaml>`
-
-## Key Files for Understanding
-
-- `src/training/sbm_loops.py`: Main training loop, tau scheduling, noise robustness testing
-- `src/models/routing.py`: Router implementations (SBMRouting is the learnable one)
-- `src/routing/adaptive_k.py`: AdaptiveKPolicy for dynamic K selection
-- `src/common/validate_config.py`: Config schema enforcement
-- `docs/IMPLEMENTATION_NOTES.md`: Full implementation spec and roadmap
+1. **Config-first**: `python -m src.common.validate_config <yaml>` before running
+2. **Theory-first**: Update `docs/*.md` BEFORE architecture changes
+3. **Reproducible**: Seeds via `src/common/seed.py`, JSON metrics
+4. **Multi-seed**: Never publish single-seed; 5+ required
