@@ -1,0 +1,84 @@
+{
+  "timestamp": "2026-01-14T10:44:53.913287",
+  "model": "OLMoE-1B-7B-0924",
+  "architecture": {
+    "num_experts": 64,
+    "default_top_k": 8,
+    "num_layers": 16
+  },
+  "prompts": [
+    {
+      "prompt": "2+2=",
+      "avg_entropy": 3.7719702730576197,
+      "latency_ms": 6118.784189224243,
+      "tokens_generated": 30
+    },
+    {
+      "prompt": "Hello",
+      "avg_entropy": 3.7553295612335207,
+      "latency_ms": 5511.8207931518555,
+      "tokens_generated": 30
+    },
+    {
+      "prompt": "The capital of France is",
+      "avg_entropy": 3.690832272171974,
+      "latency_ms": 5521.768808364868,
+      "tokens_generated": 30
+    },
+    {
+      "prompt": "Explain quantum physics",
+      "avg_entropy": 3.7471760913729666,
+      "latency_ms": 5515.036106109619,
+      "tokens_generated": 30
+    },
+    {
+      "prompt": "def fibonacci(n):",
+      "avg_entropy": 3.7577369938294094,
+      "latency_ms": 5536.300182342529,
+      "tokens_generated": 30
+    },
+    {
+      "prompt": "In the beginning, the universe was",
+      "avg_entropy": 3.7508113781611123,
+      "latency_ms": 5543.363571166992,
+      "tokens_generated": 30
+    },
+    {
+      "prompt": "The difference between AI and ML is",
+      "avg_entropy": 3.720109172662099,
+      "latency_ms": 5610.586643218994,
+      "tokens_generated": 30
+    },
+    {
+      "prompt": "Write a poem about the ocean",
+      "avg_entropy": 3.711552218099435,
+      "latency_ms": 5538.584470748901,
+      "tokens_generated": 30
+    }
+  ],
+  "entropy_stats": {
+    "min": 3.690832272171974,
+    "max": 3.7719702730576197,
+    "mean": 3.7381897450735173
+  },
+  "adaptive_k": {
+    "thresholds": {
+      "low": 3.7176078124642373,
+      "high": 3.7443833527565
+    },
+    "k_values": [
+      4,
+      8,
+      12
+    ],
+    "k_distribution": {
+      "12": 5,
+      "4": 2,
+      "8": 1
+    },
+    "avg_k": 9.5,
+    "baseline_k": 8,
+    "compute_change_pct": -18.75
+  },
+  "vram_gb": 12.896856307983398
+}

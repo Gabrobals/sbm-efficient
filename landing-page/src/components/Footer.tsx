@@ -1,4 +1,10 @@
+'use client'
+
+import { useLanguage } from '@/i18n'
+
 export default function Footer() {
+  const { t } = useLanguage()
+
   return (
     <footer className="py-12 px-4 border-t border-vs-border">
       <div className="max-w-7xl mx-auto">
@@ -15,23 +21,22 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-vs-muted text-sm max-w-md">
-              Entropy-guided dynamic expert selection for Mixture-of-Experts models.
-              Reduce inference costs by 30-50% with proven methodology.
+              {t.footer.description}
             </p>
           </div>
 
           {/* Links */}
           <div>
-            <h4 className="text-vs-text font-semibold mb-4">Resources</h4>
+            <h4 className="text-vs-text font-semibold mb-4">{t.footer.resources}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <a href="https://github.com/Gabrobals/sbm-efficient" target="_blank" rel="noopener noreferrer" className="text-vs-muted hover:text-vs-blue transition-colors">
-                  GitHub Repository
+                  {t.footer.github}
                 </a>
               </li>
               <li>
                 <a href="https://github.com/Gabrobals/sbm-efficient/blob/master/Entropy_Guided_Dynamic_Expert_Selection_in_Mixture_of_Experts_Models.pdf" target="_blank" rel="noopener noreferrer" className="text-vs-muted hover:text-vs-blue transition-colors">
-                  Research Paper
+                  {t.footer.paper}
                 </a>
               </li>
               <li>
@@ -44,16 +49,26 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-vs-text font-semibold mb-4">Contact</h4>
+            <h4 className="text-vs-text font-semibold mb-4">{t.footer.contact}</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="mailto:gabriele.ballerini@gmail.com" className="text-vs-muted hover:text-vs-blue transition-colors">
-                  gabriele.ballerini@gmail.com
+                <a href="mailto:amministrazione@vertexdata.it" className="text-vs-muted hover:text-vs-blue transition-colors">
+                  amministrazione@vertexdata.it
                 </a>
               </li>
               <li>
-                <a href="https://linkedin.com/in/gabriele-ballerini" target="_blank" rel="noopener noreferrer" className="text-vs-muted hover:text-vs-blue transition-colors">
+                <a href="https://www.linkedin.com/in/gabriele-balsamo-629975123/" target="_blank" rel="noopener noreferrer" className="text-vs-muted hover:text-vs-blue transition-colors">
                   LinkedIn
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/Gabrobals" target="_blank" rel="noopener noreferrer" className="text-vs-muted hover:text-vs-blue transition-colors">
+                  GitHub
+                </a>
+              </li>
+              <li>
+                <a href="https://www.vertexdata.it" target="_blank" rel="noopener noreferrer" className="text-vs-muted hover:text-vs-blue transition-colors">
+                  VertexData.it
                 </a>
               </li>
             </ul>
@@ -63,10 +78,10 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-vs-border flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p className="text-vs-muted text-sm">
-            © {new Date().getFullYear()} Gabriel Ballerini. P.IVA IT18354371009
+            © {new Date().getFullYear()} Gabriele Balsamo. P.IVA IT18354371009
           </p>
           <p className="text-vs-muted text-sm">
-            ATECO 62.01.00 - Software Development & Consulting
+            ATECO 62.01.00 - {t.footer.ateco}
           </p>
         </div>
       </div>

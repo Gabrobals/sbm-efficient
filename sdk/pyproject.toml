@@ -1,0 +1,88 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "adaptive-k"
+version = "0.1.2"
+description = "Entropy-guided dynamic expert selection for MoE models. Reduce inference costs by 30-50%."
+readme = "README.md"
+license = "Apache-2.0"
+authors = [
+    {name = "Vertex Data", email = "amministrazione@vertexdata.it"}
+]
+maintainers = [
+    {name = "Gabriele Balsamo", email = "amministrazione@vertexdata.it"}
+]
+keywords = [
+    "moe",
+    "mixture-of-experts",
+    "adaptive-k",
+    "inference-optimization",
+    "llm",
+    "tensorrt",
+    "pytorch",
+    "transformers",
+    "cost-reduction",
+    "enterprise"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "torch>=2.0.0",
+    "numpy>=1.21.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+huggingface = [
+    "transformers>=4.30.0",
+    "datasets>=2.0.0",
+]
+vllm = [
+    "vllm>=0.2.0",
+]
+all = [
+    "adaptive-k[dev,huggingface,vllm]",
+]
+
+[project.scripts]
+adaptive-k = "adaptive_k.cli:main"
+
+[project.urls]
+Homepage = "https://adaptive-k.vertexdata.it"
+Documentation = "https://github.com/Gabrobals/sbm-efficient/tree/master/sdk"
+Repository = "https://github.com/Gabrobals/sbm-efficient"
+Issues = "https://github.com/Gabrobals/sbm-efficient/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["adaptive_k*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py39', 'py310', 'py311']
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "I", "N"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"

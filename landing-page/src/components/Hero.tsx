@@ -1,4 +1,10 @@
+'use client'
+
+import { useLanguage } from '@/i18n'
+
 export default function Hero() {
+  const { t } = useLanguage()
+
   return (
     <section className="pt-32 pb-20 px-4 relative overflow-hidden">
       {/* Background gradient */}
@@ -16,28 +22,27 @@ export default function Hero() {
 
             {/* Headline */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-              <span className="text-vs-text">Cut MoE Inference</span>
+              <span className="text-vs-text">{t.hero.title}</span>
               <br />
-              <span className="text-vs-text">Costs by </span>
-              <span className="text-vs-green">30-50%</span>
+              <span className="text-vs-text">{t.hero.titleHighlight} </span>
+              <span className="text-vs-green">{t.hero.savings}</span>
             </h1>
 
             {/* Subheadline */}
             <p className="text-lg text-vs-muted max-w-xl">
-              Entropy-guided dynamic expert selection for Mixture-of-Experts models. 
-              Same accuracy, dramatically lower compute. Validated on{' '}
+              {t.hero.subtitle}{' '}
               <span className="text-vs-cyan">Mixtral</span>,{' '}
-              <span className="text-vs-cyan">Qwen-MoE</span>, and{' '}
+              <span className="text-vs-cyan">Qwen-MoE</span>, {t.hero.and}{' '}
               <span className="text-vs-cyan">OLMoE</span>.
             </p>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <a href="#contact" className="btn-primary text-center">
-                Request Consultation
+                {t.hero.cta}
               </a>
               <a href="#resources" className="btn-secondary text-center">
-                Read the Paper
+                {t.hero.ctaSecondary}
               </a>
             </div>
 
@@ -45,15 +50,15 @@ export default function Hero() {
             <div className="flex flex-wrap gap-8 pt-6 border-t border-vs-border">
               <div>
                 <div className="stat-number text-3xl">52.5%</div>
-                <div className="text-vs-muted text-sm">Mixtral savings</div>
+                <div className="text-vs-muted text-sm">{t.hero.mixtralSavings}</div>
               </div>
               <div>
                 <div className="stat-number-green text-3xl font-bold">32.4%</div>
-                <div className="text-vs-muted text-sm">Qwen-MoE savings</div>
+                <div className="text-vs-muted text-sm">{t.hero.qwenSavings}</div>
               </div>
               <div>
                 <div className="stat-number-purple text-3xl font-bold">24.7%</div>
-                <div className="text-vs-muted text-sm">OLMoE savings</div>
+                <div className="text-vs-muted text-sm">{t.hero.olmSavings}</div>
               </div>
             </div>
           </div>

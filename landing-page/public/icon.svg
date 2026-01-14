@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="45" fill="#0d1117"/>
+  <circle cx="50" cy="50" r="43" fill="none" stroke="url(#grad)" stroke-width="2"/>
+  
+  <!-- Stylized "K" representing Adaptive-K -->
+  <path d="M35 25 L35 75 M35 50 L65 25 M35 50 L65 75" 
+        stroke="url(#grad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Neural network dots representing routing -->
+  <circle cx="72" cy="30" r="4" fill="#22c55e"/>
+  <circle cx="72" cy="50" r="4" fill="#3b82f6"/>
+  <circle cx="72" cy="70" r="4" fill="#22c55e"/>
+</svg>

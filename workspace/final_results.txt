@@ -1,0 +1,31 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.02it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.03it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:02<00:00,  1.17it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:02<00:00,  1.12it/s]
+======================================================================
+FINAL SIMULATION: Per-Layer Adaptive-K
+======================================================================
+Adaptive layers: [2, 3, 8, 9, 10, 11, 12, 13, 14, 15]
+Static layers: [0, 1, 4, 5, 6, 7]
+======================================================================
+  'Hi                                 ' | Baseline: 128 | Adaptive:  92 | Savings: +28.1%
+  '1+1=                               ' | Baseline: 128 | Adaptive:  96 | Savings: +25.0%
+  'Yes                                ' | Baseline: 128 | Adaptive:  92 | Savings: +28.1%
+  'The                                ' | Baseline: 128 | Adaptive:  90 | Savings: +29.7%
+  'OK                                 ' | Baseline: 128 | Adaptive:  92 | Savings: +28.1%
+  'The capital of France is           ' | Baseline: 128 | Adaptive: 102 | Savings: +20.3%
+  'def fibonacci(n):                  ' | Baseline: 128 | Adaptive: 100 | Savings: +21.9%
+  'Explain machine learning           ' | Baseline: 128 | Adaptive:  98 | Savings: +23.4%
+  'Write a detailed essay about AI    ' | Baseline: 128 | Adaptive: 100 | Savings: +21.9%
+  'What is quantum entanglement?      ' | Baseline: 128 | Adaptive: 102 | Savings: +20.3%
+
+======================================================================
+FINAL RESULTS
+======================================================================
+Total experts called (baseline):  1280
+Total experts called (adaptive):  964
+Average per prompt (baseline):    128.0
+Average per prompt (adaptive):    96.4
+
+>>> OVERALL COMPUTE REDUCTION: 24.7% <<<
+======================================================================
+
+Results saved to: final_olmoe_results.json

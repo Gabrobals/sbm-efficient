@@ -1,0 +1,72 @@
+{
+  "model": "Mixtral-8x7B-Instruct-v0.1",
+  "date": "2026-01-14",
+  "hardware": "2x RTX 4090 (48GB VRAM)",
+  "quantization": "4-bit (bitsandbytes)",
+  "results": [
+    {
+      "prompt": "Hi",
+      "entropy": 1.180,
+      "k": 2
+    },
+    {
+      "prompt": "1+1=",
+      "entropy": 1.205,
+      "k": 2
+    },
+    {
+      "prompt": "The capital of France is",
+      "entropy": 1.523,
+      "k": 4
+    },
+    {
+      "prompt": "def fibonacci(n):",
+      "entropy": 1.489,
+      "k": 4
+    },
+    {
+      "prompt": "Explain quantum physics",
+      "entropy": 1.420,
+      "k": 4
+    },
+    {
+      "prompt": "Write a poem about AI",
+      "entropy": 1.521,
+      "k": 4
+    },
+    {
+      "prompt": "What is machine learning?",
+      "entropy": 1.401,
+      "k": 4
+    },
+    {
+      "prompt": "The theory of relativity",
+      "entropy": 1.267,
+      "k": 2
+    },
+    {
+      "prompt": "How to optimize neural networks",
+      "entropy": 1.412,
+      "k": 4
+    },
+    {
+      "prompt": "Translate to French: Hello",
+      "entropy": 1.557,
+      "k": 4
+    }
+  ],
+  "savings_pct": 52.5,
+  "avg_k": 3.80,
+  "baseline_k": 8,
+  "thresholds": [1.275, 1.675],
+  "k_distribution": {
+    "K=2": 3,
+    "K=4": 7,
+    "K=6": 0
+  },
+  "summary": {
+    "total_prompts": 10,
+    "compute_reduction_pct": 52.5,
+    "insight": "Simple prompts (Hi, 1+1, relativity) use K=2, complex prompts use K=4"
+  }
+}

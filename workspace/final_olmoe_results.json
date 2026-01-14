@@ -1,0 +1,91 @@
+{
+  "model": "OLMoE-1B-7B",
+  "strategy": "per-layer-adaptive-k",
+  "adaptive_layers": [
+    2,
+    3,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "static_layers": [
+    0,
+    1,
+    4,
+    5,
+    6,
+    7
+  ],
+  "results": [
+    {
+      "prompt": "Hi",
+      "baseline": 128,
+      "adaptive": 92,
+      "savings": 28.125
+    },
+    {
+      "prompt": "1+1=",
+      "baseline": 128,
+      "adaptive": 96,
+      "savings": 25.0
+    },
+    {
+      "prompt": "Yes",
+      "baseline": 128,
+      "adaptive": 92,
+      "savings": 28.125
+    },
+    {
+      "prompt": "The",
+      "baseline": 128,
+      "adaptive": 90,
+      "savings": 29.6875
+    },
+    {
+      "prompt": "OK",
+      "baseline": 128,
+      "adaptive": 92,
+      "savings": 28.125
+    },
+    {
+      "prompt": "The capital of France is",
+      "baseline": 128,
+      "adaptive": 102,
+      "savings": 20.3125
+    },
+    {
+      "prompt": "def fibonacci(n):",
+      "baseline": 128,
+      "adaptive": 100,
+      "savings": 21.875
+    },
+    {
+      "prompt": "Explain machine learning",
+      "baseline": 128,
+      "adaptive": 98,
+      "savings": 23.4375
+    },
+    {
+      "prompt": "Write a detailed essay about AI",
+      "baseline": 128,
+      "adaptive": 100,
+      "savings": 21.875
+    },
+    {
+      "prompt": "What is quantum entanglement?",
+      "baseline": 128,
+      "adaptive": 102,
+      "savings": 20.3125
+    }
+  ],
+  "summary": {
+    "total_baseline_k": 1280,
+    "total_adaptive_k": 964,
+    "compute_reduction_pct": 24.687499999999996
+  }
+}

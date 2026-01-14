@@ -48,9 +48,23 @@ stdout.log
 *.swo
 *~
 
+# Secrets - NEVER commit
+.secrets/
+
 # OS
 .DS_Store
 Thumbs.db
+
+# Node.js
+node_modules/
+landing-page/node_modules/
+landing-page/out/
+landing-page/.next/
+
+# HuggingFace models (large files)
+workspace/.hf_home/
+.hf_home/
+*.safetensors
 
 # Keep directory structure
 !results/runs/.gitkeep

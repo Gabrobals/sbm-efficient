@@ -1,83 +1,96 @@
-# SBM-Efficient: Quantum-Inspired Sparse Routing
+# Adaptive-K: Entropy-Guided Dynamic Expert Selection for MoE
 
-Implementazione rigorosa del modello **SBM (Superposed Bit Model)** con routing sparso ed efficiente basato su misura quantistica e decoerenza controllata.
+[![PyPI](https://img.shields.io/pypi/v/adaptive-k)](https://pypi.org/project/adaptive-k/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-## Documenti Teorici
+> **Reduce MoE inference costs by 30-50%** with entropy-guided dynamic expert selection.  
+> Same accuracy, dramatically lower compute.
 
-- [docs/SBM_EFFICIENT_CONCEPT.md](docs/quantum_inspired_bloch_models_teoria_matematica.md) - Fondamenti matematici
-- [docs/SBM_EFFICIENT_ARCHITECTURE.md](docs/sbm_h_superposed_bit_model_in_hilbert_space.md) - Specifiche architetturali
-- [docs/IMPLEMENTATION_NOTES.md](docs/IMPLEMENTATION_NOTES.md) - Guida implementativa
+## 🚀 Quick Install
 
-## Quick Start
+```bash
+pip install adaptive-k
+```
 
-### Validation (do this first)
+```python
+from adaptive_k import AdaptiveKRouter
+
+router = AdaptiveKRouter.from_pretrained("mixtral-8x7b")
+indices, weights, metrics = router.route(logits, return_metrics=True)
+
+print(f"Compute savings: {metrics.compute_savings:.1%}")
+# Output: Compute savings: 47.2%
+```
+
+## 📊 Validated Results
+
+| Model | Compute Savings | Quality Retained |
+|-------|-----------------|------------------|
+| Mixtral 8x7B | **52.5%** | 99.8% |
+| Qwen-MoE | **32.4%** | 99.9% |
+| OLMoE-1B-7B | **24.7%** | 99.7% |
+
+## 🔗 Links
+
+- **Website**: https://adaptive-k.vertexdata.it
+- **PyPI**: https://pypi.org/project/adaptive-k/
+- **Paper**: [Entropy-Guided Dynamic Expert Selection](docs/ARXIV_PAPER_DRAFT.md)
+- **TensorRT-LLM PR**: [#10672](https://github.com/NVIDIA/TensorRT-LLM/pull/10672)
+
+## 💼 Professional Services
+
+Need help integrating Adaptive-K into your production pipeline?
+
+| Service | Description |
+|---------|-------------|
+| **Proof of Concept** | Analyze your MoE deployment, estimate savings |
+| **Full Implementation** | Production-ready integration with calibration |
+| **Enterprise** | Custom solutions, SLA, dedicated support |
+
+👉 **Contact**: https://adaptive-k.vertexdata.it/#contact
+
+---
+
+## 🔬 Research: SBM-Efficient
+
+This repository also contains the research implementation of **SBM (Superposed Bit Model)** - the theoretical foundation behind Adaptive-K.
+
+### Research Documentation
+
+- [SBM Concept](docs/SBM_EFFICIENT_CONCEPT.md) - Mathematical foundations
+- [Architecture](docs/SBM_EFFICIENT_ARCHITECTURE.md) - Architectural specifications
+- [Implementation Notes](docs/IMPLEMENTATION_NOTES.md) - Implementation guide
+
+### Running Research Experiments
 
 ```bash
 # Install dependencies
 pip install -r requirements.txt
 
-# Validate a config file
+# Validate config
 python -m src.common.validate_config configs/sbm_mnist.yaml
 
-# Run full pre-flight checks
-python -m src.experiments.preflight configs/baseline_mnist.yaml
-```
-
-### Running Experiments (after validation passes)
-
-```bash
-# Run baseline on MNIST
-python src/experiments/run.py --config configs/baseline_mnist.yaml
-
-# Run SBM on MNIST
+# Run experiment
 python src/experiments/run.py --config configs/sbm_mnist.yaml
-
-# Validate completed run
-python -m src.experiments.postflight results/runs/<run_id>/
 ```
 
-## Project Structure
+### Project Structure
 
 ```
 sbm-efficient/
+├── sdk/              # Adaptive-K Python SDK (PyPI package)
+├── landing-page/     # Marketing website (Next.js)
 ├── configs/          # Experiment configurations
 ├── docs/             # Theoretical documentation
-├── src/              # Source code
+├── src/              # Research source code
 │   ├── common/       # Utilities (seed, device, metrics)
 │   ├── data/         # Data loaders
 │   ├── models/       # Model implementations
 │   ├── training/     # Training loops
-│   ├── profiling/    # FLOPs and latency measurement
 │   └── experiments/  # Experiment runner
 ├── results/          # Experiment outputs
-└── scripts/          # Shell scripts
+└── scripts/          # Utility scripts
 ```
-
-## Key Features
-
-- **Sparse routing**: Only active modules are executed (real FLOPs savings)
-- **Decoherence schedule**: Progressive collapse from exploration to exploitation
-- **Rigorous profiling**: Real FLOPs and latency measurement
-- **Reproducible**: YAML configs + seed control + JSON logging
-
-## Experiment Protocol
-
-1. **Synthetic tasks**: XOR generalization
-2. **Vision tasks**: MNIST, Fashion-MNIST, CIFAR-10
-3. **Robustness**: Noise, occlusion, inversion
-
-## Mandatory Metrics
-
-Every run produces `results/runs/<run_id>/metrics.json` with:
-
-- Test accuracy
-- Training stability (loss variance)
-- FLOPs executed (only active modules)
-- Latency (p50/p90/p99)
-- Active modules mean
-- Entropy mean
-
-## Development Workflow
 
 ```bash
 # Create feature branch
@@ -96,6 +109,16 @@ git checkout main
 git merge feature/baseline
 ```
 
-## License
+## 📄 License
 
-Research project - see documentation for details.
+Apache 2.0 - Free for commercial use.
+
+## 📞 Contact
+
+- **Email**: amministrazione@vertexdata.it
+- **Website**: https://adaptive-k.vertexdata.it
+- **GitHub**: https://github.com/Gabrobals/sbm-efficient
+
+---
+
+*Made by [Vertex Data](https://vertexdata.it) - AI Infrastructure Optimization*

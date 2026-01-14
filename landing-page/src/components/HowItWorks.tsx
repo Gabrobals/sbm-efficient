@@ -1,21 +1,27 @@
+'use client'
+
+import { useLanguage } from '@/i18n'
+
 export default function HowItWorks() {
+  const { t } = useLanguage()
+
   const steps = [
     {
       number: '01',
-      title: 'Compute Router Entropy',
-      description: 'For each token, calculate the entropy H of the router softmax distribution. Low entropy = confident routing.',
+      titleKey: 'step1Title' as const,
+      descKey: 'step1Desc' as const,
       code: 'H = -sum(p * log(p))',
     },
     {
       number: '02',
-      title: 'Dynamic K Selection',
-      description: 'Based on entropy thresholds, select fewer experts for confident tokens, more for uncertain ones.',
+      titleKey: 'step2Title' as const,
+      descKey: 'step2Desc' as const,
       code: 'K = 1 if H < 0.6 else (2 if H < 1.2 else 4)',
     },
     {
       number: '03',
-      title: 'Sparse Expert Execution',
-      description: 'Only execute the selected K experts. Skip unnecessary computation entirely.',
+      titleKey: 'step3Title' as const,
+      descKey: 'step3Desc' as const,
       code: 'output = sum(expert[i](x) * w[i] for i in top_k)',
     },
   ]
@@ -26,11 +32,10 @@ export default function HowItWorks() {
         {/* Section header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="text-vs-purple">How</span> It Works
+            <span className="text-vs-purple">{t.howItWorks.how}</span> {t.howItWorks.itWorks}
           </h2>
           <p className="text-vs-muted max-w-2xl mx-auto">
-            Adaptive-K uses information theory to make intelligent routing decisions.
-            The key insight: routing entropy predicts when fewer experts are sufficient.
+            {t.howItWorks.subtitle}
           </p>
         </div>
 
@@ -48,8 +53,8 @@ export default function HowItWorks() {
               
               {/* Content */}
               <div className="md:col-span-6">
-                <h3 className="text-xl font-semibold text-vs-text mb-2">{step.title}</h3>
-                <p className="text-vs-muted">{step.description}</p>
+                <h3 className="text-xl font-semibold text-vs-text mb-2">{t.howItWorks[step.titleKey]}</h3>
+                <p className="text-vs-muted">{t.howItWorks[step.descKey]}</p>
               </div>
               
               {/* Code */}
@@ -67,11 +72,9 @@ export default function HowItWorks() {
           <div className="flex items-start space-x-4">
             <span className="text-2xl">💡</span>
             <div>
-              <h4 className="text-lg font-semibold text-vs-text mb-2">The Key Insight</h4>
+              <h4 className="text-lg font-semibold text-vs-text mb-2">{t.howItWorks.keyInsight}</h4>
               <p className="text-vs-muted">
-                When the router is confident (low entropy), it has already identified the "right" expert. 
-                Running additional experts adds compute cost but minimal value. By dynamically adjusting K 
-                based on entropy, we skip unnecessary work while maintaining output quality.
+                {t.howItWorks.keyInsightText}
               </p>
             </div>
           </div>

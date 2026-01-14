@@ -1,0 +1,11 @@
+# Adaptive-K Landing Page
+# https://adaptive-k.vertexdata.it
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://adaptive-k.vertexdata.it/sitemap.xml
+
+# Crawl delay (optional, be nice to search engines)
+Crawl-delay: 1

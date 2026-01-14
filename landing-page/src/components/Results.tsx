@@ -1,24 +1,30 @@
+'use client'
+
+import { useLanguage } from '@/i18n'
+
 export default function Results() {
+  const { t } = useLanguage()
+
   const results = [
     {
       model: 'Mixtral 8x7B',
       savings: '52.5%',
       accuracy: '99.8%',
-      description: 'K=1 used 78% of the time with minimal quality loss',
+      descriptionKey: 'mixtralDesc' as const,
       color: 'blue',
     },
     {
       model: 'Qwen-MoE',
       savings: '32.4%',
       accuracy: '99.9%',
-      description: 'Effective across all entropy thresholds',
+      descriptionKey: 'qwenDesc' as const,
       color: 'green',
     },
     {
       model: 'OLMoE-1B-7B',
       savings: '24.7%',
       accuracy: '99.7%',
-      description: 'Consistent savings on smaller MoE architecture',
+      descriptionKey: 'olmDesc' as const,
       color: 'purple',
     },
   ]
@@ -29,11 +35,10 @@ export default function Results() {
         {/* Section header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="text-vs-green">Validated</span> Results
+            <span className="text-vs-green">{t.results.validated}</span> {t.results.title}
           </h2>
           <p className="text-vs-muted max-w-2xl mx-auto">
-            Real compute savings on production MoE models. 
-            Accuracy measured relative to full Top-K routing baseline.
+            {t.results.subtitle}
           </p>
         </div>
 
@@ -56,16 +61,16 @@ export default function Results() {
                   <div className={`stat-number${result.color === 'green' ? '-green' : result.color === 'purple' ? '-purple' : ''} text-4xl font-bold`}>
                     {result.savings}
                   </div>
-                  <div className="text-vs-muted text-sm">Compute Reduction</div>
+                  <div className="text-vs-muted text-sm">{t.results.computeReduction}</div>
                 </div>
                 
                 <div className="flex items-center space-x-2">
                   <span className="text-vs-green">✓</span>
-                  <span className="text-vs-text">{result.accuracy} accuracy retained</span>
+                  <span className="text-vs-text">{result.accuracy} {t.results.accuracyRetained}</span>
                 </div>
                 
                 <p className="text-vs-muted text-sm pt-2 border-t border-vs-border">
-                  {result.description}
+                  {t.results[result.descriptionKey]}
                 </p>
               </div>
             </div>
@@ -77,7 +82,7 @@ export default function Results() {
           <div className="inline-flex items-center space-x-2 bg-vs-surface border border-vs-border rounded-lg px-4 py-2">
             <span className="text-vs-yellow">⚡</span>
             <span className="text-vs-muted text-sm">
-              Results validated via WikiText-2 perplexity benchmarks
+              {t.results.benchmark}
             </span>
           </div>
         </div>

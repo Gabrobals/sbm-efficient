@@ -1,0 +1,39 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.01it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.02it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:02<00:00,  1.15it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:02<00:00,  1.11it/s]
+======================================================================
+ADAPTIVE-K PER-LAYER ANALYSIS
+======================================================================
+
+Entropy variance per layer (high variance = adaptive opportunity):
+----------------------------------------------------------------------
+  Layer  0: mean=3.678 std=0.078 [STATIC  ] ###
+  Layer  1: mean=3.873 std=0.037 [STATIC  ] #
+  Layer  2: mean=2.920 std=0.875 [ADAPTIVE] ###########################################
+  Layer  3: mean=3.443 std=0.355 [ADAPTIVE] #################
+  Layer  4: mean=3.862 std=0.038 [STATIC  ] #
+  Layer  5: mean=3.910 std=0.037 [STATIC  ] #
+  Layer  6: mean=3.864 std=0.023 [STATIC  ] #
+  Layer  7: mean=3.825 std=0.040 [STATIC  ] #
+  Layer  8: mean=3.162 std=0.553 [ADAPTIVE] ###########################
+  Layer  9: mean=3.351 std=0.318 [ADAPTIVE] ###############
+  Layer 10: mean=3.067 std=0.510 [ADAPTIVE] #########################
+  Layer 11: mean=3.127 std=0.471 [ADAPTIVE] #######################
+  Layer 12: mean=2.995 std=0.476 [ADAPTIVE] #######################
+  Layer 13: mean=2.837 std=0.626 [ADAPTIVE] ###############################
+  Layer 14: mean=2.685 std=0.761 [ADAPTIVE] ######################################
+  Layer 15: mean=3.473 std=0.178 [ADAPTIVE] ########
+
+======================================================================
+SUMMARY
+======================================================================
+Adaptive layers (high entropy variance): [2, 3, 8, 9, 10, 11, 12, 13, 14, 15]
+Static layers (low entropy variance):    [0, 1, 4, 5, 6, 7]
+
+Potential strategy:
+  - Layers [2, 3, 8, 9, 10, 11, 12, 13, 14, 15]: Use Adaptive-K (2-8 based on entropy)
+  - Layers [0, 1, 4, 5, 6, 7]: Use fixed K=8
+
+Compute analysis:
+  Adaptive layers: 10/16 (62%)
+  If we save 50% on adaptive layers: ~31% total savings
+======================================================================
