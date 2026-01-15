@@ -77,3 +77,6 @@ sdk/adaptive_k/
 sdk/dist/
 sdk/build/
 sdk/*.egg-info/
+
+# Secrets - MAI su git
+.secrets/

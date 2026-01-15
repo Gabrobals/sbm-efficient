@@ -1,6 +1,14 @@
 'use client'
 
 import { useLanguage } from '@/i18n'
+import Link from 'next/link'
+
+// LemonSqueezy checkout URLs
+const CHECKOUT_URLS = {
+  starter: '/register', // Free registration
+  professional: 'https://vertexdata.lemonsqueezy.com/checkout/buy/1220068',
+  enterprise: 'https://vertexdata.lemonsqueezy.com/checkout/buy/1220176',
+}
 
 export default function Pricing() {
   const { t } = useLanguage()
@@ -14,6 +22,8 @@ export default function Pricing() {
       features: t.pricing.starterFeatures,
       cta: t.pricing.starterCta,
       highlighted: false,
+      url: CHECKOUT_URLS.starter,
+      isExternal: false,
     },
     {
       name: t.pricing.proName,
@@ -23,6 +33,8 @@ export default function Pricing() {
       features: t.pricing.proFeatures,
       cta: t.pricing.proCta,
       highlighted: true,
+      url: CHECKOUT_URLS.professional,
+      isExternal: true,
     },
     {
       name: t.pricing.enterpriseName,
@@ -32,14 +44,10 @@ export default function Pricing() {
       features: t.pricing.enterpriseFeatures,
       cta: t.pricing.enterpriseCta,
       highlighted: false,
+      url: CHECKOUT_URLS.enterprise,
+      isExternal: true,
     },
   ]
-
-  const handleGetStarted = (tier: string) => {
-    localStorage.setItem('selectedService', tier)
-    window.dispatchEvent(new CustomEvent('serviceSelected'))
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-  }
 
   return (
     <section id="pricing" className="py-20 bg-gray-900">
@@ -105,16 +113,31 @@ export default function Pricing() {
                 ))}
               </ul>
 
-              <button
-                onClick={() => handleGetStarted(tier.name)}
-                className={`w-full py-3 px-6 rounded-lg font-semibold transition-all ${
-                  tier.highlighted
-                    ? 'bg-cyan-500 hover:bg-cyan-400 text-black'
-                    : 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-600'
-                }`}
-              >
-                {tier.cta}
-              </button>
+              {tier.isExternal ? (
+                <a
+                  href={tier.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-full py-3 px-6 rounded-lg font-semibold transition-all block text-center ${
+                    tier.highlighted
+                      ? 'bg-cyan-500 hover:bg-cyan-400 text-black'
+                      : 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-600'
+                  }`}
+                >
+                  {tier.cta}
+                </a>
+              ) : (
+                <Link
+                  href={tier.url}
+                  className={`w-full py-3 px-6 rounded-lg font-semibold transition-all block text-center ${
+                    tier.highlighted
+                      ? 'bg-cyan-500 hover:bg-cyan-400 text-black'
+                      : 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-600'
+                  }`}
+                >
+                  {tier.cta}
+                </Link>
+              )}
             </div>
           ))}
         </div>
