@@ -71,3 +71,9 @@ workspace/.hf_home/
 !results/summaries/.gitkeep
 .venv/
 data/
+
+# SDK commerciale - solo su PyPI
+sdk/adaptive_k/
+sdk/dist/
+sdk/build/
+sdk/*.egg-info/

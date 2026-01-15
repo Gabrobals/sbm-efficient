@@ -18,8 +18,23 @@ Diventare lo standard de-facto per l'ottimizzazione dell'inferenza su modelli Mi
 | Risparmio compute provato | 30-50% |
 | Modelli validati | Mixtral, Qwen-MoE, OLMoE |
 | Status IP | Open source + PR TensorRT-LLM |
-| SDK | ✅ **LIVE su PyPI** |
+| SDK | ✅ **LIVE su PyPI v0.1.2** |
+| Licensing System | ✅ **IMPLEMENTATO** |
+| Customer Portal | ✅ **LIVE** |
 | Revenue target Y1 | €50-100K |
+
+---
+
+## ✅ COMPLETATO OGGI (14 Gennaio 2026)
+
+| # | Azione | Status |
+|---|--------|--------|
+| 1 | SDK v0.1.2 su PyPI con licensing | ✅ https://pypi.org/project/adaptive-k/0.1.2/ |
+| 2 | Sistema licensing (Community/Pro/Enterprise) | ✅ `adaptive-k license` CLI |
+| 3 | Customer Portal | ✅ https://adaptive-k.vertexdata.it/portal |
+| 4 | LemonSqueezy integration | ✅ Webhook pronto |
+| 5 | LICENSING_MODEL.md documentazione | ✅ Template contratti |
+| 6 | GitHub push | ✅ Tutto sincronizzato |
 
 ---
 
@@ -27,9 +42,9 @@ Diventare lo standard de-facto per l'ottimizzazione dell'inferenza su modelli Mi
 
 | # | Azione | Impatto | Tempo |
 |---|--------|---------|-------|
-| 1 | **LinkedIn Post** - Annuncio SDK su PyPI | Visibilità, primi utenti | 30 min |
-| 2 | **Email outreach** - 10 aziende che usano MoE | Primi lead consulenza | 2h |
-| 3 | **GitHub README** - Link a PyPI + landing page | SEO, credibilità | 30 min |
+| 1 | **LemonSqueezy setup** - Creare prodotti e webhook | Vendite automatiche | 1h |
+| 2 | **LinkedIn Post** - Annuncio SDK v0.1.2 | Visibilità, primi utenti | 30 min |
+| 3 | **Email outreach** - 10 aziende che usano MoE | Primi lead consulenza | 2h |
 | 4 | **Hacker News / Reddit** - Post su r/MachineLearning | Traffico, feedback | 1h |
 
 ### Post LinkedIn (Bozza)
@@ -84,7 +99,7 @@ Paper + TensorRT-LLM PR in comments 👇
 ---
 
 ### FASE 2: SDK Python (Q2 2026)
-**Status: ✅ COMPLETATO - LIVE SU PYPI**
+**Status: ✅ COMPLETATO - LIVE SU PYPI v0.1.2**
 
 **Obiettivo**: Prodotto scalabile vendibile come licenza
 
@@ -94,7 +109,7 @@ Paper + TensorRT-LLM PR in comments 👇
 pip install adaptive-k
 ```
 
-**PyPI**: https://pypi.org/project/adaptive-k/
+**PyPI**: https://pypi.org/project/adaptive-k/0.1.2/
 
 #### 2.2 Struttura SDK (Implementata)
 
@@ -104,6 +119,7 @@ sdk/
 │   ├── __init__.py        # ✅ Package exports
 │   ├── router.py          # ✅ AdaptiveKRouter core
 │   ├── calibration.py     # ✅ Auto-calibrazione soglie
+│   ├── licensing.py       # ✅ Sistema licensing (NEW!)
 │   └── cli.py             # ✅ Command line interface
 ├── tests/
 │   └── test_router.py     # ✅ Test suite pytest
@@ -135,18 +151,33 @@ print(router.stats)
 adaptive-k calibrate --model mixtral-8x7b --dataset wikitext-2
 adaptive-k benchmark --model mixtral-8x7b --compare baseline
 adaptive-k export --format tensorrt --output config.json
+adaptive-k license                     # ✅ NEW: Show license info
+adaptive-k license --key <your-key>    # ✅ NEW: Validate license
 ```
 
-#### 2.5 Modello Business SDK (Open Core)
+#### 2.5 Sistema Licensing (IMPLEMENTATO ✅)
 
 | Tier | Prezzo | Features |
 |------|--------|----------|
-| **Community** | **FREE** (PyPI) | Core routing, tutti modelli |
-| **Consulenza** | €2,500+ | Calibrazione custom, integrazione |
-| **Enterprise** | €5,000+/anno | SLA, supporto dedicato |
+| **Community** | **FREE** (PyPI) | Core routing, tutti modelli, Apache 2.0 |
+| **Professional** | €2,500/anno | CUDA kernels, integrations, priority support |
+| **Enterprise** | €8,000+/anno | SLA, custom optimization, redistribution rights |
+
+**Documentazione completa**: [LICENSING_MODEL.md](./LICENSING_MODEL.md)
+
+#### 2.6 Piattaforma Vendita (LemonSqueezy)
+
+- **Customer Portal**: https://adaptive-k.vertexdata.it/portal ✅
+- **Webhook**: /api/webhook/lemonsqueezy ✅
+- **Auto license generation**: Implementato ✅
+- **Merchant of Record**: LemonSqueezy gestisce IVA EU
+
+**Setup rimanente**: Creare prodotti su LemonSqueezy dashboard
 
 **KPI Fase 2**:
-- [x] SDK v0.1.1 pubblicato su PyPI
+- [x] SDK v0.1.2 pubblicato su PyPI
+- [x] Sistema licensing implementato
+- [x] Customer portal live
 - [ ] 100+ downloads primo mese
 - [ ] 5 richieste consulenza da utenti SDK
 - [ ] Documentazione esempi avanzati
@@ -310,11 +341,16 @@ GEN  FEB  MAR  APR  MAG  GIU  LUG  AGO  SET  OTT  NOV  DIC
 
 ## 🎯 Next Actions (Questa Settimana)
 
-- [ ] Finalizzare landing page multilingua
-- [ ] Creare struttura cartella `sdk/`
-- [ ] Setup repository PyPI (test.pypi.org)
-- [ ] Scrivere README SDK
-- [ ] Primo blog post LinkedIn
+- [x] ~~Finalizzare landing page multilingua~~ ✅
+- [x] ~~Creare struttura cartella `sdk/`~~ ✅
+- [x] ~~Setup repository PyPI~~ ✅ v0.1.2 live
+- [x] ~~Scrivere README SDK~~ ✅
+- [x] ~~Sistema licensing~~ ✅
+- [x] ~~Customer portal~~ ✅
+- [x] ~~LemonSqueezy webhook~~ ✅
+- [ ] **Creare prodotti su LemonSqueezy** (tu)
+- [ ] **Post LinkedIn annuncio**
+- [ ] **Email outreach 10 aziende MoE**
 
 ---
 
@@ -324,7 +360,17 @@ GEN  FEB  MAR  APR  MAG  GIU  LUG  AGO  SET  OTT  NOV  DIC
 Email: amministrazione@vertexdata.it  
 Website: https://vertexdata.it  
 Adaptive-K: https://adaptive-k.vertexdata.it  
+Customer Portal: https://adaptive-k.vertexdata.it/portal  
+PyPI: https://pypi.org/project/adaptive-k/  
 GitHub: https://github.com/Gabrobals/sbm-efficient
+
+---
+
+## 📁 Documentazione Correlata
+
+- [LICENSING_MODEL.md](./LICENSING_MODEL.md) - Modello licensing completo
+- [landing-page/LEMONSQUEEZY_SETUP.md](./landing-page/LEMONSQUEEZY_SETUP.md) - Setup vendite
+- [sdk/README.md](./sdk/README.md) - Documentazione SDK
 
 ---
 
