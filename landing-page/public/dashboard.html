@@ -257,13 +257,142 @@
         </div>
     </div>
 
+    <!-- Modelli MoE Disponibili -->
+    <div class="card" style="margin-bottom: 2rem;">
+        <h3>🤖 Modelli MoE Disponibili per Profiling</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Provider</th>
+                    <th>Modello</th>
+                    <th>Params</th>
+                    <th>Experts</th>
+                    <th>Top-K</th>
+                    <th>Prezzo Input</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Together</td>
+                    <td><strong>DeepSeek-V3.1</strong></td>
+                    <td>671B</td>
+                    <td>256</td>
+                    <td>8</td>
+                    <td>$0.60/1M</td>
+                </tr>
+                <tr>
+                    <td>Together</td>
+                    <td><strong>Qwen3-235B-MoE</strong></td>
+                    <td>235B</td>
+                    <td>128</td>
+                    <td>22</td>
+                    <td>$0.65/1M</td>
+                </tr>
+                <tr>
+                    <td>Together</td>
+                    <td><strong>Qwen3-Coder-480B</strong></td>
+                    <td>480B</td>
+                    <td>160</td>
+                    <td>35</td>
+                    <td>$2.00/1M</td>
+                </tr>
+                <tr>
+                    <td>Together</td>
+                    <td><strong>Cogito-109B-MoE</strong></td>
+                    <td>109B</td>
+                    <td>64</td>
+                    <td>8</td>
+                    <td>$0.18/1M</td>
+                </tr>
+                <tr>
+                    <td>OpenRouter</td>
+                    <td><strong>Mixtral-8x7B</strong></td>
+                    <td>46.7B</td>
+                    <td>8</td>
+                    <td>2</td>
+                    <td>$0.24/1M</td>
+                </tr>
+                <tr>
+                    <td>OpenRouter</td>
+                    <td><strong>Mixtral-8x22B</strong></td>
+                    <td>141B</td>
+                    <td>8</td>
+                    <td>2</td>
+                    <td>$0.65/1M</td>
+                </tr>
+                <tr>
+                    <td>DeepSeek</td>
+                    <td><strong>deepseek-chat</strong></td>
+                    <td>671B</td>
+                    <td>256</td>
+                    <td>8</td>
+                    <td>$0.14/1M</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Risparmi Stimati Enterprise -->
+    <div class="card" style="margin-bottom: 2rem;">
+        <h3>💰 Risparmi Stimati Enterprise con Adaptive-K</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Scenario</th>
+                    <th>Tokens/giorno</th>
+                    <th>Baseline/mese</th>
+                    <th>Adaptive-K/mese</th>
+                    <th>Risparmio/mese</th>
+                    <th>Risparmio %</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Startup</strong></td>
+                    <td>10M</td>
+                    <td>$315</td>
+                    <td>$237</td>
+                    <td style="color: var(--success); font-weight: 600;">$78</td>
+                    <td>24.7%</td>
+                </tr>
+                <tr>
+                    <td><strong>Growth</strong></td>
+                    <td>100M</td>
+                    <td>$3,148</td>
+                    <td>$2,371</td>
+                    <td style="color: var(--success); font-weight: 600;">$777</td>
+                    <td>24.7%</td>
+                </tr>
+                <tr>
+                    <td><strong>Enterprise</strong></td>
+                    <td>500M</td>
+                    <td>$15,742</td>
+                    <td>$11,854</td>
+                    <td style="color: var(--success); font-weight: 600;">$3,887</td>
+                    <td>24.7%</td>
+                </tr>
+                <tr style="background: rgba(99, 102, 241, 0.1);">
+                    <td><strong>Hyperscale</strong></td>
+                    <td>1B</td>
+                    <td>$31,483</td>
+                    <td>$23,709</td>
+                    <td style="color: var(--success); font-weight: 600;">$7,775</td>
+                    <td>24.7%</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="margin-top: 1rem; color: #94a3b8; font-size: 0.85rem;">
+            * Stime basate su media di tutti i modelli MoE disponibili. Mixtral 8x7B raggiunge il 52.5% di risparmio.
+        </p>
+    </div>
+
     <div class="cta">
         <h2>Ready to reduce your MoE compute costs?</h2>
         <p style="margin: 1rem 0; color: #94a3b8;">
             Integrate Adaptive-K routing in minutes with our SDK
         </p>
         <a href="https://adaptive-k.vertexdata.it">Learn More</a>
-        <a href="https://pypi.org/project/adaptive-k-routing/" style="background: #22c55e;">pip install adaptive-k-routing</a>
+        <a href="https://pypi.org/project/adaptive-k-sdk/" style="background: #22c55e;">pip install adaptive-k-sdk</a>
     </div>
 
     <script>
