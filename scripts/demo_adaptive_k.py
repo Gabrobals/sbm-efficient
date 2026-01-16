@@ -139,17 +139,31 @@ def demo_benchmark(config_path: str, verbose: bool = False):
     # Get data
     _, test_loader = get_data_loaders(
         task=config['run']['task'],
-        batch_size=config['training']['batch_size']
+        batch_size=config['data']['batch_size']
     )
     
     # Create model
+    task = config['run']['task']
+    
+    # Get task-specific dimensions
+    task_dims = {
+        'mnist': {'feature_dim': 256, 'num_classes': 10},
+        'fashion_mnist': {'feature_dim': 256, 'num_classes': 10},
+        'cifar10': {'feature_dim': 512, 'num_classes': 10},
+        'xor': {'feature_dim': 64, 'num_classes': 2},
+    }
+    dims = task_dims.get(task, {'feature_dim': 256, 'num_classes': 10})
+    
     model = SBMAdaptiveKModel(
-        input_dim=config['model']['input_dim'],
-        hidden_dim=config['model']['hidden_dim'],
-        output_dim=config['model']['output_dim'],
-        experts_num=config['sbm']['experts_num'],
+        task=task,
+        num_experts=config['sbm']['experts_num'],
+        routing_type='sbm',
         k_values=config['adaptive_k']['k_values'],
         h_thresholds=config['adaptive_k']['h_thresholds'],
+        feature_dim=dims['feature_dim'],
+        expert_hidden_dim=dims['feature_dim'],
+        num_classes=dims['num_classes'],
+        seed=config['run']['seed']
     ).to(device)
     
     print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
@@ -192,7 +206,14 @@ def demo_benchmark(config_path: str, verbose: bool = False):
     # Latency test
     if verbose:
         print("\nRunning latency benchmark...")
-        input_shape = (config['model']['input_dim'],)
+        # Input shape depends on task
+        input_shapes = {
+            'mnist': (1, 28, 28),
+            'fashion_mnist': (1, 28, 28),
+            'cifar10': (3, 32, 32),
+            'xor': (2,)
+        }
+        input_shape = input_shapes.get(task, (1, 28, 28))
         latency_results = benchmark.run_latency_benchmark(
             input_shape,
             batch_sizes=[1, 8, 32],

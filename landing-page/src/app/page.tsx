@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import Results from '@/components/Results'
 import HowItWorks from '@/components/HowItWorks'
+import Observability from '@/components/Observability'
 import Services from '@/components/Services'
 import Pricing from '@/components/Pricing'
 import Resources from '@/components/Resources'
@@ -20,6 +21,7 @@ export default function Home() {
           <Hero />
           <Results />
           <HowItWorks />
+          <Observability />
         </article>
         <Services />
         <Pricing />
