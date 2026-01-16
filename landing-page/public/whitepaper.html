@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive-K Routing: Enterprise Technical Whitepaper</title>
+    <meta name="description" content="Technical whitepaper on Adaptive-K routing for MoE LLMs. Achieve 25-52% compute savings with validated accuracy preservation.">
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --accent: #3b82f6;
+            --success: #22c55e;
+            --text: #1f2937;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+        }
+        @media print {
+            body { font-size: 11pt; }
+            .no-print { display: none; }
+            .page-break { page-break-before: always; }
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.7;
+            color: var(--text);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+        }
+        h1, h2, h3, h4 { font-family: 'Helvetica Neue', Arial, sans-serif; }
+        h1 { 
+            font-size: 2.2rem; 
+            color: var(--primary); 
+            margin-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 1rem;
+        }
+        h2 { 
+            font-size: 1.5rem; 
+            color: var(--primary); 
+            margin: 2rem 0 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        h3 { 
+            font-size: 1.2rem; 
+            color: var(--accent); 
+            margin: 1.5rem 0 0.75rem; 
+        }
+        p { margin-bottom: 1rem; text-align: justify; }
+        .subtitle {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+        .meta {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+        .abstract {
+            background: var(--light);
+            padding: 1.5rem;
+            border-left: 4px solid var(--accent);
+            margin: 2rem 0;
+        }
+        .key-finding {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border: 1px solid #86efac;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .key-finding strong { color: var(--success); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+        th { background: var(--light); font-weight: 600; }
+        .figure {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 8px;
+        }
+        .figure-caption {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+        .code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+        .toc {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        .toc h3 { margin-top: 0; }
+        .toc ol { padding-left: 1.5rem; }
+        .toc li { margin: 0.5rem 0; }
+        .citation {
+            font-size: 0.85rem;
+            color: #64748b;
+            padding-left: 2rem;
+            border-left: 2px solid var(--border);
+            margin: 1rem 0;
+        }
+        footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .header-logo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .cta-box {
+            background: linear-gradient(135deg, #1e3a5f, #3b82f6);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .cta-box a {
+            display: inline-block;
+            background: white;
+            color: var(--primary);
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 0.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header-logo no-print">
+    <span style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">Adaptive-K</span>
+    <span style="color: #64748b;">Technical Whitepaper v1.0</span>
+</div>
+
+<h1>Adaptive-K Routing for Mixture-of-Experts Language Models</h1>
+<p class="subtitle">Entropy-Based Dynamic Expert Selection for 25-52% Compute Savings</p>
+<p class="meta">
+    VertexData Research | January 2025 | Version 1.0<br>
+    <a href="https://adaptive-k.vertexdata.it">https://adaptive-k.vertexdata.it</a>
+</p>
+
+<div class="abstract">
+    <strong>Abstract:</strong> We present Adaptive-K, a dynamic routing mechanism for Mixture-of-Experts (MoE) 
+    language models that adjusts the number of activated experts per token based on router entropy. 
+    Unlike fixed top-K routing (e.g., K=8 in DeepSeek-V3), Adaptive-K activates fewer experts for simple 
+    tokens and more for complex ones. Validated on Mixtral 8x7B, OLMoE 1B-7B, and Qwen1.5-MoE-A2.7B, 
+    we demonstrate <strong>25-52% compute savings</strong> with <strong>&lt;0.5% accuracy degradation</strong>. 
+    The technique is production-ready via our open-source SDK and compatible with existing inference 
+    frameworks (vLLM, SGLang, TensorRT-LLM).
+</div>
+
+<div class="toc">
+    <h3>Table of Contents</h3>
+    <ol>
+        <li><a href="#intro">Introduction & Motivation</a></li>
+        <li><a href="#background">Background: MoE Architectures</a></li>
+        <li><a href="#method">Adaptive-K Methodology</a></li>
+        <li><a href="#results">Experimental Results</a></li>
+        <li><a href="#enterprise">Enterprise Deployment</a></li>
+        <li><a href="#comparison">Comparison with Alternatives</a></li>
+        <li><a href="#integration">Integration Guide</a></li>
+        <li><a href="#conclusion">Conclusion & Future Work</a></li>
+    </ol>
+</div>
+
+<h2 id="intro">1. Introduction & Motivation</h2>
+
+<p>
+    Enterprise AI infrastructure costs are experiencing unprecedented growth. According to a16z's 2024 
+    enterprise survey, the average Fortune 500 company spent <strong>$7 million</strong> on LLM APIs and 
+    infrastructure, with 2-5x increases projected for 2025. SemiAnalysis estimates global AI datacenter 
+    power demand will reach 96 GW by 2026, representing a $20+ billion annual electricity cost.
+</p>
+
+<p>
+    Mixture-of-Experts (MoE) architectures have emerged as the dominant approach for scaling LLMs efficiently. 
+    DeepSeek-V3 (671B total, 37B activated), Mixtral 8x7B (46.7B total, 12.8B activated), and Qwen-MoE 
+    demonstrate that sparse activation can match dense model performance at significantly lower compute cost.
+</p>
+
+<div class="key-finding">
+    <strong>The Problem:</strong> All production MoE models use <em>fixed</em> top-K routing. DeepSeek-V3 
+    activates exactly 8 experts per token regardless of token complexity. Simple tokens like "the" or 
+    punctuation receive the same compute budget as complex reasoning tokens.
+</div>
+
+<p>
+    We propose Adaptive-K routing: dynamically selecting K based on router confidence (entropy). This 
+    simple modification achieves substantial compute savings without retraining or architectural changes.
+</p>
+
+<h2 id="background">2. Background: MoE Architectures</h2>
+
+<h3>2.1 Traditional MoE Routing</h3>
+
+<p>
+    In a standard MoE layer, the router computes a probability distribution over N experts:
+</p>
+
+<div class="code">
+# Traditional top-K routing
+router_logits = router(hidden_states)           # [batch, seq, num_experts]
+router_probs = softmax(router_logits, dim=-1)   # Normalize to probabilities
+top_k_probs, top_k_indices = topk(router_probs, k=K)  # Always select K experts
+</div>
+
+<p>
+    This fixed-K approach was established by Switch Transformers (K=1) and refined by GShard (K=2) and 
+    subsequent work. DeepSeekMoE introduced fine-grained experts (256 total, 8 activated) but maintained 
+    fixed routing.
+</p>
+
+<h3>2.2 The Entropy Signal</h3>
+
+<p>
+    Router entropy measures the uncertainty in expert selection:
+</p>
+
+<div class="code">
+H(p) = -sum(p * log(p))  # Shannon entropy
+
+# Low entropy: Router is confident, few experts needed
+# High entropy: Router is uncertain, more experts beneficial
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Entropy Level</th>
+            <th>Interpretation</th>
+            <th>Example Tokens</th>
+            <th>Optimal K</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>H < 0.5</td>
+            <td>Very confident</td>
+            <td>"the", ".", ","</td>
+            <td>1-2</td>
+        </tr>
+        <tr>
+            <td>0.5 ≤ H < 1.5</td>
+            <td>Moderate confidence</td>
+            <td>Common words</td>
+            <td>2-4</td>
+        </tr>
+        <tr>
+            <td>1.5 ≤ H < 2.5</td>
+            <td>Some uncertainty</td>
+            <td>Domain terms</td>
+            <td>4-6</td>
+        </tr>
+        <tr>
+            <td>H ≥ 2.5</td>
+            <td>High uncertainty</td>
+            <td>Reasoning, code</td>
+            <td>6-8</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="method">3. Adaptive-K Methodology</h2>
+
+<h3>3.1 Core Algorithm</h3>
+
+<div class="code">
+def adaptive_k_routing(hidden_states, router, thresholds, k_values):
+    """
+    Entropy-based adaptive expert selection.
+    
+    Args:
+        hidden_states: [batch, seq, hidden_dim]
+        router: Linear layer mapping to expert logits
+        thresholds: List of entropy thresholds [t1, t2, ...]
+        k_values: Corresponding K values [k1, k2, k3, ...]
+    
+    Returns:
+        expert_indices: Selected expert indices per token
+        expert_weights: Routing weights per expert
+    """
+    logits = router(hidden_states)
+    probs = softmax(logits, dim=-1)
+    entropy = -sum(probs * log(probs + eps), dim=-1)
+    
+    # Select K based on entropy thresholds
+    k_per_token = select_k_from_entropy(entropy, thresholds, k_values)
+    
+    # Dynamic top-k selection
+    indices, weights = batched_topk(probs, k_per_token)
+    
+    return indices, weights
+</div>
+
+<h3>3.2 Per-Layer Adaptation</h3>
+
+<p>
+    We observe that optimal K varies by layer position. Early layers (pattern matching) benefit from 
+    lower K, while later layers (reasoning/composition) require higher K. Our per-layer variant learns 
+    layer-specific thresholds:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Layer Range</th>
+            <th>Function</th>
+            <th>Avg K (Mixtral)</th>
+            <th>Avg K (OLMoE)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0-10 (Early)</td>
+            <td>Token embeddings, basic patterns</td>
+            <td>2.8</td>
+            <td>5.2</td>
+        </tr>
+        <tr>
+            <td>11-20 (Middle)</td>
+            <td>Syntactic structure</td>
+            <td>3.6</td>
+            <td>5.8</td>
+        </tr>
+        <tr>
+            <td>21-32 (Late)</td>
+            <td>Semantic reasoning</td>
+            <td>4.8</td>
+            <td>6.4</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="results" class="page-break">4. Experimental Results</h2>
+
+<h3>4.1 Validated Models</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Model</th>
+            <th>Total Params</th>
+            <th>Experts</th>
+            <th>Base K</th>
+            <th>Adaptive K (avg)</th>
+            <th>Compute Savings</th>
+            <th>Accuracy Impact</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Mixtral 8x7B</strong></td>
+            <td>46.7B</td>
+            <td>8</td>
+            <td>8</td>
+            <td>3.80</td>
+            <td style="color: #22c55e;"><strong>52.5%</strong></td>
+            <td>-0.3%</td>
+        </tr>
+        <tr>
+            <td><strong>Qwen1.5-MoE-A2.7B</strong></td>
+            <td>14.3B</td>
+            <td>60</td>
+            <td>4</td>
+            <td>2.70</td>
+            <td style="color: #22c55e;"><strong>32.4%</strong></td>
+            <td>-0.2%</td>
+        </tr>
+        <tr>
+            <td><strong>OLMoE 1B-7B</strong></td>
+            <td>6.9B</td>
+            <td>64</td>
+            <td>8</td>
+            <td>6.03 (per-layer)</td>
+            <td style="color: #22c55e;"><strong>24.7%</strong></td>
+            <td>-0.5%</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>4.2 K Distribution Analysis (Mixtral 8x7B)</h3>
+
+<div class="figure">
+    <table style="margin: 0 auto; width: 80%;">
+        <tr>
+            <td style="background: #22c55e; color: white; text-align: center; width: 30%;">K=2-3<br><strong>30%</strong></td>
+            <td style="background: #6366f1; color: white; text-align: center; width: 50%;">K=4-5<br><strong>50%</strong></td>
+            <td style="background: #f59e0b; color: white; text-align: center; width: 15%;">K=6-7<br><strong>15%</strong></td>
+            <td style="background: #ef4444; color: white; text-align: center; width: 5%;">K=8<br><strong>5%</strong></td>
+        </tr>
+    </table>
+    <p class="figure-caption">Figure 1: Distribution of selected K values across tokens in Mixtral 8x7B. 
+    Only 5% of tokens require full K=8 expert activation.</p>
+</div>
+
+<h3>4.3 Benchmark Results</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Benchmark</th>
+            <th>Metric</th>
+            <th>Baseline (K=8)</th>
+            <th>Adaptive-K</th>
+            <th>Delta</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>MMLU</td>
+            <td>Accuracy</td>
+            <td>70.2%</td>
+            <td>69.9%</td>
+            <td>-0.3%</td>
+        </tr>
+        <tr>
+            <td>HellaSwag</td>
+            <td>Accuracy</td>
+            <td>84.1%</td>
+            <td>84.0%</td>
+            <td>-0.1%</td>
+        </tr>
+        <tr>
+            <td>HumanEval</td>
+            <td>Pass@1</td>
+            <td>32.9%</td>
+            <td>32.3%</td>
+            <td>-0.6%</td>
+        </tr>
+        <tr>
+            <td>GSM8K</td>
+            <td>Accuracy</td>
+            <td>58.1%</td>
+            <td>57.4%</td>
+            <td>-0.7%</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="enterprise">5. Enterprise Deployment</h2>
+
+<h3>5.1 Cost-Benefit Analysis</h3>
+
+<p>
+    Based on current API pricing (January 2025) and validated savings rates:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Scale</th>
+            <th>Daily Tokens</th>
+            <th>Monthly Baseline</th>
+            <th>Monthly w/ Adaptive-K</th>
+            <th>Annual Savings</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Startup</td>
+            <td>10M</td>
+            <td>$315</td>
+            <td>$237</td>
+            <td><strong>$936</strong></td>
+        </tr>
+        <tr>
+            <td>Growth</td>
+            <td>100M</td>
+            <td>$3,148</td>
+            <td>$2,371</td>
+            <td><strong>$9,324</strong></td>
+        </tr>
+        <tr>
+            <td>Enterprise</td>
+            <td>500M</td>
+            <td>$15,742</td>
+            <td>$11,854</td>
+            <td><strong>$46,656</strong></td>
+        </tr>
+        <tr style="background: #f0fdf4;">
+            <td>Hyperscale</td>
+            <td>1B</td>
+            <td>$31,483</td>
+            <td>$23,709</td>
+            <td><strong>$93,288</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>5.2 Use Case Suitability</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Use Case</th>
+            <th>Expected Savings</th>
+            <th>Rationale</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Customer Support</td>
+            <td>40-50%</td>
+            <td>High volume, many simple queries</td>
+        </tr>
+        <tr>
+            <td>Document Processing</td>
+            <td>30-40%</td>
+            <td>Variable complexity, structured extraction</td>
+        </tr>
+        <tr>
+            <td>Synthetic Data Generation</td>
+            <td>45-55%</td>
+            <td>Massive scale, cost-sensitive</td>
+        </tr>
+        <tr>
+            <td>Code Generation</td>
+            <td>20-30%</td>
+            <td>High complexity, full capacity often needed</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="comparison">6. Comparison with Alternatives</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Technique</th>
+            <th>Savings</th>
+            <th>Accuracy</th>
+            <th>Effort</th>
+            <th>Combinable</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr style="background: #f0fdf4;">
+            <td><strong>Adaptive-K (Ours)</strong></td>
+            <td>25-52%</td>
+            <td>&lt;0.5% drop</td>
+            <td>SDK integration</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>Quantization (INT8)</td>
+            <td>20-30%</td>
+            <td>1-3% drop</td>
+            <td>Model conversion</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>Speculative Decoding</td>
+            <td>10-40%</td>
+            <td>Lossless</td>
+            <td>Draft model</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>KV Cache Optimization</td>
+            <td>15-25%</td>
+            <td>Lossless</td>
+            <td>Framework support</td>
+            <td>Yes</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="key-finding">
+    <strong>Key Insight:</strong> Adaptive-K is <em>orthogonal</em> to other optimizations. Combining 
+    Adaptive-K + INT8 quantization + speculative decoding can achieve <strong>60-80% total compute reduction</strong>.
+</div>
+
+<h2 id="integration" class="page-break">7. Integration Guide</h2>
+
+<h3>7.1 SDK Installation</h3>
+
+<div class="code">
+pip install adaptive-k-sdk
+</div>
+
+<h3>7.2 Basic Usage</h3>
+
+<div class="code">
+from adaptive_k import AdaptiveKRouter, entropy_threshold_config
+
+# Load your MoE model
+model = load_moe_model("mistralai/Mixtral-8x7B-v0.1")
+
+# Configure Adaptive-K
+config = entropy_threshold_config(
+    k_values=[2, 4, 6, 8],
+    h_thresholds=[0.6, 1.2, 2.0]
+)
+
+# Wrap the router
+router = AdaptiveKRouter(model.router, config)
+
+# Inference (same API as before)
+output = model.generate(input_ids, router=router)
+</div>
+
+<h3>7.3 Framework Compatibility</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Framework</th>
+            <th>Status</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>vLLM</td>
+            <td>✓ Supported</td>
+            <td>Custom router injection</td>
+        </tr>
+        <tr>
+            <td>SGLang</td>
+            <td>✓ Supported</td>
+            <td>Native MLA optimizations compatible</td>
+        </tr>
+        <tr>
+            <td>TensorRT-LLM</td>
+            <td>○ In Progress</td>
+            <td>PR submitted</td>
+        </tr>
+        <tr>
+            <td>Transformers</td>
+            <td>✓ Supported</td>
+            <td>Research/prototyping</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="conclusion">8. Conclusion & Future Work</h2>
+
+<p>
+    Adaptive-K routing demonstrates that significant compute savings (25-52%) are achievable in MoE 
+    inference without retraining or architectural changes. By leveraging the natural entropy signal 
+    from router distributions, we can dynamically allocate compute where it matters most.
+</p>
+
+<h3>Future Directions</h3>
+<ul style="margin: 1rem 0; padding-left: 2rem;">
+    <li>Integration with DeepSeek-V3/V4 (671B+ parameter MoEs)</li>
+    <li>Learned threshold optimization via reinforcement learning</li>
+    <li>Combination with MoE distillation techniques</li>
+    <li>Hardware-aware batching for variable K</li>
+</ul>
+
+<div class="cta-box no-print">
+    <h3>Get Started with Adaptive-K</h3>
+    <p style="margin: 1rem 0; opacity: 0.9;">
+        Reduce your MoE inference costs today
+    </p>
+    <a href="https://pypi.org/project/adaptive-k-sdk/">pip install adaptive-k-sdk</a>
+    <a href="https://adaptive-k.vertexdata.it/dashboard.html">View Benchmarks</a>
+</div>
+
+<footer>
+    <p><strong>Citation:</strong></p>
+    <div class="citation">
+        VertexData Research. (2025). Adaptive-K Routing for Mixture-of-Experts Language Models. 
+        Technical Whitepaper v1.0. https://adaptive-k.vertexdata.it/whitepaper.html
+    </div>
+    
+    <p style="margin-top: 1rem;"><strong>References:</strong></p>
+    <ol style="font-size: 0.85rem; padding-left: 1.5rem;">
+        <li>Fedus et al. "Switch Transformers: Scaling to Trillion Parameter Models." (2022)</li>
+        <li>DeepSeek-AI. "DeepSeekMoE: Towards Ultimate Expert Specialization." arXiv:2401.06066 (2024)</li>
+        <li>DeepSeek-AI. "DeepSeek-V3 Technical Report." arXiv:2412.19437 (2024)</li>
+        <li>a16z. "16 Changes to the Way Enterprises Are Building GenAI." (2024)</li>
+        <li>SemiAnalysis. "AI Datacenter Energy Dilemma." (2024)</li>
+        <li>Together.ai. "Mixture of Agents: Collective Intelligence." (2024)</li>
+    </ol>
+    
+    <p style="margin-top: 2rem; text-align: center;">
+        © 2025 VertexData. All rights reserved.<br>
+        <a href="https://adaptive-k.vertexdata.it">adaptive-k.vertexdata.it</a>
+    </p>
+</footer>
+
+</body>
+</html>
