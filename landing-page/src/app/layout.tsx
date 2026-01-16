@@ -23,9 +23,18 @@ export const metadata: Metadata = {
     'reduce AI costs',
     'machine learning efficiency',
     'sparse expert selection',
+    'DeepSeek-V3',
+    'DBRX optimization',
+    'Qwen MoE',
+    'OLMoE',
+    'entropy routing',
+    'dynamic K selection',
+    'GPU cost reduction',
+    'inference latency',
     'ottimizzazione AI',
     'riduzione costi inferenza',
     'intelligenza artificiale',
+    'modelli MoE',
   ],
   authors: [{ name: 'Vertex Data', url: 'https://vertexdata.it' }],
   creator: 'Vertex Data',
@@ -122,6 +131,46 @@ const organizationJsonLd = {
   ],
 }
 
+// FAQ Schema for rich snippets in search results
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is Adaptive-K routing for MoE models?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Adaptive-K is an entropy-guided algorithm that dynamically selects the optimal number of experts (K) for each token in Mixture-of-Experts models. Instead of using a fixed K=2, it measures routing confidence via entropy and activates 1-8 experts based on complexity, reducing compute by 30-50%.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Which MoE models are compatible with Adaptive-K?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Adaptive-K is validated on Mixtral 8x7B (52.5% savings), OLMoE 1B-7B (24.7% savings), Qwen1.5-MoE (32.4% savings), and is being tested on DeepSeek-V3, DBRX, and Grok-1. It works with any router-based MoE architecture.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How much GPU cost can Adaptive-K save?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Adaptive-K typically reduces GPU compute costs by 30-50% while maintaining model quality. For enterprise deployments processing millions of tokens daily, this translates to significant infrastructure savings.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is the Adaptive-K SDK open source?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, the adaptive-k-sdk is fully open source under MIT license, available on PyPI (pip install adaptive-k-sdk) and GitHub. Enterprise support and TensorRT-LLM integration are available through Vertex Data.',
+      },
+    },
+  ],
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -151,6 +200,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       </head>
       <body className="bg-vs-black text-vs-text antialiased">

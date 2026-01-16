@@ -30,11 +30,11 @@ export default function Results() {
   ]
 
   return (
-    <section id="results" className="py-20 px-4 bg-vs-bg">
+    <section id="results" aria-labelledby="results-title" className="py-20 px-4 bg-vs-bg">
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 id="results-title" className="text-3xl md:text-4xl font-bold mb-4">
             <span className="text-vs-green">{t.results.validated}</span> {t.results.title}
           </h2>
           <p className="text-vs-muted max-w-2xl mx-auto">

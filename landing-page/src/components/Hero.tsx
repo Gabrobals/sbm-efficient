@@ -6,9 +6,9 @@ export default function Hero() {
   const { t } = useLanguage()
 
   return (
-    <section className="pt-32 pb-20 px-4 relative overflow-hidden">
+    <section id="hero" className="pt-32 pb-20 px-4 relative overflow-hidden" aria-labelledby="hero-title">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-vs-blue/5 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-vs-blue/5 to-transparent pointer-events-none" aria-hidden="true" />
       
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -21,7 +21,7 @@ export default function Hero() {
             </div>
 
             {/* Headline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            <h1 id="hero-title" className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
               <span className="text-vs-text">{t.hero.title}</span>
               <br />
               <span className="text-vs-text">{t.hero.titleHighlight} </span>

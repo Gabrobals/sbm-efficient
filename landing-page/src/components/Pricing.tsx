@@ -50,11 +50,11 @@ export default function Pricing() {
   ]
 
   return (
-    <section id="pricing" className="py-20 bg-gray-900">
+    <section id="pricing" aria-labelledby="pricing-title" className="py-20 bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 id="pricing-title" className="text-3xl md:text-4xl font-bold text-white mb-4">
             <span className="text-cyan-400">{t.pricing.transparent}</span> {t.pricing.title}
           </h2>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
