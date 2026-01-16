@@ -82,6 +82,9 @@ export const translations = {
       prType: 'PR',
       prTitle: 'TensorRT-LLM Integration',
       prDesc: 'Pull request adding AdaptiveKMoeRoutingMethod to NVIDIA TensorRT-LLM.',
+      vscodeType: 'VS Code',
+      vscodeTitle: 'VS Code Extension',
+      vscodeDesc: 'MoE cost estimation, snippets, and ROI calculator for developers.',
     },
     contact: {
       get: 'Get',
@@ -248,6 +251,9 @@ export const translations = {
       prType: 'PR',
       prTitle: 'Integrazione TensorRT-LLM',
       prDesc: 'Pull request che aggiunge AdaptiveKMoeRoutingMethod a NVIDIA TensorRT-LLM.',
+      vscodeType: 'VS Code',
+      vscodeTitle: 'Estensione VS Code',
+      vscodeDesc: 'Stima costi MoE, snippet e calcolatore ROI per sviluppatori.',
     },
     contact: {
       get: 'Mettiti in',
