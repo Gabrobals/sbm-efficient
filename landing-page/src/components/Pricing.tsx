@@ -6,8 +6,8 @@ import Link from 'next/link'
 // LemonSqueezy checkout URLs
 const CHECKOUT_URLS = {
   starter: '/register', // Free registration
-  professional: 'https://vertexdata.lemonsqueezy.com/checkout/buy/1220068',
-  enterprise: 'https://vertexdata.lemonsqueezy.com/checkout/buy/1220176',
+  professional: 'https://vertexdata.lemonsqueezy.com/checkout/buy/f9550cfd-ac26-401f-b707-985ed6ca5606',
+  enterprise: 'https://vertexdata.lemonsqueezy.com/checkout/buy/bd5fdadd-f970-4edd-8400-d5d66e9c9b6e',
 }
 
 export default function Pricing() {
