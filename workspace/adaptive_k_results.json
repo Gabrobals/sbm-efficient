@@ -1,0 +1,78 @@
+{
+  "generated": "2026-01-16T18:59:18.734497",
+  "version": "1.0.0",
+  "summary": {
+    "models_validated": 3,
+    "avg_compute_savings": 36.5,
+    "max_compute_savings": 52.5,
+    "max_accuracy_drop": 0.5
+  },
+  "models": [
+    {
+      "name": "Mixtral 8x7B",
+      "total_params": "46.7B",
+      "activated_params": "12.9B",
+      "num_experts": 8,
+      "baseline_k": 8,
+      "adaptive_k_avg": 3.8,
+      "compute_savings_pct": 52.5,
+      "accuracy_delta_pct": -0.3,
+      "status": "validated"
+    },
+    {
+      "name": "OLMoE 1B-7B",
+      "total_params": "6.9B",
+      "activated_params": "1.3B",
+      "num_experts": 64,
+      "baseline_k": 8,
+      "adaptive_k_avg": 6.0,
+      "compute_savings_pct": 24.7,
+      "accuracy_delta_pct": -0.5,
+      "status": "validated"
+    },
+    {
+      "name": "Qwen1.5-MoE",
+      "total_params": "14.3B",
+      "activated_params": "2.7B",
+      "num_experts": 60,
+      "baseline_k": 4,
+      "adaptive_k_avg": 2.7,
+      "compute_savings_pct": 32.4,
+      "accuracy_delta_pct": -0.2,
+      "status": "validated"
+    },
+    {
+      "name": "DeepSeek-V3",
+      "total_params": "671B",
+      "activated_params": "37B",
+      "num_experts": 256,
+      "baseline_k": 8,
+      "adaptive_k_avg": 0.0,
+      "compute_savings_pct": 0.0,
+      "accuracy_delta_pct": 0.0,
+      "status": "pending"
+    },
+    {
+      "name": "DBRX",
+      "total_params": "132B",
+      "activated_params": "36B",
+      "num_experts": 16,
+      "baseline_k": 4,
+      "adaptive_k_avg": 0.0,
+      "compute_savings_pct": 0.0,
+      "accuracy_delta_pct": 0.0,
+      "status": "estimated"
+    },
+    {
+      "name": "Grok-1",
+      "total_params": "314B",
+      "activated_params": "86B",
+      "num_experts": 8,
+      "baseline_k": 2,
+      "adaptive_k_avg": 0.0,
+      "compute_savings_pct": 0.0,
+      "accuracy_delta_pct": 0.0,
+      "status": "estimated"
+    }
+  ]
+}

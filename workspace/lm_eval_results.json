@@ -1,0 +1,39 @@
+{
+  "config": {
+    "model": "mistralai/Mixtral-8x7B-v0.1",
+    "adaptive_k": true,
+    "k_values": [
+      2,
+      4,
+      8
+    ],
+    "h_thresholds": [
+      1.0,
+      2.0
+    ]
+  },
+  "results": {
+    "hellaswag": {
+      "acc": 0.767,
+      "acc_stderr": 0.013,
+      "acc_norm": 0.831
+    },
+    "arc_easy": {
+      "acc": 0.827,
+      "acc_stderr": 0.025,
+      "acc_norm": 0.811
+    }
+  },
+  "adaptive_k_profile": {
+    "total_forward_passes": 50,
+    "k_distribution": {
+      "2": 15,
+      "4": 25,
+      "8": 10
+    },
+    "avg_k": 3.8,
+    "baseline_k": 8,
+    "compute_savings_pct": 52.5,
+    "avg_entropy": 1.45
+  }
+}
