@@ -31,6 +31,7 @@ export const translations = {
       qwenDesc: 'Effective across all entropy thresholds',
       olmDesc: 'Consistent savings on smaller MoE architecture',
       benchmark: 'Results validated via WikiText-2 perplexity benchmarks',
+      viewDashboard: 'View Interactive Dashboard',
     },
     howItWorks: {
       how: 'How',
@@ -190,6 +191,7 @@ export const translations = {
       qwenDesc: 'Efficace su tutte le soglie di entropia',
       olmDesc: 'Risparmi consistenti su architetture MoE più piccole',
       benchmark: 'Risultati validati tramite benchmark di perplexity WikiText-2',
+      viewDashboard: 'Visualizza Dashboard Interattiva',
     },
     howItWorks: {
       how: 'Come',
