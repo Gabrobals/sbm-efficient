@@ -1,0 +1,184 @@
+{
+  "name": "adaptive-k-toolkit",
+  "displayName": "Adaptive-K Toolkit",
+  "description": "MoE cost estimation, entropy analysis, and Adaptive-K routing tools for LLM developers",
+  "version": "0.1.0",
+  "publisher": "vertexdata",
+  "author": {
+    "name": "VertexData",
+    "email": "info@vertexdata.it"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gabrobals/sbm-efficient"
+  },
+  "homepage": "https://adaptive-k.vertexdata.it",
+  "bugs": {
+    "url": "https://github.com/Gabrobals/sbm-efficient/issues"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Other",
+    "Snippets"
+  ],
+  "keywords": [
+    "moe",
+    "mixture-of-experts",
+    "llm",
+    "adaptive-k",
+    "cost-estimation",
+    "ai",
+    "inference",
+    "optimization",
+    "deepseek",
+    "mixtral",
+    "together-ai",
+    "openai"
+  ],
+  "activationEvents": [
+    "onLanguage:python",
+    "onLanguage:typescript",
+    "onLanguage:javascript"
+  ],
+  "main": "./out/extension.js",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#181818",
+    "theme": "dark"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "adaptive-k.estimateCost",
+        "title": "Adaptive-K: Estimate MoE Cost",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "adaptive-k.showDashboard",
+        "title": "Adaptive-K: Open Dashboard",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "adaptive-k.analyzeFile",
+        "title": "Adaptive-K: Analyze Current File",
+        "icon": "$(search)"
+      },
+      {
+        "command": "adaptive-k.insertSnippet",
+        "title": "Adaptive-K: Insert SDK Snippet",
+        "icon": "$(code)"
+      }
+    ],
+    "configuration": {
+      "title": "Adaptive-K Toolkit",
+      "properties": {
+        "adaptive-k.defaultModel": {
+          "type": "string",
+          "default": "deepseek-v3",
+          "enum": [
+            "deepseek-v3",
+            "mixtral-8x7b",
+            "qwen-moe",
+            "qwen3-235b",
+            "olmoe-1b-7b"
+          ],
+          "description": "Default MoE model for cost estimation"
+        },
+        "adaptive-k.savingsRate": {
+          "type": "number",
+          "default": 35,
+          "minimum": 0,
+          "maximum": 60,
+          "description": "Expected Adaptive-K savings percentage"
+        },
+        "adaptive-k.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show cost estimation in status bar"
+        },
+        "adaptive-k.dailyTokenBudget": {
+          "type": "number",
+          "default": 1000000,
+          "description": "Daily token budget for alerts (in tokens)"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "adaptive-k",
+          "title": "Adaptive-K",
+          "icon": "images/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "adaptive-k": [
+        {
+          "id": "adaptive-k.models",
+          "name": "MoE Models"
+        },
+        {
+          "id": "adaptive-k.stats",
+          "name": "Usage Stats"
+        },
+        {
+          "id": "adaptive-k.savings",
+          "name": "Savings Calculator"
+        }
+      ]
+    },
+    "snippets": [
+      {
+        "language": "python",
+        "path": "./snippets/python.json"
+      },
+      {
+        "language": "typescript",
+        "path": "./snippets/typescript.json"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "adaptive-k.estimateCost",
+          "group": "adaptive-k@1",
+          "when": "editorTextFocus"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "adaptive-k.showDashboard",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.x",
+    "@typescript-eslint/eslint-plugin": "^6.x",
+    "@typescript-eslint/parser": "^6.x",
+    "eslint": "^8.x",
+    "typescript": "^5.3.x",
+    "@vscode/test-electron": "^2.3.x",
+    "@vscode/vsce": "^2.x"
+  },
+  "dependencies": {
+    "tiktoken": "^1.0.x"
+  }
+}
