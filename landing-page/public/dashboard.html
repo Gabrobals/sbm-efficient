@@ -3,753 +3,632 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adaptive-K Benchmark Dashboard</title>
+    <title>Adaptive-K Benchmark Dashboard | VertexData</title>
+    <meta name="description" content="Interactive benchmarks and ROI calculator for Adaptive-K routing in MoE models. Validated 25-52% compute savings.">
+    <link rel="icon" href="/favicon.ico">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* VS Code Theme - matching vertex.it */
         :root {
-            --primary: #6366f1;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --bg: #0f172a;
-            --card: #1e293b;
-            --text: #e2e8f0;
-            --border: #334155;
+            --vs-black: #0d0d0d;
+            --vs-bg: #181818;
+            --vs-surface: #1f1f1f;
+            --vs-border: #2d2d2d;
+            --vs-hover: #2a2a2a;
+            --vs-text: #d4d4d4;
+            --vs-muted: #6e7681;
+            --vs-blue: #3794ff;
+            --vs-green: #4ec9b0;
+            --vs-yellow: #dcdcaa;
+            --vs-orange: #ce9178;
+            --vs-purple: #c586c0;
+            --vs-red: #f14c4c;
+            --vs-cyan: #9cdcfe;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            padding: 2rem;
+            background: var(--vs-black);
+            color: var(--vs-text);
             min-height: 100vh;
         }
+        
+        /* Navigation */
+        nav {
+            background: var(--vs-bg);
+            border-bottom: 1px solid var(--vs-border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--vs-text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo span { color: var(--vs-blue); }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .nav-links a {
+            color: var(--vs-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--vs-text); }
+        
+        /* Main content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Header */
         .header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
         }
         .header h1 {
             font-size: 2.5rem;
-            background: linear-gradient(135deg, var(--primary), #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
         }
-        .header p { color: #94a3b8; }
+        .header h1 .highlight { color: var(--vs-blue); }
+        .header p { 
+            color: var(--vs-muted); 
+            font-size: 1.1rem;
+        }
+        .header .badge {
+            display: inline-block;
+            background: var(--vs-surface);
+            border: 1px solid var(--vs-border);
+            color: var(--vs-green);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+        
+        /* Grid layout */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+        
+        /* Cards */
         .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            background: var(--vs-surface);
+            border: 1px solid var(--vs-border);
+            border-radius: 8px;
             padding: 1.5rem;
+            transition: border-color 0.2s;
         }
+        .card:hover { border-color: var(--vs-blue); }
         .card h3 {
-            color: var(--primary);
+            color: var(--vs-text);
+            font-size: 1rem;
             margin-bottom: 1rem;
-            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+        .card h3 .icon { color: var(--vs-blue); }
+        
+        /* Stats */
         .stat {
             display: flex;
             justify-content: space-between;
             padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--vs-border);
         }
         .stat:last-child { border-bottom: none; }
-        .stat-value {
-            font-weight: 600;
-            color: var(--success);
+        .stat-label { color: var(--vs-muted); }
+        .stat-value { font-weight: 600; }
+        .stat-value.green { color: var(--vs-green); }
+        .stat-value.blue { color: var(--vs-blue); }
+        
+        /* Metric boxes */
+        .metric-box {
+            background: var(--vs-bg);
+            border: 1px solid var(--vs-border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
         }
-        .chart-container {
-            position: relative;
-            height: 300px;
+        .metric-box .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--vs-green);
         }
+        .metric-box .label {
+            color: var(--vs-muted);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+        .metric-box.blue .value { color: var(--vs-blue); }
+        .metric-box.cyan .value { color: var(--vs-cyan); }
+        
+        /* Tables */
         table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 0.9rem;
         }
         th, td {
-            padding: 0.75rem;
+            padding: 0.75rem 1rem;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--vs-border);
         }
-        th { color: var(--primary); font-weight: 600; }
-        .status-validated { color: var(--success); }
-        .status-pending { color: var(--warning); }
-        .status-estimated { color: #94a3b8; }
-        .savings-bar {
-            background: var(--border);
+        th { 
+            color: var(--vs-muted); 
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+        tr:hover { background: var(--vs-hover); }
+        
+        /* Progress bar */
+        .progress-bar {
+            background: var(--vs-border);
             border-radius: 4px;
-            height: 8px;
+            height: 6px;
             overflow: hidden;
+            margin-bottom: 0.25rem;
         }
-        .savings-fill {
-            background: linear-gradient(90deg, var(--primary), var(--success));
+        .progress-fill {
             height: 100%;
+            border-radius: 4px;
             transition: width 0.5s ease;
         }
+        .progress-fill.green { background: linear-gradient(90deg, var(--vs-green), #6ee7b7); }
+        .progress-fill.blue { background: linear-gradient(90deg, var(--vs-blue), #60a5fa); }
+        
+        /* Status badges */
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.8rem;
+        }
+        .status.validated { color: var(--vs-green); }
+        .status.pending { color: var(--vs-yellow); }
+        .status.estimated { color: var(--vs-muted); }
+        
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            height: 280px;
+        }
+        
+        /* Section titles */
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 2.5rem 0 1.5rem;
+            color: var(--vs-text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-title .icon { color: var(--vs-cyan); }
+        
+        /* Forms */
+        select, input[type="range"] {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--vs-bg);
+            border: 1px solid var(--vs-border);
+            border-radius: 6px;
+            color: var(--vs-text);
+            font-size: 0.9rem;
+        }
+        select:focus { outline: none; border-color: var(--vs-blue); }
+        label {
+            display: block;
+            color: var(--vs-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* CTA section */
         .cta {
             text-align: center;
-            padding: 2rem;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+            padding: 3rem 2rem;
+            background: var(--vs-surface);
+            border: 1px solid var(--vs-border);
             border-radius: 12px;
-            margin-top: 2rem;
+            margin-top: 3rem;
         }
-        .cta a {
+        .cta h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .cta p {
+            color: var(--vs-muted);
+            margin-bottom: 1.5rem;
+        }
+        .btn {
             display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 0.75rem 2rem;
-            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
             text-decoration: none;
-            margin: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            margin: 0.25rem;
         }
-        .cta a:hover { opacity: 0.9; }
+        .btn-primary {
+            background: var(--vs-blue);
+            color: white;
+        }
+        .btn-primary:hover { 
+            background: #2563eb;
+            box-shadow: 0 0 20px rgba(55, 148, 255, 0.3);
+        }
+        .btn-secondary {
+            background: var(--vs-green);
+            color: var(--vs-black);
+        }
+        .btn-secondary:hover {
+            background: #34d399;
+            box-shadow: 0 0 20px rgba(78, 201, 176, 0.3);
+        }
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--vs-border);
+            color: var(--vs-text);
+        }
+        .btn-ghost:hover { border-color: var(--vs-text); }
+        
+        /* Highlight boxes */
+        .highlight-box {
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        .highlight-box.blue {
+            background: rgba(55, 148, 255, 0.1);
+            border: 1px solid rgba(55, 148, 255, 0.3);
+        }
+        .highlight-box.green {
+            background: rgba(78, 201, 176, 0.1);
+            border: 1px solid rgba(78, 201, 176, 0.3);
+        }
+        .highlight-box.yellow {
+            background: rgba(220, 220, 170, 0.1);
+            border: 1px solid rgba(220, 220, 170, 0.3);
+        }
+        .highlight-box.red {
+            background: rgba(241, 76, 76, 0.1);
+            border: 1px solid rgba(241, 76, 76, 0.3);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+        }
         @media (max-width: 768px) {
-            body { padding: 1rem; }
+            .container { padding: 1rem; }
             .header h1 { font-size: 1.8rem; }
+            .grid, .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            nav { padding: 1rem; }
+            .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Adaptive-K Routing Benchmarks</h1>
-        <p>Validated compute savings across MoE architectures</p>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Generated: 2026-01-16 18:59</p>
-    </div>
+    <!-- Navigation -->
+    <nav>
+        <a href="https://adaptive-k.vertexdata.it" class="logo">
+            <span>Adaptive-K</span> Dashboard
+        </a>
+        <div class="nav-links">
+            <a href="https://adaptive-k.vertexdata.it">Home</a>
+            <a href="/whitepaper.html">Whitepaper</a>
+            <a href="https://pypi.org/project/adaptive-k-sdk/">SDK</a>
+            <a href="https://github.com/Gabrobals/sbm-efficient">GitHub</a>
+        </div>
+    </nav>
 
-    <div class="grid">
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><span class="highlight">Adaptive-K</span> Routing Benchmarks</h1>
+            <p>Validated compute savings across MoE architectures</p>
+            <span class="badge">Updated: January 2025</span>
+        </div>
+
+        <!-- Summary Stats -->
+        <div class="grid grid-4">
+            <div class="metric-box">
+                <div class="value">3</div>
+                <div class="label">Models Validated</div>
+            </div>
+            <div class="metric-box">
+                <div class="value">36.5%</div>
+                <div class="label">Avg Compute Savings</div>
+            </div>
+            <div class="metric-box blue">
+                <div class="value">52.5%</div>
+                <div class="label">Max Compute Savings</div>
+            </div>
+            <div class="metric-box cyan">
+                <div class="value">-0.5%</div>
+                <div class="label">Max Accuracy Drop</div>
+            </div>
+        </div>
+
+        <!-- Main Results -->
+        <h2 class="section-title"><span class="icon">📊</span> Benchmark Results</h2>
         <div class="card">
-            <h3>📊 Summary Statistics</h3>
-            <div class="stat">
-                <span>Models Validated</span>
-                <span class="stat-value">3</span>
-            </div>
-            <div class="stat">
-                <span>Avg Compute Savings</span>
-                <span class="stat-value">36.5%</span>
-            </div>
-            <div class="stat">
-                <span>Max Compute Savings</span>
-                <span class="stat-value">52.5%</span>
-            </div>
-            <div class="stat">
-                <span>Max Accuracy Drop</span>
-                <span class="stat-value">-0.5%</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>💰 Enterprise Cost Projection</h3>
-            <p style="color: #94a3b8; margin-bottom: 1rem; font-size: 0.9rem;">
-                At 100M tokens/month
-            </p>
-            <div class="stat">
-                <span>Conservative (25%)</span>
-                <span class="stat-value">$25,000/mo saved</span>
-            </div>
-            <div class="stat">
-                <span>Moderate (35%)</span>
-                <span class="stat-value">$35,000/mo saved</span>
-            </div>
-            <div class="stat">
-                <span>Aggressive (50%)</span>
-                <span class="stat-value">$50,000/mo saved</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="card" style="margin-bottom: 2rem;">
-        <h3>📈 Compute Savings by Model</h3>
-        <div class="chart-container">
-            <canvas id="savingsChart"></canvas>
-        </div>
-    </div>
-
-    <div class="card" style="margin-bottom: 2rem;">
-        <h3>🔬 Detailed Results</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Model</th>
-                    <th>Total Params</th>
-                    <th>Experts</th>
-                    <th>K (base → adaptive)</th>
-                    <th>Compute Savings</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Mixtral 8x7B</strong></td>
-                    <td>46.7B</td>
-                    <td>8</td>
-                    <td>8 → 3.80</td>
-                    <td>
-                        <div class="savings-bar"><div class="savings-fill" style="width: 52.5%"></div></div>
-                        <span style="font-size: 0.9rem; color: var(--success);">52.5%</span>
-                    </td>
-                    <td class="status-validated">✓ Validated</td>
-                </tr>
-                <tr>
-                    <td><strong>Qwen1.5-MoE</strong></td>
-                    <td>14.3B</td>
-                    <td>60</td>
-                    <td>4 → 2.70</td>
-                    <td>
-                        <div class="savings-bar"><div class="savings-fill" style="width: 32.4%"></div></div>
-                        <span style="font-size: 0.9rem; color: var(--success);">32.4%</span>
-                    </td>
-                    <td class="status-validated">✓ Validated</td>
-                </tr>
-                <tr>
-                    <td><strong>OLMoE 1B-7B</strong></td>
-                    <td>6.9B</td>
-                    <td>64</td>
-                    <td>8 → 6.0 (per-layer)</td>
-                    <td>
-                        <div class="savings-bar"><div class="savings-fill" style="width: 24.7%"></div></div>
-                        <span style="font-size: 0.9rem; color: var(--success);">24.7%</span>
-                    </td>
-                    <td class="status-validated">✓ Validated</td>
-                </tr>
-                <tr>
-                    <td><strong>DeepSeek-V3</strong></td>
-                    <td>671B</td>
-                    <td>256</td>
-                    <td>8 → TBD</td>
-                    <td>
-                        <div class="savings-bar"><div class="savings-fill" style="width: 0%"></div></div>
-                        <span style="font-size: 0.9rem; color: var(--warning);">Pending</span>
-                    </td>
-                    <td class="status-pending">○ Pending</td>
-                </tr>
-                <tr>
-                    <td><strong>DBRX</strong></td>
-                    <td>132B</td>
-                    <td>16</td>
-                    <td>4 → TBD</td>
-                    <td>
-                        <div class="savings-bar"><div class="savings-fill" style="width: 0%"></div></div>
-                        <span style="font-size: 0.9rem; color: #94a3b8;">~30% est.</span>
-                    </td>
-                    <td class="status-estimated">~ Estimated</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="grid">
-        <div class="card">
-            <h3>📊 K Distribution (Mixtral)</h3>
-            <div class="chart-container" style="height: 200px;">
-                <canvas id="kDistChart"></canvas>
-            </div>
-        </div>
-        <div class="card">
-            <h3>⚡ Latency vs Accuracy Trade-off</h3>
-            <div class="chart-container" style="height: 200px;">
-                <canvas id="tradeoffChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modelli MoE Disponibili -->
-    <div class="card" style="margin-bottom: 2rem;">
-        <h3>🤖 Modelli MoE Disponibili per Profiling</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Provider</th>
-                    <th>Modello</th>
-                    <th>Params</th>
-                    <th>Experts</th>
-                    <th>Top-K</th>
-                    <th>Prezzo Input</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Together</td>
-                    <td><strong>DeepSeek-V3.1</strong></td>
-                    <td>671B</td>
-                    <td>256</td>
-                    <td>8</td>
-                    <td>$0.60/1M</td>
-                </tr>
-                <tr>
-                    <td>Together</td>
-                    <td><strong>Qwen3-235B-MoE</strong></td>
-                    <td>235B</td>
-                    <td>128</td>
-                    <td>22</td>
-                    <td>$0.65/1M</td>
-                </tr>
-                <tr>
-                    <td>Together</td>
-                    <td><strong>Qwen3-Coder-480B</strong></td>
-                    <td>480B</td>
-                    <td>160</td>
-                    <td>35</td>
-                    <td>$2.00/1M</td>
-                </tr>
-                <tr>
-                    <td>Together</td>
-                    <td><strong>Cogito-109B-MoE</strong></td>
-                    <td>109B</td>
-                    <td>64</td>
-                    <td>8</td>
-                    <td>$0.18/1M</td>
-                </tr>
-                <tr>
-                    <td>OpenRouter</td>
-                    <td><strong>Mixtral-8x7B</strong></td>
-                    <td>46.7B</td>
-                    <td>8</td>
-                    <td>2</td>
-                    <td>$0.24/1M</td>
-                </tr>
-                <tr>
-                    <td>OpenRouter</td>
-                    <td><strong>Mixtral-8x22B</strong></td>
-                    <td>141B</td>
-                    <td>8</td>
-                    <td>2</td>
-                    <td>$0.65/1M</td>
-                </tr>
-                <tr>
-                    <td>DeepSeek</td>
-                    <td><strong>deepseek-chat</strong></td>
-                    <td>671B</td>
-                    <td>256</td>
-                    <td>8</td>
-                    <td>$0.14/1M</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Risparmi Stimati Enterprise -->
-    <div class="card" style="margin-bottom: 2rem;">
-        <h3>💰 Risparmi Stimati Enterprise con Adaptive-K</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Scenario</th>
-                    <th>Tokens/giorno</th>
-                    <th>Baseline/mese</th>
-                    <th>Adaptive-K/mese</th>
-                    <th>Risparmio/mese</th>
-                    <th>Risparmio %</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Startup</strong></td>
-                    <td>10M</td>
-                    <td>$315</td>
-                    <td>$237</td>
-                    <td style="color: var(--success); font-weight: 600;">$78</td>
-                    <td>24.7%</td>
-                </tr>
-                <tr>
-                    <td><strong>Growth</strong></td>
-                    <td>100M</td>
-                    <td>$3,148</td>
-                    <td>$2,371</td>
-                    <td style="color: var(--success); font-weight: 600;">$777</td>
-                    <td>24.7%</td>
-                </tr>
-                <tr>
-                    <td><strong>Enterprise</strong></td>
-                    <td>500M</td>
-                    <td>$15,742</td>
-                    <td>$11,854</td>
-                    <td style="color: var(--success); font-weight: 600;">$3,887</td>
-                    <td>24.7%</td>
-                </tr>
-                <tr style="background: rgba(99, 102, 241, 0.1);">
-                    <td><strong>Hyperscale</strong></td>
-                    <td>1B</td>
-                    <td>$31,483</td>
-                    <td>$23,709</td>
-                    <td style="color: var(--success); font-weight: 600;">$7,775</td>
-                    <td>24.7%</td>
-                </tr>
-            </tbody>
-        </table>
-        <p style="margin-top: 1rem; color: #94a3b8; font-size: 0.85rem;">
-            * Stime basate su media di tutti i modelli MoE disponibili. Mixtral 8x7B raggiunge il 52.5% di risparmio.
-        </p>
-    </div>
-
-    <!-- Industry Research & Market Context -->
-    <div class="card" style="margin-bottom: 2rem;">
-        <h3>📊 Industry Research: AI Infrastructure Cost Crisis</h3>
-        <div class="grid" style="margin-top: 1rem;">
-            <div style="padding: 1rem; background: rgba(99, 102, 241, 0.1); border-radius: 8px;">
-                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Enterprise AI Spend 2024</h4>
-                <p style="font-size: 2rem; font-weight: bold; color: var(--success);">$7M</p>
-                <p style="color: #94a3b8; font-size: 0.85rem;">Average enterprise spend on LLM APIs (a16z research)</p>
-            </div>
-            <div style="padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: 8px;">
-                <h4 style="color: var(--success); margin-bottom: 0.5rem;">Budget Growth 2025</h4>
-                <p style="font-size: 2rem; font-weight: bold; color: var(--success);">2-5x</p>
-                <p style="color: #94a3b8; font-size: 0.85rem;">Expected YoY increase in AI infrastructure spending</p>
-            </div>
-            <div style="padding: 1rem; background: rgba(245, 158, 11, 0.1); border-radius: 8px;">
-                <h4 style="color: var(--warning); margin-bottom: 0.5rem;">Datacenter Power 2026</h4>
-                <p style="font-size: 2rem; font-weight: bold; color: var(--warning);">96 GW</p>
-                <p style="color: #94a3b8; font-size: 0.85rem;">Global datacenter power demand (SemiAnalysis)</p>
-            </div>
-            <div style="padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px;">
-                <h4 style="color: #ef4444; margin-bottom: 0.5rem;">H100 Cost/Year</h4>
-                <p style="font-size: 2rem; font-weight: bold; color: #ef4444;">$648/mo</p>
-                <p style="color: #94a3b8; font-size: 0.85rem;">Electricity cost per 8-GPU server (10.2kW @ $0.083/kWh)</p>
-            </div>
-        </div>
-        <p style="margin-top: 1rem; color: #94a3b8; font-size: 0.85rem;">
-            Sources: a16z "16 Changes to Enterprise GenAI" (2024), SemiAnalysis "AI Datacenter Energy Dilemma" (2024)
-        </p>
-    </div>
-
-    <!-- Technical Deep Dive: MoE Architecture -->
-    <div class="card" style="margin-bottom: 2rem;">
-        <h3>🔬 Technical Deep Dive: Why Adaptive-K Works</h3>
-        <div style="margin-top: 1rem;">
-            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">The MoE Efficiency Problem</h4>
-            <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 1rem;">
-                Traditional MoE models use <strong style="color: var(--text);">fixed top-K routing</strong>: every token activates exactly K experts regardless of complexity. 
-                DeepSeek-V3 activates 37B of 671B parameters (5.5%), but still wastes compute on trivial tokens that need fewer experts.
-            </p>
-            
-            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Adaptive-K Solution</h4>
-            <table style="margin-bottom: 1rem;">
+            <table>
                 <thead>
                     <tr>
-                        <th>Token Complexity</th>
-                        <th>Fixed K=8</th>
-                        <th>Adaptive-K</th>
-                        <th>Savings</th>
+                        <th>Model</th>
+                        <th>Total Params</th>
+                        <th>Experts</th>
+                        <th>K (base → adaptive)</th>
+                        <th>Compute Savings</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Trivial ("the", "a", punctuation)</td>
-                        <td>8 experts</td>
-                        <td>1-2 experts</td>
-                        <td style="color: var(--success);">75-87%</td>
+                        <td><strong>Mixtral 8x7B</strong></td>
+                        <td>46.7B</td>
+                        <td>8</td>
+                        <td>8 → 3.80</td>
+                        <td>
+                            <div class="progress-bar"><div class="progress-fill green" style="width: 52.5%"></div></div>
+                            <span style="color: var(--vs-green);">52.5%</span>
+                        </td>
+                        <td><span class="status validated">✓ Validated</span></td>
                     </tr>
                     <tr>
-                        <td>Simple (common words)</td>
-                        <td>8 experts</td>
-                        <td>2-4 experts</td>
-                        <td style="color: var(--success);">50-75%</td>
+                        <td><strong>Qwen1.5-MoE</strong></td>
+                        <td>14.3B</td>
+                        <td>60</td>
+                        <td>4 → 2.70</td>
+                        <td>
+                            <div class="progress-bar"><div class="progress-fill green" style="width: 32.4%"></div></div>
+                            <span style="color: var(--vs-green);">32.4%</span>
+                        </td>
+                        <td><span class="status validated">✓ Validated</span></td>
                     </tr>
                     <tr>
-                        <td>Moderate (domain terms)</td>
-                        <td>8 experts</td>
-                        <td>4-6 experts</td>
-                        <td style="color: var(--success);">25-50%</td>
+                        <td><strong>OLMoE 1B-7B</strong></td>
+                        <td>6.9B</td>
+                        <td>64</td>
+                        <td>8 → 6.0 (per-layer)</td>
+                        <td>
+                            <div class="progress-bar"><div class="progress-fill green" style="width: 24.7%"></div></div>
+                            <span style="color: var(--vs-green);">24.7%</span>
+                        </td>
+                        <td><span class="status validated">✓ Validated</span></td>
                     </tr>
                     <tr>
-                        <td>Complex (reasoning, code)</td>
-                        <td>8 experts</td>
-                        <td>6-8 experts</td>
-                        <td style="color: #94a3b8;">0-25%</td>
+                        <td><strong>DeepSeek-V3</strong></td>
+                        <td>671B</td>
+                        <td>256</td>
+                        <td>8 → TBD</td>
+                        <td>
+                            <div class="progress-bar"><div class="progress-fill blue" style="width: 0%"></div></div>
+                            <span style="color: var(--vs-yellow);">Pending</span>
+                        </td>
+                        <td><span class="status pending">○ Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>DBRX</strong></td>
+                        <td>132B</td>
+                        <td>16</td>
+                        <td>4 → TBD</td>
+                        <td>
+                            <div class="progress-bar"><div class="progress-fill blue" style="width: 30%"></div></div>
+                            <span style="color: var(--vs-muted);">~30% est.</span>
+                        </td>
+                        <td><span class="status estimated">~ Estimated</span></td>
                     </tr>
                 </tbody>
             </table>
-            
-            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Key Innovations</h4>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                <div style="padding: 1rem; border: 1px solid var(--border); border-radius: 8px;">
-                    <strong style="color: var(--success);">Entropy-Based Selection</strong>
-                    <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.5rem;">
-                        Router confidence determines K. High entropy (uncertainty) → more experts. Low entropy → fewer experts.
-                    </p>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-2" style="margin-top: 2rem;">
+            <div class="card">
+                <h3><span class="icon">📈</span> Compute Savings by Model</h3>
+                <div class="chart-container">
+                    <canvas id="savingsChart"></canvas>
                 </div>
-                <div style="padding: 1rem; border: 1px solid var(--border); border-radius: 8px;">
-                    <strong style="color: var(--success);">Per-Layer Adaptation</strong>
-                    <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.5rem;">
-                        Early layers need fewer experts (pattern matching). Later layers need more (reasoning).
-                    </p>
-                </div>
-                <div style="padding: 1rem; border: 1px solid var(--border); border-radius: 8px;">
-                    <strong style="color: var(--success);">Zero Accuracy Loss</strong>
-                    <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.5rem;">
-                        Validated <0.5% accuracy drop across all tested models (Mixtral, OLMoE, Qwen-MoE).
-                    </p>
+            </div>
+            <div class="card">
+                <h3><span class="icon">🎯</span> K Distribution (Mixtral)</h3>
+                <div class="chart-container">
+                    <canvas id="kDistChart"></canvas>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Comparison with Alternatives -->
-    <div class="card" style="margin-bottom: 2rem;">
-        <h3>⚖️ Adaptive-K vs Alternative Approaches</h3>
-        <table style="margin-top: 1rem;">
-            <thead>
-                <tr>
-                    <th>Approach</th>
-                    <th>Compute Savings</th>
-                    <th>Accuracy Impact</th>
-                    <th>Integration Effort</th>
-                    <th>Production Ready</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr style="background: rgba(34, 197, 94, 0.1);">
-                    <td><strong>Adaptive-K (Ours)</strong></td>
-                    <td style="color: var(--success);">25-52%</td>
-                    <td style="color: var(--success);">< 0.5% drop</td>
-                    <td>SDK/API</td>
-                    <td class="status-validated">✓ Yes</td>
-                </tr>
-                <tr>
-                    <td>Quantization (INT8/FP8)</td>
-                    <td>20-30%</td>
-                    <td>1-3% drop</td>
-                    <td>Model conversion</td>
-                    <td class="status-validated">✓ Yes</td>
-                </tr>
-                <tr>
-                    <td>Speculative Decoding</td>
-                    <td>10-40%</td>
-                    <td>0% (lossless)</td>
-                    <td>Draft model required</td>
-                    <td class="status-validated">✓ Yes</td>
-                </tr>
-                <tr>
-                    <td>Expert Pruning</td>
-                    <td>30-50%</td>
-                    <td>2-5% drop</td>
-                    <td>Retraining required</td>
-                    <td class="status-pending">○ Research</td>
-                </tr>
-                <tr>
-                    <td>Model Distillation</td>
-                    <td>50-80%</td>
-                    <td>5-15% drop</td>
-                    <td>Full training pipeline</td>
-                    <td class="status-validated">✓ Yes</td>
-                </tr>
-            </tbody>
-        </table>
-        <p style="margin-top: 1rem; color: #94a3b8; font-size: 0.85rem;">
-            <strong>Key advantage:</strong> Adaptive-K is orthogonal to other optimizations. Combine with quantization + speculative decoding for 60-80% total savings.
-        </p>
-    </div>
-
-    <!-- Interactive ROI Calculator -->
-    <div class="card" style="margin-bottom: 2rem;">
-        <h3>🧮 ROI Calculator</h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem;">
-            <div>
-                <label style="display: block; margin-bottom: 0.5rem; color: #94a3b8;">Daily Token Volume</label>
-                <select id="tokenVolume" style="width: 100%; padding: 0.75rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text);" onchange="calculateROI()">
-                    <option value="10">10M tokens/day (Startup)</option>
-                    <option value="50">50M tokens/day (Growth)</option>
-                    <option value="100" selected>100M tokens/day (Scale)</option>
-                    <option value="500">500M tokens/day (Enterprise)</option>
-                    <option value="1000">1B tokens/day (Hyperscale)</option>
-                </select>
-                
-                <label style="display: block; margin: 1rem 0 0.5rem; color: #94a3b8;">MoE Model</label>
-                <select id="modelSelect" style="width: 100%; padding: 0.75rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text);" onchange="calculateROI()">
-                    <option value="0.14" data-savings="35">DeepSeek-V3 ($0.14/1M)</option>
-                    <option value="0.24" data-savings="52.5">Mixtral 8x7B ($0.24/1M)</option>
-                    <option value="0.65" data-savings="32.4" selected>Qwen-MoE ($0.65/1M)</option>
-                    <option value="2.00" data-savings="30">Qwen3-Coder-480B ($2.00/1M)</option>
-                </select>
-                
-                <label style="display: block; margin: 1rem 0 0.5rem; color: #94a3b8;">Estimated Savings Rate</label>
-                <input type="range" id="savingsRate" min="20" max="55" value="35" style="width: 100%;" onchange="calculateROI()">
-                <span id="savingsDisplay" style="color: var(--success);">35%</span>
+        <!-- Industry Research -->
+        <h2 class="section-title"><span class="icon">📰</span> Industry Research</h2>
+        <div class="grid grid-4">
+            <div class="highlight-box blue">
+                <div style="font-size: 2rem; font-weight: 700; color: var(--vs-blue);">$7M</div>
+                <div style="color: var(--vs-muted); font-size: 0.85rem; margin-top: 0.25rem;">Avg Enterprise LLM Spend</div>
+                <div style="color: var(--vs-muted); font-size: 0.75rem; margin-top: 0.5rem;">Source: a16z 2024</div>
             </div>
-            <div style="padding: 1.5rem; background: rgba(99, 102, 241, 0.1); border-radius: 12px;">
-                <h4 style="color: var(--primary); margin-bottom: 1rem;">Monthly Projection</h4>
-                <div class="stat">
-                    <span>Baseline Cost</span>
-                    <span id="baselineCost" style="color: #94a3b8;">$1,950</span>
+            <div class="highlight-box green">
+                <div style="font-size: 2rem; font-weight: 700; color: var(--vs-green);">2-5x</div>
+                <div style="color: var(--vs-muted); font-size: 0.85rem; margin-top: 0.25rem;">Budget Growth 2025</div>
+                <div style="color: var(--vs-muted); font-size: 0.75rem; margin-top: 0.5rem;">Expected YoY increase</div>
+            </div>
+            <div class="highlight-box yellow">
+                <div style="font-size: 2rem; font-weight: 700; color: var(--vs-yellow);">96 GW</div>
+                <div style="color: var(--vs-muted); font-size: 0.85rem; margin-top: 0.25rem;">Datacenter Power 2026</div>
+                <div style="color: var(--vs-muted); font-size: 0.75rem; margin-top: 0.5rem;">Source: SemiAnalysis</div>
+            </div>
+            <div class="highlight-box red">
+                <div style="font-size: 2rem; font-weight: 700; color: var(--vs-red);">$648/mo</div>
+                <div style="color: var(--vs-muted); font-size: 0.85rem; margin-top: 0.25rem;">H100 8-GPU Power Cost</div>
+                <div style="color: var(--vs-muted); font-size: 0.75rem; margin-top: 0.5rem;">@ $0.083/kWh</div>
+            </div>
+        </div>
+
+        <!-- ROI Calculator -->
+        <h2 class="section-title"><span class="icon">🧮</span> ROI Calculator</h2>
+        <div class="card">
+            <div class="grid grid-2">
+                <div>
+                    <label>Daily Token Volume</label>
+                    <select id="tokenVolume" onchange="calculateROI()">
+                        <option value="10">10M tokens/day (Startup)</option>
+                        <option value="50">50M tokens/day (Growth)</option>
+                        <option value="100" selected>100M tokens/day (Scale)</option>
+                        <option value="500">500M tokens/day (Enterprise)</option>
+                        <option value="1000">1B tokens/day (Hyperscale)</option>
+                    </select>
+                    
+                    <label style="margin-top: 1rem;">MoE Model</label>
+                    <select id="modelSelect" onchange="calculateROI()">
+                        <option value="0.14" data-savings="35">DeepSeek-V3 ($0.14/1M)</option>
+                        <option value="0.24" data-savings="52.5">Mixtral 8x7B ($0.24/1M)</option>
+                        <option value="0.65" data-savings="32.4" selected>Qwen-MoE ($0.65/1M)</option>
+                        <option value="2.00" data-savings="30">Qwen3-Coder-480B ($2.00/1M)</option>
+                    </select>
+                    
+                    <label style="margin-top: 1rem;">Estimated Savings Rate: <span id="savingsDisplay" style="color: var(--vs-green);">35%</span></label>
+                    <input type="range" id="savingsRate" min="20" max="55" value="35" onchange="calculateROI()">
                 </div>
-                <div class="stat">
-                    <span>With Adaptive-K</span>
-                    <span id="adaptiveCost" style="color: var(--success);">$1,268</span>
-                </div>
-                <div class="stat" style="border-top: 2px solid var(--primary); padding-top: 1rem; margin-top: 0.5rem;">
-                    <span style="font-weight: bold;">Monthly Savings</span>
-                    <span id="monthlySavings" style="color: var(--success); font-weight: bold; font-size: 1.5rem;">$683</span>
-                </div>
-                <div class="stat">
-                    <span>Annual Savings</span>
-                    <span id="annualSavings" style="color: var(--success); font-weight: bold;">$8,190</span>
+                <div class="highlight-box blue" style="padding: 1.5rem;">
+                    <h4 style="color: var(--vs-blue); margin-bottom: 1rem;">Monthly Projection</h4>
+                    <div class="stat">
+                        <span class="stat-label">Baseline Cost</span>
+                        <span id="baselineCost" class="stat-value">$1,950</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">With Adaptive-K</span>
+                        <span id="adaptiveCost" class="stat-value green">$1,268</span>
+                    </div>
+                    <div class="stat" style="border-top: 2px solid var(--vs-blue); padding-top: 1rem; margin-top: 0.5rem;">
+                        <span class="stat-label" style="font-weight: bold;">Monthly Savings</span>
+                        <span id="monthlySavings" class="stat-value green" style="font-size: 1.5rem;">$683</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Annual Savings</span>
+                        <span id="annualSavings" class="stat-value green">$8,190</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Enterprise Use Cases -->
-    <div class="card" style="margin-bottom: 2rem;">
-        <h3>🏢 Enterprise Use Cases</h3>
-        <div class="grid" style="margin-top: 1rem;">
-            <div style="padding: 1rem; border: 1px solid var(--border); border-radius: 8px;">
-                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Customer Support AI</h4>
-                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 0.5rem;">
-                    High volume, many simple queries. Perfect for Adaptive-K.
-                </p>
-                <p style="color: var(--success);">Typical savings: <strong>40-50%</strong></p>
-                <p style="color: #94a3b8; font-size: 0.8rem;">a16z reports $6/call savings with LLM support</p>
+        <!-- MoE Models -->
+        <h2 class="section-title"><span class="icon">🤖</span> MoE Models for Profiling</h2>
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Provider</th>
+                        <th>Model</th>
+                        <th>Params</th>
+                        <th>Experts</th>
+                        <th>Top-K</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Together</td><td><strong>DeepSeek-V3.1</strong></td><td>671B</td><td>256</td><td>8</td><td>$0.60/1M</td></tr>
+                    <tr><td>Together</td><td><strong>Qwen3-235B-MoE</strong></td><td>235B</td><td>128</td><td>22</td><td>$0.65/1M</td></tr>
+                    <tr><td>Together</td><td><strong>Qwen3-Coder-480B</strong></td><td>480B</td><td>160</td><td>35</td><td>$2.00/1M</td></tr>
+                    <tr><td>Together</td><td><strong>Cogito-109B-MoE</strong></td><td>109B</td><td>64</td><td>8</td><td>$0.18/1M</td></tr>
+                    <tr><td>OpenRouter</td><td><strong>Mixtral-8x7B</strong></td><td>46.7B</td><td>8</td><td>2</td><td>$0.24/1M</td></tr>
+                    <tr><td>DeepSeek</td><td><strong>deepseek-chat</strong></td><td>671B</td><td>256</td><td>8</td><td>$0.14/1M</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Enterprise Use Cases -->
+        <h2 class="section-title"><span class="icon">🏢</span> Enterprise Use Cases</h2>
+        <div class="grid grid-4">
+            <div class="card">
+                <h4 style="color: var(--vs-blue); margin-bottom: 0.5rem;">Customer Support AI</h4>
+                <p style="color: var(--vs-muted); font-size: 0.85rem; margin-bottom: 0.5rem;">High volume, many simple queries</p>
+                <p style="color: var(--vs-green);">Savings: <strong>40-50%</strong></p>
             </div>
-            <div style="padding: 1rem; border: 1px solid var(--border); border-radius: 8px;">
-                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Document Processing</h4>
-                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 0.5rem;">
-                    Large context, structured extraction. Variable complexity.
-                </p>
-                <p style="color: var(--success);">Typical savings: <strong>30-40%</strong></p>
+            <div class="card">
+                <h4 style="color: var(--vs-blue); margin-bottom: 0.5rem;">Document Processing</h4>
+                <p style="color: var(--vs-muted); font-size: 0.85rem; margin-bottom: 0.5rem;">Variable complexity extraction</p>
+                <p style="color: var(--vs-green);">Savings: <strong>30-40%</strong></p>
             </div>
-            <div style="padding: 1rem; border: 1px solid var(--border); border-radius: 8px;">
-                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Code Generation</h4>
-                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 0.5rem;">
-                    High complexity, needs full expert capacity. Lower savings.
-                </p>
-                <p style="color: var(--success);">Typical savings: <strong>20-30%</strong></p>
+            <div class="card">
+                <h4 style="color: var(--vs-blue); margin-bottom: 0.5rem;">Code Generation</h4>
+                <p style="color: var(--vs-muted); font-size: 0.85rem; margin-bottom: 0.5rem;">High complexity tasks</p>
+                <p style="color: var(--vs-green);">Savings: <strong>20-30%</strong></p>
             </div>
-            <div style="padding: 1rem; border: 1px solid var(--border); border-radius: 8px;">
-                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Synthetic Data Generation</h4>
-                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 0.5rem;">
-                    Massive scale, cost-sensitive. Accuracy less critical.
-                </p>
-                <p style="color: var(--success);">Typical savings: <strong>45-55%</strong></p>
+            <div class="card">
+                <h4 style="color: var(--vs-blue); margin-bottom: 0.5rem;">Synthetic Data Gen</h4>
+                <p style="color: var(--vs-muted); font-size: 0.85rem; margin-bottom: 0.5rem;">Massive scale, cost-sensitive</p>
+                <p style="color: var(--vs-green);">Savings: <strong>45-55%</strong></p>
             </div>
         </div>
-    </div>
 
-    <div class="cta">
-        <h2>Ready to reduce your MoE compute costs?</h2>
-        <p style="margin: 1rem 0; color: #94a3b8;">
-            Integrate Adaptive-K routing in minutes with our SDK
-        </p>
-        <a href="https://adaptive-k.vertexdata.it">Learn More</a>
-        <a href="https://pypi.org/project/adaptive-k-sdk/" style="background: #22c55e;">pip install adaptive-k-sdk</a>
-        <a href="https://github.com/sbm-efficient/adaptive-k-sdk" style="background: #334155;">View on GitHub</a>
+        <!-- CTA -->
+        <div class="cta">
+            <h2>Ready to reduce your MoE compute costs?</h2>
+            <p>Integrate Adaptive-K routing in minutes with our SDK</p>
+            <a href="https://adaptive-k.vertexdata.it" class="btn btn-primary">Learn More</a>
+            <a href="https://pypi.org/project/adaptive-k-sdk/" class="btn btn-secondary">pip install adaptive-k-sdk</a>
+            <a href="/whitepaper.html" class="btn btn-ghost">Read Whitepaper</a>
+        </div>
     </div>
 
     <script>
-        // ROI Calculator
         function calculateROI() {
             const volume = parseFloat(document.getElementById('tokenVolume').value);
-            const modelSelect = document.getElementById('modelSelect');
-            const price = parseFloat(modelSelect.value);
+            const price = parseFloat(document.getElementById('modelSelect').value);
             const savings = parseFloat(document.getElementById('savingsRate').value);
-            
             document.getElementById('savingsDisplay').textContent = savings + '%';
-            
-            const dailyCost = (volume * price) / 1000;
-            const monthlyCost = dailyCost * 30;
-            const adaptiveMonthlyCost = monthlyCost * (1 - savings/100);
-            const monthlySavings = monthlyCost - adaptiveMonthlyCost;
-            
+            const monthlyCost = (volume * price / 1000) * 30;
+            const adaptiveCost = monthlyCost * (1 - savings/100);
+            const monthlySavings = monthlyCost - adaptiveCost;
             document.getElementById('baselineCost').textContent = '$' + monthlyCost.toLocaleString(undefined, {maximumFractionDigits: 0});
-            document.getElementById('adaptiveCost').textContent = '$' + adaptiveMonthlyCost.toLocaleString(undefined, {maximumFractionDigits: 0});
+            document.getElementById('adaptiveCost').textContent = '$' + adaptiveCost.toLocaleString(undefined, {maximumFractionDigits: 0});
             document.getElementById('monthlySavings').textContent = '$' + monthlySavings.toLocaleString(undefined, {maximumFractionDigits: 0});
             document.getElementById('annualSavings').textContent = '$' + (monthlySavings * 12).toLocaleString(undefined, {maximumFractionDigits: 0});
         }
-        
-        // Initialize calculator
         calculateROI();
-    </script>
 
-    <script>
-        // Savings Chart
+        const chartColors = { green: '#4ec9b0', blue: '#3794ff', yellow: '#dcdcaa', purple: '#c586c0', border: '#2d2d2d', text: '#6e7681' };
+        
         new Chart(document.getElementById('savingsChart'), {
             type: 'bar',
             data: {
                 labels: ['Mixtral 8x7B', 'Qwen1.5-MoE', 'OLMoE 1B-7B', 'DeepSeek-V3', 'DBRX'],
-                datasets: [{
-                    label: 'Compute Savings (%)',
-                    data: [52.5, 32.4, 24.7, 0, 0],
-                    backgroundColor: ['#22c55e', '#22c55e', '#22c55e', '#334155', '#334155'],
-                    borderRadius: 8
-                }]
+                datasets: [{ data: [52.5, 32.4, 24.7, 0, 0], backgroundColor: [chartColors.green, chartColors.green, chartColors.green, chartColors.border, chartColors.border], borderRadius: 6 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { 
-                        beginAtZero: true, 
-                        max: 60,
-                        grid: { color: '#334155' },
-                        ticks: { color: '#94a3b8' }
-                    },
-                    x: { 
-                        grid: { display: false },
-                        ticks: { color: '#94a3b8' }
-                    }
-                }
-            }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 60, grid: { color: chartColors.border }, ticks: { color: chartColors.text } }, x: { grid: { display: false }, ticks: { color: chartColors.text } } } }
         });
 
-        // K Distribution Chart
         new Chart(document.getElementById('kDistChart'), {
             type: 'doughnut',
-            data: {
-                labels: ['K=2 (30%)', 'K=4 (50%)', 'K=6 (15%)', 'K=8 (5%)'],
-                datasets: [{
-                    data: [30, 50, 15, 5],
-                    backgroundColor: ['#22c55e', '#6366f1', '#f59e0b', '#ef4444']
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { 
-                        position: 'right',
-                        labels: { color: '#e2e8f0' }
-                    }
-                }
-            }
-        });
-
-        // Trade-off Chart
-        new Chart(document.getElementById('tradeoffChart'), {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Models',
-                    data: [
-                        {x: 52.5, y: 0.3},
-                        {x: 32.4, y: 0.2},
-                        {x: 24.7, y: 0.5}
-                    ],
-                    backgroundColor: '#6366f1',
-                    pointRadius: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { 
-                        title: { display: true, text: 'Compute Savings (%)', color: '#94a3b8' },
-                        grid: { color: '#334155' },
-                        ticks: { color: '#94a3b8' }
-                    },
-                    y: { 
-                        title: { display: true, text: 'Accuracy Drop (%)', color: '#94a3b8' },
-                        grid: { color: '#334155' },
-                        ticks: { color: '#94a3b8' },
-                        reverse: true
-                    }
-                }
-            }
+            data: { labels: ['K=2 (30%)', 'K=4 (50%)', 'K=6 (15%)', 'K=8 (5%)'], datasets: [{ data: [30, 50, 15, 5], backgroundColor: [chartColors.green, chartColors.blue, chartColors.yellow, chartColors.purple] }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#d4d4d4', padding: 15 } } } }
         });
     </script>
 </body>
