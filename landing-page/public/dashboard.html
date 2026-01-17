@@ -536,6 +536,33 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Spiegazione semplice -->
+            <div style="margin-top: 1.5rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(78, 201, 176, 0.1), rgba(55, 148, 255, 0.1)); border-radius: 8px; border-left: 4px solid var(--vs-green);">
+                <h4 style="color: var(--vs-green); margin-bottom: 1rem;">💡 Come Funziona (in parole semplici)</h4>
+                <p style="color: #d4d4d4; line-height: 1.7; margin-bottom: 1rem;">
+                    I modelli AI moderni come DeepSeek-V3 e Mixtral usano una tecnologia chiamata <strong style="color: var(--vs-blue);">Mixture of Experts (MoE)</strong>: 
+                    invece di usare tutto il "cervello" del modello per ogni domanda, attivano solo alcuni "esperti" specializzati.
+                </p>
+                <p style="color: #d4d4d4; line-height: 1.7; margin-bottom: 1rem;">
+                    Il problema? <strong>Attivano sempre lo stesso numero di esperti</strong>, anche per domande semplici come "Che ore sono?" 
+                    che non richiedono tutta quella potenza di calcolo.
+                </p>
+                <p style="color: #d4d4d4; line-height: 1.7; margin-bottom: 1rem;">
+                    <strong style="color: var(--vs-green);">Adaptive-K</strong> risolve questo: analizza la "confidenza" del modello e decide automaticamente 
+                    quanti esperti attivare. Domanda facile → pochi esperti. Domanda complessa → più esperti.
+                </p>
+                <div style="display: flex; gap: 2rem; margin-top: 1rem; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <div style="color: var(--vs-muted); font-size: 0.8rem; margin-bottom: 0.3rem;">❌ PRIMA (Standard)</div>
+                        <div style="color: #d4d4d4;">Sempre 8 esperti attivi = costo fisso alto</div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <div style="color: var(--vs-muted); font-size: 0.8rem; margin-bottom: 0.3rem;">✅ DOPO (Adaptive-K)</div>
+                        <div style="color: var(--vs-green);">2-8 esperti in base alla difficoltà = risparmio 30-50%</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- MoE Models -->
