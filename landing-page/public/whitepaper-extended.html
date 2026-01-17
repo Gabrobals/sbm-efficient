@@ -1595,54 +1595,440 @@
             To our knowledge, we are the first to use routing entropy for dynamic expert selection in MoE models.
         </p>
 
-        <h3>7.4 Industrial Inference Optimization</h3>
+        <h3>7.4 Industrial Inference Optimization: A Comprehensive Analysis</h3>
         
         <p>
             The industrial deployment of LLMs has catalyzed significant innovation in inference optimization. 
-            We categorize these approaches by their optimization target and position Adaptive-K within this landscape.
+            Understanding the landscape of existing approaches is essential for positioning Adaptive-K and 
+            demonstrating its unique contribution. We provide a detailed technical analysis of each optimization 
+            layer, including mathematical models for cost savings.
         </p>
-        
-        <h4>7.4.1 Hardware-Level Optimization</h4>
+
+        <h4>7.4.1 Hardware-Level Optimization: Custom Inference Accelerators</h4>
         
         <p>
-            Specialized inference accelerators have emerged as a key strategy for reducing inference costs. 
-            AWS Inferentia <a href="#ref29">[29]</a> provides custom silicon optimized for inference workloads, 
-            with reported latency reductions exceeding 30% and cost savings of 40-50% compared to GPU-based 
-            inference. However, hardware approaches require significant infrastructure investment and create 
-            vendor lock-in. Adaptive-K, by contrast, provides software-level optimization that works on 
-            <em>any</em> hardware platform.
+            <strong>What it is:</strong> Custom silicon designed specifically for neural network inference, 
+            as opposed to general-purpose GPUs. Examples include AWS Inferentia (Amazon), TPU (Google), 
+            Gaudi (Intel), and Trainium (Amazon for training).
         </p>
-        
-        <h4>7.4.2 Model Compression Techniques</h4>
         
         <p>
-            Model compression encompasses quantization, pruning, and distillation <a href="#ref30">[30]</a>. 
-            Quantization converts model weights from FP32/FP16 to lower precision formats (INT8, INT4, FP8), 
-            achieving 2-4× speedup with minimal accuracy loss. Pruning removes redundant parameters, reducing 
-            model size and compute. These techniques operate on the <em>static</em> model representation—they 
-            reduce the cost of every expert equally. Adaptive-K is orthogonal and complementary: it reduces 
-            the <em>number</em> of expert activations dynamically, and the benefits multiply when combined 
-            with quantization.
+            <strong>How it works:</strong> Inference accelerators optimize the hardware datapath for the 
+            specific operations dominant in neural network inference: matrix multiplications, activation 
+            functions, and memory access patterns. AWS Inferentia <a href="#ref29">[29]</a>, for example, 
+            uses NeuronCores—custom processing units with large on-chip memory (32GB per chip) that can 
+            store entire model layers, eliminating off-chip memory bandwidth bottlenecks.
         </p>
         
-        <h4>7.4.3 Inference Engine Optimization</h4>
-        
-        <p>
-            High-performance inference engines like vLLM <a href="#ref31">[31]</a> and TensorRT-LLM optimize 
-            <em>how</em> computation is executed. vLLM's PagedAttention mechanism optimizes memory management 
-            for KV cache, while continuous batching maximizes GPU utilization. These engines achieve 40-50% 
-            infrastructure cost savings through better resource utilization <a href="#ref32">[32]</a>. 
-            Critically, these optimizations address memory and scheduling but do not reduce the fundamental 
-            compute required per token.
-        </p>
-        
-        <div class="insight">
-            <strong>Key Insight:</strong> The inference optimization stack has four layers: (1) Hardware, 
-            (2) Inference Engine, (3) Model Compression, and (4) Dynamic Compute Selection. Current solutions 
-            focus on layers 1-3, leaving layer 4—<em>how much compute per input</em>—largely unexplored. 
-            Adaptive-K addresses this gap, enabling <em>multiplicative</em> savings when combined with existing 
-            optimizations.
+        <div class="definition">
+            <div class="definition-title">Definition 7.1 (Hardware Efficiency Gain)</div>
+            <p>
+                Let \(T_{\text{GPU}}(M)\) be the inference time for model \(M\) on a GPU, and 
+                \(T_{\text{ASIC}}(M)\) be the time on specialized hardware. The hardware efficiency gain is:
+            </p>
+            <div class="equation">
+                $$\eta_{\text{HW}} = \frac{T_{\text{GPU}}(M) - T_{\text{ASIC}}(M)}{T_{\text{GPU}}(M)} = 1 - \frac{T_{\text{ASIC}}(M)}{T_{\text{GPU}}(M)}$$
+                <span class="equation-number">(13)</span>
+            </div>
         </div>
+        
+        <p>
+            <strong>Reported results:</strong> AWS documents 30-40% latency reduction and up to 70% cost 
+            reduction per inference for specific workloads <a href="#ref29">[29]</a>. Sprinklr's case study 
+            reports >30% latency reduction after migrating 20+ ML models to Inferentia.
+        </p>
+        
+        <p>
+            <strong>Limitations:</strong>
+        </p>
+        <ul>
+            <li><strong>Vendor lock-in:</strong> Code must be compiled with vendor-specific tools (AWS Neuron SDK)</li>
+            <li><strong>Capital expenditure:</strong> Requires infrastructure migration and new hardware procurement</li>
+            <li><strong>Model compatibility:</strong> Not all architectures are equally optimized; MoE support varies</li>
+            <li><strong>Static optimization:</strong> Hardware efficiency is fixed—it cannot adapt to input complexity</li>
+        </ul>
+        
+        <p>
+            <strong>Why Adaptive-K is complementary:</strong> Hardware optimizes the <em>execution speed</em> of 
+            each operation. Adaptive-K reduces the <em>number of operations</em>. On Inferentia, each expert 
+            forward pass is faster; with Adaptive-K, we execute fewer expert passes per token. The savings multiply:
+        </p>
+        
+        <div class="equation">
+            $$T_{\text{combined}} = T_{\text{ASIC}}(M) \times \frac{\mathbb{E}[K_{\text{adaptive}}]}{K_{\text{baseline}}}$$
+            <span class="equation-number">(14)</span>
+        </div>
+
+        <h4>7.4.2 Model Compression: Quantization, Pruning, and Distillation</h4>
+        
+        <p>
+            <strong>What it is:</strong> Techniques that reduce model size and computational requirements by 
+            modifying the model weights or architecture. The three primary approaches are:
+        </p>
+        
+        <ul>
+            <li><strong>Quantization:</strong> Representing weights and activations with fewer bits</li>
+            <li><strong>Pruning:</strong> Removing weights or neurons with minimal impact on output</li>
+            <li><strong>Knowledge Distillation:</strong> Training a smaller "student" model to mimic a larger "teacher"</li>
+        </ul>
+        
+        <p>
+            <strong>Quantization in detail:</strong> Neural network weights are typically stored in FP32 (32-bit 
+            floating point) or FP16 (16-bit). Quantization converts these to lower precision formats:
+        </p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Format</th>
+                    <th>Bits per Weight</th>
+                    <th>Memory Reduction</th>
+                    <th>Typical Speedup</th>
+                    <th>Accuracy Impact</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>FP32 (baseline)</td>
+                    <td>32</td>
+                    <td>1×</td>
+                    <td>1×</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>FP16</td>
+                    <td>16</td>
+                    <td>2×</td>
+                    <td>~1.5-2×</td>
+                    <td>Negligible</td>
+                </tr>
+                <tr>
+                    <td>INT8</td>
+                    <td>8</td>
+                    <td>4×</td>
+                    <td>~2-3×</td>
+                    <td>&lt;1% perplexity</td>
+                </tr>
+                <tr>
+                    <td>INT4</td>
+                    <td>4</td>
+                    <td>8×</td>
+                    <td>~3-4×</td>
+                    <td>1-3% perplexity</td>
+                </tr>
+            </tbody>
+            <caption><strong>Table 13:</strong> Quantization formats and their trade-offs. Data from Neural Magic 
+            benchmarks on 500,000+ LLM evaluations <a href="#ref30">[30]</a>.</caption>
+        </table>
+        
+        <div class="definition">
+            <div class="definition-title">Definition 7.2 (Quantization Speedup)</div>
+            <p>
+                For a model with \(P\) parameters, the memory footprint scales as:
+            </p>
+            <div class="equation">
+                $$\text{Memory}(b) = P \times \frac{b}{8} \text{ bytes}$$
+                <span class="equation-number">(15)</span>
+            </div>
+            <p>
+                where \(b\) is bits per weight. Compute speedup depends on hardware support for low-precision 
+                arithmetic. For INT8 on modern GPUs with Tensor Cores:
+            </p>
+            <div class="equation">
+                $$\text{Speedup}_{\text{INT8}} \approx \frac{\text{TOPS}_{\text{INT8}}}{\text{TFLOPS}_{\text{FP16}}} \approx 2\text{-}3\times$$
+                <span class="equation-number">(16)</span>
+            </div>
+        </div>
+        
+        <p>
+            <strong>How it applies to MoE:</strong> In an MoE model with \(N\) experts, quantization reduces 
+            the cost of <em>every</em> expert equally. If each expert has \(P_E\) parameters:
+        </p>
+        
+        <div class="equation">
+            $$C_{\text{expert}}^{\text{quantized}} = C_{\text{expert}}^{\text{baseline}} \times \frac{1}{\text{Speedup}_{\text{quant}}}$$
+            <span class="equation-number">(17)</span>
+        </div>
+        
+        <p>
+            <strong>Why Adaptive-K is complementary:</strong> Quantization reduces the cost per expert. 
+            Adaptive-K reduces the number of experts. Combined:
+        </p>
+        
+        <div class="equation">
+            $$C_{\text{combined}} = C_{\text{expert}}^{\text{baseline}} \times \frac{1}{\text{Speedup}_{\text{quant}}} \times \frac{\mathbb{E}[K_{\text{adaptive}}]}{K_{\text{baseline}}}$$
+            <span class="equation-number">(18)</span>
+        </div>
+        
+        <div class="highlight">
+            <strong>Numerical Example (Mixtral 8×7B):</strong><br>
+            • Baseline: K=2 experts, FP16 precision<br>
+            • INT8 quantization alone: 2.5× speedup → <strong>60% cost reduction</strong><br>
+            • Adaptive-K alone: Avg K=0.95 → <strong>52.5% cost reduction</strong><br>
+            • Combined: 2.5× speedup × (0.95/2) = <strong>81% cost reduction</strong><br>
+            The optimizations <em>multiply</em>, not add.
+        </div>
+
+        <h4>7.4.3 Inference Engine Optimization: vLLM and PagedAttention</h4>
+        
+        <p>
+            <strong>What it is:</strong> Software frameworks that optimize <em>how</em> inference computation 
+            is scheduled and executed on hardware. The key innovations address memory management and batching.
+        </p>
+        
+        <p>
+            <strong>The KV Cache Problem:</strong> Autoregressive LLMs must store key-value (KV) pairs from 
+            all previous tokens to compute attention. For a model with \(L\) layers, hidden dimension \(d\), 
+            and sequence length \(S\):
+        </p>
+        
+        <div class="equation">
+            $$\text{KV Cache Size} = 2 \times L \times S \times d \times \text{bytes per element}$$
+            <span class="equation-number">(19)</span>
+        </div>
+        
+        <p>
+            For Mixtral 8×7B with 32 layers, d=4096, and a 4K context in FP16:
+            \(2 \times 32 \times 4096 \times 4096 \times 2 = 2.1\text{GB}\) per sequence. 
+            With batch size 32, this requires 67GB just for KV cache—more than most GPUs.
+        </p>
+        
+        <p>
+            <strong>PagedAttention Solution <a href="#ref31">[31]</a>:</strong> vLLM borrows the concept of 
+            virtual memory paging from operating systems. Instead of allocating contiguous memory for each 
+            sequence's full potential length, it allocates memory in fixed-size "pages" (blocks) and manages 
+            them dynamically:
+        </p>
+        
+        <ul>
+            <li><strong>Reduced fragmentation:</strong> Memory is allocated in small blocks, reducing waste</li>
+            <li><strong>Memory sharing:</strong> Sequences with common prefixes can share KV cache pages</li>
+            <li><strong>Dynamic allocation:</strong> Memory grows with actual sequence length, not max length</li>
+        </ul>
+        
+        <p>
+            <strong>Continuous Batching:</strong> Traditional batching waits for all sequences in a batch to 
+            complete before starting new ones. Continuous batching immediately fills slots freed by completed 
+            sequences, maximizing GPU utilization.
+        </p>
+        
+        <div class="definition">
+            <div class="definition-title">Definition 7.3 (Throughput vs Latency Trade-off)</div>
+            <p>
+                Let \(\lambda\) be the request arrival rate and \(\mu\) be the service rate. GPU utilization is:
+            </p>
+            <div class="equation">
+                $$U = \frac{\lambda}{\mu \times B}$$
+                <span class="equation-number">(20)</span>
+            </div>
+            <p>
+                where \(B\) is effective batch size. vLLM's continuous batching increases effective \(B\) by 
+                reducing idle time, achieving 2-4× higher throughput than naive batching.
+            </p>
+        </div>
+        
+        <p>
+            <strong>Reported results:</strong> vLLM achieves 24× higher throughput than HuggingFace Transformers 
+            and 2-4× higher throughput than text-generation-inference on common benchmarks <a href="#ref32">[32]</a>.
+        </p>
+        
+        <p>
+            <strong>What vLLM does NOT optimize:</strong>
+        </p>
+        <ul>
+            <li>The number of FLOPs per token (fixed by model architecture)</li>
+            <li>The number of experts activated in MoE models (fixed at K)</li>
+            <li>Input-dependent compute allocation (treats all tokens equally)</li>
+        </ul>
+        
+        <p>
+            <strong>Why Adaptive-K is complementary:</strong> vLLM optimizes <em>scheduling</em> (when and how 
+            to compute). Adaptive-K optimizes <em>compute amount</em> (how much to compute). They address 
+            orthogonal bottlenecks:
+        </p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Bottleneck</th>
+                    <th>vLLM Solution</th>
+                    <th>Adaptive-K Solution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Memory fragmentation</td>
+                    <td>PagedAttention ✓</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>GPU underutilization</td>
+                    <td>Continuous batching ✓</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>Excessive compute per token</td>
+                    <td>—</td>
+                    <td>Dynamic K selection ✓</td>
+                </tr>
+                <tr>
+                    <td>Uniform resource allocation</td>
+                    <td>—</td>
+                    <td>Entropy-based adaptation ✓</td>
+                </tr>
+            </tbody>
+            <caption><strong>Table 14:</strong> Complementary bottlenecks addressed by vLLM and Adaptive-K.</caption>
+        </table>
+
+        <h4>7.4.4 The Four-Layer Optimization Stack: A Unified Framework</h4>
+        
+        <p>
+            We propose a unified framework for understanding inference optimization as a four-layer stack, 
+            where each layer addresses a distinct efficiency dimension:
+        </p>
+        
+        <div class="algorithm">
+            <div class="algorithm-header">The Inference Optimization Stack</div>
+            <div class="algorithm-body">
+┌─────────────────────────────────────────────────────────────────────────┐
+│  Layer 4: DYNAMIC COMPUTE SELECTION          ← <span class="keyword">Adaptive-K (this work)</span>  │
+│           "How much compute for THIS input?"                            │
+│           Varies K based on routing entropy                             │
+├─────────────────────────────────────────────────────────────────────────┤
+│  Layer 3: MODEL COMPRESSION                  ← Quantization, Pruning    │
+│           "Make each operation cheaper"                                 │
+│           INT8/INT4, weight pruning, distillation                       │
+├─────────────────────────────────────────────────────────────────────────┤
+│  Layer 2: INFERENCE ENGINE                   ← vLLM, TensorRT-LLM       │
+│           "Execute operations efficiently"                              │
+│           PagedAttention, continuous batching, kernel fusion            │
+├─────────────────────────────────────────────────────────────────────────┤
+│  Layer 1: HARDWARE                           ← GPU, TPU, Inferentia     │
+│           "Fast silicon for neural network ops"                         │
+│           Tensor Cores, custom accelerators                             │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+        </div>
+        
+        <p>
+            <strong>Key insight:</strong> Each layer operates independently and provides multiplicative benefits. 
+            The total cost reduction factor is the product of individual layer efficiencies:
+        </p>
+        
+        <div class="equation">
+            $$\text{Cost}_{\text{optimized}} = \text{Cost}_{\text{baseline}} \times \prod_{i=1}^{4} (1 - \eta_i)$$
+            <span class="equation-number">(21)</span>
+        </div>
+        
+        <p>
+            where \(\eta_i\) is the efficiency gain from layer \(i\).
+        </p>
+
+        <h4>7.4.5 Quantitative Comparison: A Production Deployment Simulation</h4>
+        
+        <p>
+            To illustrate the practical impact, we simulate a production deployment scenario based on 
+            publicly reported metrics.
+        </p>
+        
+        <div class="definition">
+            <div class="definition-title">Simulation Setup</div>
+            <p>
+                <strong>Workload:</strong> 10 billion predictions per day (comparable to Sprinklr's reported volume)<br>
+                <strong>Model:</strong> Mixtral 8×7B with K=2 baseline routing<br>
+                <strong>Baseline cost:</strong> $0.001 per 1K tokens (typical cloud inference pricing)<br>
+                <strong>Average tokens per prediction:</strong> 100 tokens
+            </p>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Optimization Configuration</th>
+                    <th>Cost Factor</th>
+                    <th>Daily Cost</th>
+                    <th>Annual Cost</th>
+                    <th>Annual Savings</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Baseline (no optimization)</strong></td>
+                    <td>1.00×</td>
+                    <td>$1,000,000</td>
+                    <td>$365M</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>+ Hardware (Inferentia, -35%)</td>
+                    <td>0.65×</td>
+                    <td>$650,000</td>
+                    <td>$237M</td>
+                    <td>$128M</td>
+                </tr>
+                <tr>
+                    <td>+ Engine (vLLM, -40% infra)</td>
+                    <td>0.39×</td>
+                    <td>$390,000</td>
+                    <td>$142M</td>
+                    <td>$223M</td>
+                </tr>
+                <tr>
+                    <td>+ Quantization (INT8, 2.5× speedup)</td>
+                    <td>0.156×</td>
+                    <td>$156,000</td>
+                    <td>$57M</td>
+                    <td>$308M</td>
+                </tr>
+                <tr style="background: #f0fdf4;">
+                    <td><strong>+ Adaptive-K (-52.5%)</strong></td>
+                    <td><strong>0.074×</strong></td>
+                    <td><strong>$74,000</strong></td>
+                    <td><strong>$27M</strong></td>
+                    <td><strong>$338M</strong></td>
+                </tr>
+            </tbody>
+            <caption><strong>Table 15:</strong> Cumulative cost reduction from stacked optimizations. 
+            Adaptive-K adds $30M annual savings on top of all other optimizations. Numbers are illustrative 
+            based on publicly reported efficiency gains; actual results vary by workload.</caption>
+        </table>
+        
+        <div class="highlight">
+            <strong>Key Finding:</strong> Even when all other optimizations are already applied, Adaptive-K 
+            provides an additional 52.5% reduction on the remaining compute cost. At scale, this represents 
+            tens of millions of dollars in annual savings.
+        </div>
+
+        <h4>7.4.6 Why Layer 4 Was Previously Unexplored</h4>
+        
+        <p>
+            Given the substantial potential savings, why has dynamic compute selection received less attention 
+            than other optimization layers? We identify three contributing factors:
+        </p>
+        
+        <ol>
+            <li>
+                <strong>Architectural coupling:</strong> Most neural networks are dense—every parameter is used 
+                for every input. MoE models, with their explicit expert selection mechanism, are uniquely suited 
+                to variable compute allocation. The recent proliferation of production MoE models (Mixtral, 
+                GPT-4-MoE rumors, Gemini) has only recently made this optimization broadly applicable.
+            </li>
+            <li>
+                <strong>Training complexity:</strong> Training with variable K introduces gradient estimation 
+                challenges (discrete K selection is non-differentiable). Our post-hoc approach sidesteps this 
+                by operating only at inference time on pre-trained models.
+            </li>
+            <li>
+                <strong>Implementation complexity:</strong> Variable K complicates efficient batched execution. 
+                Our padded batching approach (Section 4.3) provides a practical solution with acceptable overhead.
+            </li>
+        </ol>
+        
+        <p>
+            The convergence of (1) widespread MoE adoption, (2) mature inference engines that handle the 
+            execution complexity, and (3) our training-free approach makes Layer 4 optimization timely and practical.
+        </p>
+
+        <h4>7.4.7 Summary: Positioning Adaptive-K in the Optimization Landscape</h4>
         
         <table>
             <thead>
@@ -1650,44 +2036,57 @@
                     <th>Optimization Layer</th>
                     <th>Representative Methods</th>
                     <th>Typical Savings</th>
+                    <th>What It Optimizes</th>
                     <th>Limitation</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Hardware</td>
-                    <td>AWS Inferentia, TPU, NVIDIA H100</td>
+                    <td>AWS Inferentia, TPU, H100</td>
                     <td>30-50%</td>
-                    <td>Vendor lock-in, CapEx</td>
+                    <td>Ops/second</td>
+                    <td>CapEx, vendor lock-in</td>
                 </tr>
                 <tr>
                     <td>Inference Engine</td>
-                    <td>vLLM, TensorRT-LLM, DeepSpeed</td>
-                    <td>40-50%</td>
-                    <td>Memory-bound, not compute</td>
+                    <td>vLLM, TensorRT-LLM</td>
+                    <td>2-4× throughput</td>
+                    <td>Memory, scheduling</td>
+                    <td>Not compute-bound</td>
                 </tr>
                 <tr>
                     <td>Model Compression</td>
-                    <td>INT8/INT4 quantization, pruning</td>
+                    <td>INT8, INT4, pruning</td>
                     <td>2-4× speedup</td>
-                    <td>Static, uniform reduction</td>
+                    <td>FLOPs per op</td>
+                    <td>Static, all tokens equal</td>
                 </tr>
                 <tr style="background: #f0fdf4;">
                     <td><strong>Dynamic Compute</strong></td>
-                    <td><strong>Adaptive-K (this work)</strong></td>
+                    <td><strong>Adaptive-K</strong></td>
                     <td><strong>25-52%</strong></td>
-                    <td>MoE architectures only</td>
+                    <td><strong>Ops per token</strong></td>
+                    <td>MoE only</td>
                 </tr>
             </tbody>
-            <caption><strong>Table 12:</strong> Inference optimization landscape. Adaptive-K addresses an 
-            orthogonal dimension (dynamic compute per input) and can be combined with all other approaches.</caption>
+            <caption><strong>Table 16:</strong> Inference optimization landscape summary. Adaptive-K uniquely 
+            addresses the "operations per token" dimension, enabling input-dependent resource allocation.</caption>
         </table>
+        
+        <div class="insight">
+            <strong>The Fundamental Insight:</strong> Layers 1-3 ask "How can we execute K expert forward passes 
+            faster?" Adaptive-K asks "Do we need K expert forward passes for this token?" By answering "no" for 
+            60%+ of tokens, we achieve substantial savings orthogonal to all other optimizations.
+        </div>
         
         <p>
             Recent industry analyses emphasize that inference costs now dominate the total cost of ownership 
-            for deployed LLMs <a href="#ref33">[33]</a>, making even modest per-query savings highly impactful 
-            at scale. For services processing billions of queries daily, Adaptive-K's 25-52% compute reduction 
-            translates to substantial operational savings.
+            for deployed LLMs <a href="#ref33">[33]</a>—often exceeding training costs within months of deployment. 
+            For services processing billions of queries daily, every percentage point of efficiency improvement 
+            translates to millions in operational savings. Adaptive-K's 25-52% compute reduction, stacking 
+            multiplicatively with existing optimizations, represents a significant advancement in practical 
+            LLM deployment efficiency.
         </p>
 
         <!-- 8. Discussion -->
