@@ -1,0 +1,58 @@
+[project]
+name = "adaptive-speculative"
+version = "0.1.0"
+description = "Entropy-guided dynamic draft length for speculative decoding"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Gabriele Ballarani", email = "gabriele@adaptive-k.dev"}
+]
+requires-python = ">=3.10"
+keywords = ["llm", "inference", "speculative-decoding", "entropy", "optimization"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "torch>=2.0",
+    "numpy>=1.24",
+    "transformers>=4.40",
+]
+
+[project.optional-dependencies]
+vllm = ["vllm>=0.6.0"]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=24.0",
+    "ruff>=0.3",
+]
+
+[project.urls]
+Homepage = "https://github.com/Gabrobals/adaptive-speculative"
+Documentation = "https://adaptive-k.dev"
+Repository = "https://github.com/Gabrobals/adaptive-speculative"
+Issues = "https://github.com/Gabrobals/adaptive-speculative/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/adaptive_speculative"]
+
+[tool.black]
+line-length = 88
+target-version = ["py310", "py311", "py312"]
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
