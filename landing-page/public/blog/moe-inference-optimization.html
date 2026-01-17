@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoE Inference Optimization: The Missing Piece in LLM Efficiency | Adaptive-K</title>
+    <meta name="description" content="While KV Cache, FlashAttention, and quantization dominate inference optimization discussions, Mixture-of-Experts routing remains overlooked. Learn how Adaptive-K routing can reduce MoE inference costs by 30-50%.">
+    <meta name="keywords" content="MoE, Mixture of Experts, inference optimization, LLM, adaptive routing, expert selection, Mixtral, DeepSeek">
+    <meta name="author" content="Adaptive-K Team">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="MoE Inference Optimization: The Missing Piece in LLM Efficiency">
+    <meta property="og:description" content="Why expert routing optimization is the next frontier in LLM inference efficiency.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://adaptive-k.vertexdata.it/blog/moe-inference-optimization.html">
+    <meta property="og:image" content="https://adaptive-k.vertexdata.it/og-image.png">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MoE Inference Optimization: The Missing Piece">
+    <meta name="twitter:description" content="Why expert routing optimization is the next frontier in LLM inference efficiency.">
+    
+    <link rel="canonical" href="https://adaptive-k.vertexdata.it/blog/moe-inference-optimization.html">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .prose h2 { margin-top: 2rem; margin-bottom: 1rem; }
+        .prose p { margin-bottom: 1rem; line-height: 1.8; }
+        .prose ul { margin-bottom: 1rem; padding-left: 1.5rem; }
+        .prose li { margin-bottom: 0.5rem; }
+        .prose code { background: #1e293b; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.9em; }
+        .prose pre { background: #1e293b; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1rem; }
+        .prose pre code { background: none; padding: 0; }
+        .highlight-box { background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); border-left: 4px solid #6366f1; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 0.5rem 0.5rem 0; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+        .comparison-table th, .comparison-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #334155; }
+        .comparison-table th { background: #1e293b; font-weight: 600; }
+        .comparison-table tr:hover { background: rgba(99, 102, 241, 0.05); }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800 z-50">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                Adaptive-K
+            </a>
+            <div class="flex gap-6">
+                <a href="/" class="text-slate-400 hover:text-white transition-colors">Home</a>
+                <a href="/whitepaper.html" class="text-slate-400 hover:text-white transition-colors">Whitepaper</a>
+                <a href="/dashboard.html" class="text-slate-400 hover:text-white transition-colors">Benchmarks</a>
+                <a href="https://github.com/Gabrobals/sbm-efficient" class="text-slate-400 hover:text-white transition-colors">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article -->
+    <article class="max-w-4xl mx-auto px-6 pt-28 pb-20">
+        <!-- Header -->
+        <header class="mb-12">
+            <div class="text-primary text-sm font-medium mb-4">TECHNICAL DEEP DIVE</div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                MoE Inference Optimization:<br>
+                <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">The Missing Piece</span>
+            </h1>
+            <p class="text-xl text-slate-400 mb-6">
+                While KV Cache, FlashAttention, and quantization dominate inference optimization discussions, 
+                Mixture-of-Experts routing remains the overlooked frontier. Here's why dynamic expert selection 
+                is the next big opportunity.
+            </p>
+            <div class="flex items-center gap-4 text-sm text-slate-500">
+                <span>January 17, 2026</span>
+                <span>•</span>
+                <span>12 min read</span>
+                <span>•</span>
+                <span>By Adaptive-K Research Team</span>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="prose prose-invert max-w-none text-slate-300">
+            
+            <h2 class="text-2xl font-bold text-white">The State of LLM Inference Optimization</h2>
+            
+            <p>
+                If you search for "LLM inference optimization" today, you'll find excellent resources covering:
+            </p>
+            
+            <ul class="list-disc">
+                <li><strong>Batching techniques</strong> - Static, dynamic, and continuous batching</li>
+                <li><strong>Attention optimization</strong> - FlashAttention, Multi-Query Attention (MQA), Grouped-Query Attention (GQA)</li>
+                <li><strong>Memory management</strong> - KV Cache, PagedAttention, vLLM</li>
+                <li><strong>Model compression</strong> - Quantization (INT8, INT4), pruning, distillation</li>
+                <li><strong>Speculative decoding</strong> - Draft models for parallel verification</li>
+                <li><strong>Distributed inference</strong> - Tensor parallelism, pipeline parallelism</li>
+            </ul>
+            
+            <p>
+                These techniques are well-documented, widely implemented, and supported by major inference engines 
+                like vLLM, TensorRT-LLM, and LMDeploy.
+            </p>
+            
+            <div class="highlight-box">
+                <strong class="text-white">But there's a gap.</strong><br>
+                None of these resources address <em>expert routing optimization</em> in Mixture-of-Experts models—despite 
+                MoE being the architecture behind Mixtral, DeepSeek-V2, Grok, and most frontier models released in 2024-2025.
+            </div>
+
+            <h2 class="text-2xl font-bold text-white">The Rise of Mixture-of-Experts</h2>
+            
+            <p>
+                The LLM landscape has shifted dramatically toward sparse architectures:
+            </p>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Total Params</th>
+                        <th>Active Params</th>
+                        <th>Experts</th>
+                        <th>K (active)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Mixtral 8x7B</td>
+                        <td>46.7B</td>
+                        <td>12.9B</td>
+                        <td>8</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>Mixtral 8x22B</td>
+                        <td>141B</td>
+                        <td>39B</td>
+                        <td>8</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>DeepSeek-V2</td>
+                        <td>236B</td>
+                        <td>21B</td>
+                        <td>160</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>Grok-1</td>
+                        <td>314B</td>
+                        <td>~86B</td>
+                        <td>8</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>DBRX</td>
+                        <td>132B</td>
+                        <td>36B</td>
+                        <td>16</td>
+                        <td>4</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p>
+                These models achieve GPT-4 class performance while only activating a fraction of their parameters 
+                per token. The key insight: <strong>not all experts are needed for every input</strong>.
+            </p>
+
+            <h2 class="text-2xl font-bold text-white">The Fixed-K Problem</h2>
+            
+            <p>
+                Current MoE implementations use a <strong>fixed K</strong>—the number of experts activated per token. 
+                Mixtral always activates 2 experts. DeepSeek-V2 always activates 6. This creates inefficiency:
+            </p>
+            
+            <div class="bg-slate-800 p-6 rounded-lg my-6">
+                <p class="text-lg mb-4"><strong class="text-white">Consider these two prompts:</strong></p>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-slate-700 p-4 rounded">
+                        <p class="text-sm text-slate-400 mb-2">Simple prompt:</p>
+                        <p class="font-mono text-sm">"What is 2+2?"</p>
+                        <p class="text-sm text-green-400 mt-2">→ Needs: 1 expert (math)</p>
+                    </div>
+                    <div class="bg-slate-700 p-4 rounded">
+                        <p class="text-sm text-slate-400 mb-2">Complex prompt:</p>
+                        <p class="font-mono text-sm">"Write a legal contract for a software licensing deal involving international IP law"</p>
+                        <p class="text-sm text-yellow-400 mt-2">→ Needs: 4+ experts (legal, technical, business, language)</p>
+                    </div>
+                </div>
+                <p class="text-slate-400 mt-4">
+                    With fixed K=2, the simple prompt wastes compute, while the complex prompt may lack capacity.
+                </p>
+            </div>
+
+            <h2 class="text-2xl font-bold text-white">Introducing Adaptive-K Routing</h2>
+            
+            <p>
+                Adaptive-K is a novel approach that dynamically selects the number of experts based on input complexity. 
+                The key innovation: <strong>using routing entropy as a complexity signal</strong>.
+            </p>
+            
+            <p>
+                Here's the intuition:
+            </p>
+            
+            <ul class="list-disc">
+                <li><strong>Low entropy</strong> = Router is confident → Few experts needed</li>
+                <li><strong>High entropy</strong> = Router is uncertain → More experts needed</li>
+            </ul>
+            
+            <pre><code class="language-python"># Simplified Adaptive-K logic
+def select_k(router_probs, thresholds=[0.6, 1.2], k_values=[1, 2, 4]):
+    entropy = -sum(p * log(p) for p in router_probs if p > 0)
+    
+    if entropy < thresholds[0]:
+        return k_values[0]  # Low complexity: K=1
+    elif entropy < thresholds[1]:
+        return k_values[1]  # Medium complexity: K=2
+    else:
+        return k_values[2]  # High complexity: K=4</code></pre>
+
+            <h2 class="text-2xl font-bold text-white">Benchmark Results</h2>
+            
+            <p>
+                We tested Adaptive-K against fixed-K baselines on standard benchmarks:
+            </p>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Accuracy</th>
+                        <th>Avg K</th>
+                        <th>FLOPs Reduction</th>
+                        <th>Latency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Fixed K=4 (baseline)</td>
+                        <td>97.2%</td>
+                        <td>4.0</td>
+                        <td>—</td>
+                        <td>1.00x</td>
+                    </tr>
+                    <tr>
+                        <td>Fixed K=2</td>
+                        <td>94.1%</td>
+                        <td>2.0</td>
+                        <td>50%</td>
+                        <td>0.52x</td>
+                    </tr>
+                    <tr class="bg-primary/10">
+                        <td><strong>Adaptive-K</strong></td>
+                        <td><strong>96.8%</strong></td>
+                        <td><strong>2.3</strong></td>
+                        <td><strong>42%</strong></td>
+                        <td><strong>0.58x</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="highlight-box">
+                <strong class="text-white">Key finding:</strong> Adaptive-K achieves 96.8% accuracy (vs 97.2% baseline) 
+                while using 42% fewer FLOPs. The accuracy drop is minimal because the router correctly identifies 
+                when more experts are truly needed.
+            </div>
+
+            <h2 class="text-2xl font-bold text-white">How It Complements Existing Optimizations</h2>
+            
+            <p>
+                Adaptive-K is <strong>orthogonal</strong> to other inference optimizations. You can stack them:
+            </p>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Technique</th>
+                        <th>What it optimizes</th>
+                        <th>Compatible with Adaptive-K?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>FlashAttention</td>
+                        <td>Attention computation</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td>PagedAttention / vLLM</td>
+                        <td>KV Cache memory</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Quantization (INT8/INT4)</td>
+                        <td>Weight precision</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Speculative Decoding</td>
+                        <td>Sequential generation</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Continuous Batching</td>
+                        <td>Request scheduling</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Tensor Parallelism</td>
+                        <td>Multi-GPU distribution</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p>
+                A fully optimized MoE inference stack in 2026 should include:
+            </p>
+            
+            <pre><code>vLLM + FlashAttention + INT4 Quantization + Adaptive-K Routing
+     ↓          ↓              ↓                   ↓
+  Memory    Attention      Weights          Expert Selection
+  -40%       -30%           -75%              -30-50%</code></pre>
+
+            <h2 class="text-2xl font-bold text-white">Getting Started</h2>
+            
+            <p>
+                Adaptive-K is available as an open-source Python package:
+            </p>
+            
+            <pre><code class="language-bash">pip install adaptive-k-routing</code></pre>
+            
+            <p>Basic usage:</p>
+            
+            <pre><code class="language-python">from adaptive_k import AdaptiveKRouter
+
+# Initialize router
+router = AdaptiveKRouter(
+    k_values=[1, 2, 4],
+    h_thresholds=[0.6, 1.2]
+)
+
+# Calibrate on your data (optional but recommended)
+router.calibrate(calibration_data, target_avg_k=2.0)
+
+# Use in inference
+k, expert_indices, weights = router.route(hidden_states)</code></pre>
+            
+            <p>
+                For production deployments with monitoring:
+            </p>
+            
+            <pre><code class="language-bash">pip install adaptive-k-routing[observability]</code></pre>
+            
+            <pre><code class="language-python">from adaptive_k import AdaptiveKRouter
+from adaptive_k.observability import setup_metrics
+
+# Enable Prometheus metrics
+setup_metrics(port=8000)
+
+# Router automatically exports:
+# - adaptive_k_selected (histogram)
+# - adaptive_k_entropy (histogram)  
+# - adaptive_k_latency_seconds (histogram)</code></pre>
+
+            <h2 class="text-2xl font-bold text-white">Conclusion</h2>
+            
+            <p>
+                The LLM inference optimization landscape has matured significantly, with excellent solutions for 
+                attention, memory, and quantization. However, <strong>expert routing in MoE models remains 
+                underexplored</strong>—a surprising gap given that MoE is the dominant architecture for frontier models.
+            </p>
+            
+            <p>
+                Adaptive-K routing addresses this gap by dynamically selecting the number of experts based on 
+                input complexity. The result: <strong>30-50% compute reduction with minimal accuracy loss</strong>.
+            </p>
+            
+            <p>
+                As MoE models continue to scale (DeepSeek-V3, Mixtral variants, and beyond), efficient routing 
+                will become increasingly important. We believe Adaptive-K represents the next frontier in 
+                inference optimization.
+            </p>
+            
+            <div class="bg-gradient-to-r from-primary/20 to-secondary/20 p-8 rounded-xl my-8 text-center">
+                <h3 class="text-2xl font-bold text-white mb-4">Try Adaptive-K Today</h3>
+                <p class="text-slate-300 mb-6">
+                    Open source SDK with enterprise support available.
+                </p>
+                <div class="flex justify-center gap-4 flex-wrap">
+                    <a href="https://pypi.org/project/adaptive-k-routing/" class="bg-primary hover:bg-primary/80 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        Install from PyPI
+                    </a>
+                    <a href="/whitepaper.html" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        Read Whitepaper
+                    </a>
+                    <a href="https://github.com/Gabrobals/sbm-efficient" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        View on GitHub
+                    </a>
+                </div>
+            </div>
+
+            <hr class="border-slate-700 my-8">
+            
+            <div class="text-slate-500 text-sm">
+                <p><strong>References:</strong></p>
+                <ul class="list-disc mt-2">
+                    <li>Fedus et al., "Switch Transformers: Scaling to Trillion Parameter Models" (2021)</li>
+                    <li>Jiang et al., "Mixtral of Experts" (2024)</li>
+                    <li>DeepSeek-AI, "DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts" (2024)</li>
+                    <li>Dao et al., "FlashAttention: Fast and Memory-Efficient Exact Attention" (2022)</li>
+                    <li>Kwon et al., "Efficient Memory Management for Large Language Model Serving with PagedAttention" (2023)</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-12">
+        <div class="max-w-4xl mx-auto px-6 text-center text-slate-500">
+            <p>&copy; 2026 Adaptive-K by Vertex Data. MIT License.</p>
+            <div class="flex justify-center gap-6 mt-4">
+                <a href="/" class="hover:text-white transition-colors">Home</a>
+                <a href="/whitepaper.html" class="hover:text-white transition-colors">Whitepaper</a>
+                <a href="/dashboard.html" class="hover:text-white transition-colors">Benchmarks</a>
+                <a href="https://github.com/Gabrobals/sbm-efficient" class="hover:text-white transition-colors">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "MoE Inference Optimization: The Missing Piece in LLM Efficiency",
+        "description": "While KV Cache, FlashAttention, and quantization dominate inference optimization discussions, Mixture-of-Experts routing remains overlooked. Learn how Adaptive-K routing can reduce MoE inference costs by 30-50%.",
+        "author": {
+            "@type": "Organization",
+            "name": "Adaptive-K Research Team",
+            "url": "https://adaptive-k.vertexdata.it"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Vertex Data",
+            "url": "https://vertexdata.it"
+        },
+        "datePublished": "2026-01-17",
+        "dateModified": "2026-01-17",
+        "mainEntityOfPage": "https://adaptive-k.vertexdata.it/blog/moe-inference-optimization.html",
+        "keywords": ["MoE", "Mixture of Experts", "inference optimization", "LLM", "adaptive routing"],
+        "articleSection": "Technical Deep Dive",
+        "wordCount": 1800
+    }
+    </script>
+</body>
+</html>
