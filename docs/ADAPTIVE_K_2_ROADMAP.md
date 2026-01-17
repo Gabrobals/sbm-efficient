@@ -59,6 +59,7 @@ Token "quantum" (hard) → K=4 draft → not enough, rejection
 - [ ] Write entropy calibration script
 
 #### Week 3: Adaptive Logic
+- [ ] **⚠️ MOVE TO PRIVATE REPO before vLLM integration**
 - [ ] Implement adaptive draft length selector
 - [ ] Add threshold configuration
 - [ ] Unit tests for edge cases
