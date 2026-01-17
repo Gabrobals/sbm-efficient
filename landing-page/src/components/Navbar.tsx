@@ -36,7 +36,7 @@ export default function Navbar() {
               {/* K accent - dynamic lines suggesting adaptation */}
               <path d="M24 10L20 16L24 22" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
             </svg>
-            <span className="font-semibold text-lg">
+            <span className="font-semibold text-lg" translate="no">
               <span className="text-vs-blue">Adaptive</span>
               <span className="text-vs-text">-K</span>
             </span>
