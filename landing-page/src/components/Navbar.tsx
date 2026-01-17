@@ -12,7 +12,6 @@ export default function Navbar() {
     { href: '#results', label: t.nav.results },
     { href: '#how-it-works', label: t.nav.howItWorks },
     { href: '#services', label: t.nav.services },
-    { href: '#pricing', label: t.nav.pricing },
     { href: '#resources', label: t.nav.resources },
     { href: '#contact', label: t.nav.contact },
   ]
