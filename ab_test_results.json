@@ -1,0 +1,29 @@
+{
+  "experiment": "adaptive_k_v1_rollout",
+  "phase": "ramping",
+  "traffic_split": 0.4,
+  "duration_seconds": 0.01986098289489746,
+  "control": {
+    "name": "baseline",
+    "samples": 4500,
+    "mean_latency_ms": 79.68283829983147,
+    "mean_perplexity": 3.8395224832642683,
+    "mean_k": 2.0
+  },
+  "treatment": {
+    "name": "adaptive_k",
+    "samples": 500,
+    "mean_latency_ms": 67.58019881775098,
+    "mean_perplexity": 3.8717705650566647,
+    "mean_k": 1.4
+  },
+  "analysis": {
+    "compute_savings": "30.0%",
+    "latency_improvement": "15.2%",
+    "perplexity_change": "0.84%",
+    "is_significant": true,
+    "p_value": 0.0,
+    "confidence_level": 0.95
+  },
+  "recommendation": "\u2705 SHIP IT: 30% savings with acceptable quality. Recommend full rollout."
+}

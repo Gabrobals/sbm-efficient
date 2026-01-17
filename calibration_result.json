@@ -1,0 +1,35 @@
+{
+  "config": {
+    "model": "mixtral-8x7b",
+    "k_values": [
+      1,
+      2
+    ],
+    "target_savings": 0.4
+  },
+  "result": {
+    "optimal_threshold": 1.8047289879675719,
+    "expected_savings": "40.0%",
+    "expected_quality_impact": "1.04%",
+    "entropy_percentiles": {
+      "mean": 0.9894729843874865,
+      "std": 0.7658324895340975,
+      "p10": 0.08470881147625532,
+      "p25": 0.2533484425296604,
+      "p50": 0.8145309537794068,
+      "p75": 1.7117960451195466,
+      "p90": 2.0203626845419516
+    },
+    "k_distribution": {
+      "1": 8000,
+      "2": 2000
+    }
+  },
+  "recommended_config": {
+    "k_values": [
+      1,
+      2
+    ],
+    "entropy_threshold": 1.8047289879675719
+  }
+}
