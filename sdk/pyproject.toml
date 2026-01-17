@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "adaptive-k-routing"
-version = "0.1.4"
+version = "0.1.5"
 description = "Entropy-guided dynamic expert selection for MoE models. Reduce inference costs by 30-50%. Now with observability & monitoring."
 readme = "README.md"
 license = "Apache-2.0"
