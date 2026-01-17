@@ -343,7 +343,7 @@
         <div class="nav-links">
             <a href="https://adaptive-k.vertexdata.it">Home</a>
             <a href="/whitepaper.html">Whitepaper</a>
-            <a href="https://pypi.org/project/adaptive-k-sdk/">SDK</a>
+            <a href="https://pypi.org/project/adaptive-k-routing/">SDK</a>
             <a href="https://github.com/Gabrobals/sbm-efficient">GitHub</a>
         </div>
     </nav>
@@ -593,7 +593,7 @@
             <h2>Ready to reduce your MoE compute costs?</h2>
             <p>Integrate Adaptive-K routing in minutes with our SDK</p>
             <a href="https://adaptive-k.vertexdata.it" class="btn btn-primary">Learn More</a>
-            <a href="https://pypi.org/project/adaptive-k-sdk/" class="btn btn-secondary">pip install adaptive-k-sdk</a>
+            <a href="https://pypi.org/project/adaptive-k-routing/" class="btn btn-secondary">pip install adaptive-k-routing</a>
             <a href="/whitepaper.html" class="btn btn-ghost">Read Whitepaper</a>
         </div>
     </div>
@@ -604,7 +604,7 @@
             const price = parseFloat(document.getElementById('modelSelect').value);
             const savings = parseFloat(document.getElementById('savingsRate').value);
             document.getElementById('savingsDisplay').textContent = savings + '%';
-            const monthlyCost = (volume * price / 1000) * 30;
+            const monthlyCost = volume * price * 30;
             const adaptiveCost = monthlyCost * (1 - savings/100);
             const monthlySavings = monthlyCost - adaptiveCost;
             document.getElementById('baselineCost').textContent = '$' + monthlyCost.toLocaleString(undefined, {maximumFractionDigits: 0});

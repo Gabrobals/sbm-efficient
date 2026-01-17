@@ -1406,7 +1406,7 @@ print(f<span class="code-string">"Compute savings: {stats['compute_savings_pct']
                 <ul>
                     <li>Theoretical framework development</li>
                     <li>Initial experiments on Mixtral, Qwen-MoE, OLMoE</li>
-                    <li>Python SDK (adaptive-k-sdk v0.1.4 on PyPI)</li>
+                    <li>Python SDK (adaptive-k-routing v0.1.4 on PyPI)</li>
                 </ul>
             </div>
             <div class="timeline-item">
@@ -1641,7 +1641,7 @@ print(f<span class="code-string">"Compute savings: {stats['compute_savings_pct']
         
         <ul>
             <li><strong>Researchers:</strong> Cite and extend this work; explore learned thresholds and per-layer optimization</li>
-            <li><strong>Practitioners:</strong> Try the SDK (<code>pip install adaptive-k-sdk</code>) on your MoE deployments</li>
+            <li><strong>Practitioners:</strong> Try the SDK (<code>pip install adaptive-k-routing</code>) on your MoE deployments</li>
             <li><strong>Infrastructure Teams:</strong> Evaluate TensorRT-LLM integration for production workloads</li>
             <li><strong>Framework Maintainers:</strong> Consider native Adaptive-K support in vLLM, SGLang, Transformers</li>
         </ul>
@@ -1757,10 +1757,10 @@ File: tensorrt_llm/_torch/modules/fused_moe/routing.py
         <h2 class="no-number">Appendix B: SDK Quick Start</h2>
         
         <pre><code><span class="code-comment"># Installation</span>
-pip install adaptive-k-sdk
+pip install adaptive-k-routing
 
 <span class="code-comment"># Basic Usage</span>
-<span class="code-keyword">from</span> adaptive_k_sdk <span class="code-keyword">import</span> AdaptiveKRouter
+<span class="code-keyword">from</span> adaptive_k <span class="code-keyword">import</span> AdaptiveKRouter
 
 router = AdaptiveKRouter(
     k_values=[1, 2],
@@ -1781,7 +1781,7 @@ print(f<span class="code-string">"Expected savings: {savings:.1%}"</span>)</code
         <p><strong>Adaptive-K Routing</strong> — Open Source Research by VertexData</p>
         <p>
             <a href="https://github.com/Gabrobals/sbm-efficient">GitHub</a> · 
-            <a href="https://pypi.org/project/adaptive-k-sdk/">PyPI</a> · 
+            <a href="https://pypi.org/project/adaptive-k-routing/">PyPI</a> · 
             <a href="https://open-vsx.org/extension/vertexdata/adaptive-k-toolkit">VS Code Extension</a> · 
             <a href="https://adaptive-k.vertexdata.it">Website</a>
         </p>

@@ -125,7 +125,7 @@ LLM(model="...")
 
 - [Landing Page](https://adaptive-k.vertexdata.it)
 - [Documentation](https://adaptive-k.vertexdata.it/docs)
-- [PyPI Package](https://pypi.org/project/adaptive-k-sdk/)
+- [PyPI Package](https://pypi.org/project/adaptive-k-routing/)
 - [GitHub Repository](https://github.com/Gabrobals/sbm-efficient)
 - [Technical Whitepaper](https://adaptive-k.vertexdata.it/whitepaper.html)
 

@@ -2,7 +2,7 @@
     "Adaptive-K Setup TypeScript": {
         "prefix": "adaptive-k-setup-ts",
         "body": [
-            "import { AdaptiveKRouter, EntropyCalculator } from 'adaptive-k-sdk';",
+            "import { AdaptiveKRouter, EntropyCalculator } from 'adaptive-k-routing';",
             "",
             "// Initialize Adaptive-K router",
             "const router = new AdaptiveKRouter({",

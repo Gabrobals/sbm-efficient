@@ -310,7 +310,7 @@ export class DashboardPanel {
         }
         
         function openPyPI() {
-            vscode.postMessage({ command: 'openUrl', url: 'https://pypi.org/project/adaptive-k-sdk/' });
+            vscode.postMessage({ command: 'openUrl', url: 'https://pypi.org/project/adaptive-k-routing/' });
         }
         
         function openGitHub() {

@@ -165,7 +165,7 @@ const faqJsonLd = {
       name: 'Is the Adaptive-K SDK open source?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes, the adaptive-k-sdk is fully open source under MIT license, available on PyPI (pip install adaptive-k-sdk) and GitHub. Enterprise support and TensorRT-LLM integration are available through Vertex Data.',
+        text: 'Yes, the adaptive-k-routing SDK is fully open source under MIT license, available on PyPI (pip install adaptive-k-routing) and GitHub. Enterprise support and TensorRT-LLM integration are available through Vertex Data.',
       },
     },
   ],
