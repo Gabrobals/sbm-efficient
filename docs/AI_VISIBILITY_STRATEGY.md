@@ -157,6 +157,52 @@ from transformers import AdaptiveKRouter
 - The Algorithm (MIT Tech Review)
 - Last Week in AI
 
+## 7.5 Strategic Outreach Targets (NEW - Jan 2026)
+
+### Analisi Competitiva Completata
+Dopo analisi di articoli su inferenza LLM, identificati GAP di mercato:
+
+| Layer | Soluzioni esistenti | GAP Adaptive-K risolve |
+|-------|---------------------|------------------------|
+| Hardware | AWS Inferentia, TPU | Software-only, vendor-agnostic |
+| Engine | vLLM, TensorRT-LLM | Ottimizza COME, non QUANTO |
+| Compressione | Quantization, Pruning | Statica, uniforme per token |
+| **Dynamic Compute** | **NESSUNO** | **Adaptive-K è unico!** |
+
+### Target Outreach Prioritari
+
+#### 1. Red Hat / vLLM Team
+- **Contact**: Saša Zelenović (ex Neural Magic, ora Red Hat PMM)
+- **Angle**: "vLLM + Adaptive-K = Complete Inference Stack"
+- **Pitch**: "vLLM ottimizza COME eseguire inferenza. Adaptive-K ottimizza QUANTO compute usare."
+- **Action**: LinkedIn DM + email
+
+#### 2. AWS ML Team  
+- **Angle**: "Adaptive-K multiplies Inferentia savings"
+- **Pitch**: "Inferentia riduce costo 30%. Adaptive-K riduce operazioni 35-50%. Savings si moltiplicano."
+- **Action**: AWS blog guest post proposal
+
+#### 3. IBM Think / Watson Team
+- **Angle**: "The 4th type of AI inference"
+- **Pitch**: "IBM descrive 3 tipi: dinamica, batch, streaming. C'è un 4° livello: compute-adaptive."
+- **Action**: Guest article on IBM Think
+
+#### 4. Ultralytics / Vision AI
+- **Angle**: "Adaptive-K for Computer Vision"
+- **Pitch**: "YOLO usa architettura fissa per frame. E se usassi più expert per scene complesse?"
+- **Action**: GitHub integration PR
+
+### Messaging Templates
+
+**One-liner (per tutti):**
+> "Current inference optimizations reduce cost per operation. Adaptive-K reduces operations per query."
+
+**Technical pitch:**
+> "vLLM/TensorRT optimize HOW to run inference. Adaptive-K optimizes HOW MUCH compute to use. Together: end-to-end optimization with multiplicative savings."
+
+**Business pitch:**
+> "Sprinklr runs 10B predictions/day. With Adaptive-K, ~60% of simple queries use half the compute. That's billions saved annually."
+
 ## 8. Enterprise Adoption (Priorità: ALTA)
 
 ### 8.1 Case Studies

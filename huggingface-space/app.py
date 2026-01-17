@@ -298,6 +298,27 @@ with gr.Blocks(
         By using entropy as a complexity signal, Adaptive-K allocates compute where it's needed.
         """)
     
+    with gr.Accordion("📝 Important Notes", open=True):
+        gr.Markdown("""
+        ### Understanding the Results
+        
+        **💡 About Compute Savings:**
+        - Savings are calculated vs **fixed K=4** (the baseline)
+        - When K=4 is selected → **0% savings** (this is expected! Complex queries need all experts)
+        - When K=1 is selected → **75% savings** (simple queries save the most)
+        - Try "What is 2+2?" to see maximum savings!
+        
+        **🎯 About Expert Selection:**
+        - This demo uses **keyword heuristics** to simulate router behavior
+        - In production with real MoE models (Mixtral, DeepSeek), the neural router makes more accurate selections
+        - The concept remains the same: entropy guides K selection
+        
+        **🧪 Try These Examples:**
+        - Simple: "What is 2+2?" → Low entropy → K=1 → **75% savings**
+        - Medium: "Translate hello to Italian" → Medium entropy → K=2 → **50% savings**
+        - Complex: Multi-domain questions → High entropy → K=4 → **0% savings** (but accuracy preserved!)
+        """)
+    
     gr.Examples(
         examples=EXAMPLES,
         inputs=[text_input, threshold_low, threshold_high],
