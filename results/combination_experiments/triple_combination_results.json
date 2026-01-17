@@ -1,0 +1,75 @@
+{
+  "baseline": {
+    "perplexity": 46.525474439789306,
+    "avg_k": 2.0,
+    "avg_layers_ratio": 1.0,
+    "avg_seq_ratio": 1.0,
+    "compute_ratio": 1.0,
+    "savings": 0.0
+  },
+  "adaptive_k_only": {
+    "perplexity": 46.88803379809564,
+    "avg_k": 1.482197265625,
+    "avg_layers_ratio": 1.0,
+    "avg_seq_ratio": 1.0,
+    "compute_ratio": 0.7410986328125,
+    "savings": 0.2589013671875
+  },
+  "early_exit_only": {
+    "perplexity": 47.05738766811958,
+    "avg_k": 2.0,
+    "avg_layers_ratio": 0.4316064453125,
+    "avg_seq_ratio": 1.0,
+    "compute_ratio": 0.4316064453125,
+    "savings": 0.5683935546875001
+  },
+  "token_prune_only": {
+    "perplexity": 46.934358600577966,
+    "avg_k": 2.0,
+    "avg_layers_ratio": 1.0,
+    "avg_seq_ratio": 0.125,
+    "compute_ratio": 0.125,
+    "savings": 0.875
+  },
+  "adaptive_k + early_exit": {
+    "perplexity": 47.4305160612708,
+    "avg_k": 1.483434178620799,
+    "avg_layers_ratio": 0.430927734375,
+    "avg_seq_ratio": 1.0,
+    "compute_ratio": 0.31962646484374996,
+    "savings": 0.6803735351562501
+  },
+  "adaptive_k + token_prune": {
+    "perplexity": 47.31607075244885,
+    "avg_k": 1.4840648379052368,
+    "avg_layers_ratio": 1.0,
+    "avg_seq_ratio": 0.125,
+    "compute_ratio": 0.0927540523690773,
+    "savings": 0.9072459476309227
+  },
+  "early_exit + token_prune": {
+    "perplexity": 47.47276840944615,
+    "avg_k": 2.0,
+    "avg_layers_ratio": 0.4296875,
+    "avg_seq_ratio": 0.125,
+    "compute_ratio": 0.0537109375,
+    "savings": 0.9462890625
+  },
+  "TRIPLE COMBO": {
+    "perplexity": 47.843120901502196,
+    "avg_k": 1.4792372126180717,
+    "avg_layers_ratio": 0.4330078125,
+    "avg_seq_ratio": 0.125,
+    "compute_ratio": 0.04003257935027179,
+    "savings": 0.9599674206497282
+  },
+  "validation": {
+    "ak_ratio": 0.7410986328125,
+    "ee_ratio": 0.4316064453125,
+    "tp_ratio": 0.125,
+    "predicted_triple": 0.039982868316769594,
+    "actual_triple": 0.04003257935027179,
+    "difference": 4.971103350219497e-05,
+    "validated": true
+  }
+}
