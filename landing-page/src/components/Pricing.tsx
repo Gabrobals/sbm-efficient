@@ -1,17 +1,29 @@
 'use client'
 
 import { useLanguage } from '@/i18n'
-import Link from 'next/link'
 
-// Checkout URLs - Update these when LemonSqueezy products are created
-const CHECKOUT_URLS = {
-  starter: '#contact', // Discovery Call - link to contact for now
-  professional: '#contact', // Integration Package - link to contact for now
-  enterprise: '#contact', // Enterprise Support - link to contact for now
+// Service IDs that match the contact form options
+const SERVICE_IDS = {
+  starter: 'assessment',      // Discovery Call
+  professional: 'implementation', // Integration Package
+  enterprise: 'enterprise',   // Enterprise Support
 }
 
 export default function Pricing() {
   const { t } = useLanguage()
+
+  // Function to pre-fill contact form and scroll to it
+  const handleServiceClick = (serviceId: string) => {
+    // Store selected service in localStorage
+    localStorage.setItem('selectedService', serviceId)
+    // Dispatch custom event to notify Contact component
+    window.dispatchEvent(new Event('serviceSelected'))
+    // Scroll to contact section
+    const contactSection = document.getElementById('contact')
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   const tiers = [
     {
@@ -22,8 +34,7 @@ export default function Pricing() {
       features: t.pricing.starterFeatures,
       cta: t.pricing.starterCta,
       highlighted: false,
-      url: CHECKOUT_URLS.starter,
-      isExternal: false,
+      serviceId: SERVICE_IDS.starter,
     },
     {
       name: t.pricing.proName,
@@ -33,8 +44,7 @@ export default function Pricing() {
       features: t.pricing.proFeatures,
       cta: t.pricing.proCta,
       highlighted: true,
-      url: CHECKOUT_URLS.professional,
-      isExternal: false,
+      serviceId: SERVICE_IDS.professional,
     },
     {
       name: t.pricing.enterpriseName,
@@ -44,8 +54,7 @@ export default function Pricing() {
       features: t.pricing.enterpriseFeatures,
       cta: t.pricing.enterpriseCta,
       highlighted: false,
-      url: CHECKOUT_URLS.enterprise,
-      isExternal: false,
+      serviceId: SERVICE_IDS.enterprise,
     },
   ]
 
@@ -113,31 +122,16 @@ export default function Pricing() {
                 ))}
               </ul>
 
-              {tier.isExternal ? (
-                <a
-                  href={tier.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`w-full py-3 px-6 rounded-lg font-semibold transition-all block text-center ${
-                    tier.highlighted
-                      ? 'bg-cyan-500 hover:bg-cyan-400 text-black'
-                      : 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-600'
-                  }`}
-                >
-                  {tier.cta}
-                </a>
-              ) : (
-                <Link
-                  href={tier.url}
-                  className={`w-full py-3 px-6 rounded-lg font-semibold transition-all block text-center ${
-                    tier.highlighted
-                      ? 'bg-cyan-500 hover:bg-cyan-400 text-black'
-                      : 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-600'
-                  }`}
-                >
-                  {tier.cta}
-                </Link>
-              )}
+              <button
+                onClick={() => handleServiceClick(tier.serviceId)}
+                className={`w-full py-3 px-6 rounded-lg font-semibold transition-all block text-center cursor-pointer ${
+                  tier.highlighted
+                    ? 'bg-cyan-500 hover:bg-cyan-400 text-black'
+                    : 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-600'
+                }`}
+              >
+                {tier.cta}
+              </button>
             </div>
           ))}
         </div>
