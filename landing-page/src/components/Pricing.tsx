@@ -3,11 +3,11 @@
 import { useLanguage } from '@/i18n'
 import Link from 'next/link'
 
-// LemonSqueezy checkout URLs
+// Checkout URLs - Update these when LemonSqueezy products are created
 const CHECKOUT_URLS = {
-  starter: '/register', // Free registration
-  professional: 'https://vertexdata.lemonsqueezy.com/checkout/buy/f9550cfd-ac26-401f-b707-985ed6ca5606',
-  enterprise: 'https://vertexdata.lemonsqueezy.com/checkout/buy/bd5fdadd-f970-4edd-8400-d5d66e9c9b6e',
+  starter: '#contact', // Discovery Call - link to contact for now
+  professional: '#contact', // Integration Package - link to contact for now
+  enterprise: '#contact', // Enterprise Support - link to contact for now
 }
 
 export default function Pricing() {
@@ -34,7 +34,7 @@ export default function Pricing() {
       cta: t.pricing.proCta,
       highlighted: true,
       url: CHECKOUT_URLS.professional,
-      isExternal: true,
+      isExternal: false,
     },
     {
       name: t.pricing.enterpriseName,
@@ -45,7 +45,7 @@ export default function Pricing() {
       cta: t.pricing.enterpriseCta,
       highlighted: false,
       url: CHECKOUT_URLS.enterprise,
-      isExternal: true,
+      isExternal: false,
     },
   ]
 
