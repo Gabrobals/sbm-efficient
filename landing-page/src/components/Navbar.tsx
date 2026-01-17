@@ -27,9 +27,15 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-vs-blue flex items-center justify-center">
-              <span className="text-white font-bold text-sm">AK</span>
-            </div>
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
+              {/* Background rounded square */}
+              <rect width="32" height="32" rx="8" fill="#0078D4"/>
+              {/* Letter A stylized as adaptive/dynamic arrow */}
+              <path d="M10 22L16 8L22 22" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 18H20" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+              {/* K accent - dynamic lines suggesting adaptation */}
+              <path d="M24 10L20 16L24 22" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
+            </svg>
             <span className="font-semibold text-lg">
               <span className="text-vs-blue">Adaptive</span>
               <span className="text-vs-text">-K</span>

@@ -1,0 +1,11 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="96" fill="#0078D4"/>
+  
+  <!-- Letter A stylized as adaptive/dynamic arrow -->
+  <path d="M160 352L256 128L352 352" stroke="white" strokeWidth="40" strokeLinecap="round" strokeLinejoin="round"/>
+  <path d="M192 288H320" stroke="white" strokeWidth="40" strokeLinecap="round"/>
+  
+  <!-- K accent - dynamic lines suggesting adaptation -->
+  <path d="M384 160L320 256L384 352" stroke="white" strokeWidth="32" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
+</svg>
