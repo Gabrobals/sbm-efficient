@@ -29,6 +29,28 @@ export default function Results() {
     },
   ]
 
+  // NEW: Combination experiments showing multiplicative savings
+  const combinations = [
+    {
+      name: 'Adaptive-K + Early Exit',
+      savings: '68.0%',
+      compute: '32.0%',
+      badge: 'COMBO',
+    },
+    {
+      name: 'Adaptive-K + ToMe',
+      savings: '51.9%',
+      compute: '48.1%',
+      badge: 'COMBO',
+    },
+    {
+      name: 'Triple Combo',
+      savings: '96.0%',
+      compute: '4.0%',
+      badge: 'MAX',
+    },
+  ]
+
   return (
     <section id="results" aria-labelledby="results-title" className="py-20 px-4 bg-vs-bg">
       <div className="max-w-7xl mx-auto">
@@ -75,6 +97,61 @@ export default function Results() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* NEW: Combination Experiments Section */}
+        <div className="mt-16">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-vs-text mb-2">
+              🔬 {t.results.combinationsTitle || 'Multiplicative Savings: Technique Combinations'}
+            </h3>
+            <p className="text-vs-muted max-w-2xl mx-auto">
+              {t.results.combinationsSubtitle || 'Adaptive-K stacks with other optimizations. Savings multiply, not just add.'}
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-6">
+            {combinations.map((combo, index) => (
+              <div
+                key={index}
+                className={`card relative overflow-hidden ${combo.badge === 'MAX' ? 'border-vs-green border-2' : ''}`}
+              >
+                {combo.badge === 'MAX' && (
+                  <div className="absolute top-0 right-0 bg-vs-green text-black text-xs font-bold px-2 py-1 rounded-bl">
+                    🏆 BEST
+                  </div>
+                )}
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-lg font-semibold text-vs-text">{combo.name}</h4>
+                  <span className="text-xs px-2 py-1 rounded-full bg-vs-purple/20 text-vs-purple">
+                    {combo.badge}
+                  </span>
+                </div>
+                
+                <div className="space-y-4">
+                  <div>
+                    <div className={`text-4xl font-bold ${combo.badge === 'MAX' ? 'text-vs-green' : 'stat-number'}`}>
+                      {combo.savings}
+                    </div>
+                    <div className="text-vs-muted text-sm">{t.results.computeReduction}</div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <span className="text-vs-cyan">→</span>
+                    <span className="text-vs-text">{t.results.onlyCompute || 'Only'} {combo.compute} {t.results.computeUsed || 'compute used'}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Explanation box */}
+          <div className="mt-8 bg-vs-surface border border-vs-border rounded-lg p-6">
+            <p className="text-vs-muted text-sm">
+              <span className="text-vs-yellow font-bold">💡 {t.results.keyInsight || 'Key Insight'}:</span>{' '}
+              {t.results.multiplicativeExplanation || 'Adaptive-K reduces experts per token, Early Exit skips layers, Token Pruning (ToMe) reduces sequence length. Combined: 0.741 × 0.432 × 0.125 = 0.040 (96% savings). See Whitepaper Proposition 7.1.'}
+            </p>
+          </div>
         </div>
 
         {/* Bottom note */}

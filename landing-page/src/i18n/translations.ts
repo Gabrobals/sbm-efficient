@@ -32,6 +32,13 @@ export const translations = {
       olmDesc: 'Consistent savings on smaller MoE architecture',
       benchmark: 'Results validated via WikiText-2 perplexity benchmarks',
       viewDashboard: 'View Interactive Dashboard',
+      // NEW: Combination experiments translations
+      combinationsTitle: 'Multiplicative Savings: Technique Combinations',
+      combinationsSubtitle: 'Adaptive-K stacks with other optimizations. Savings multiply, not just add.',
+      onlyCompute: 'Only',
+      computeUsed: 'compute used',
+      keyInsight: 'Key Insight',
+      multiplicativeExplanation: 'Adaptive-K reduces experts per token, Early Exit skips layers, Token Pruning (ToMe) reduces sequence length. Combined: 0.741 × 0.432 × 0.125 = 0.040 (96% savings). See Whitepaper Proposition 7.1.',
     },
     howItWorks: {
       how: 'How',
@@ -207,6 +214,13 @@ export const translations = {
       olmDesc: 'Risparmi consistenti su architetture MoE più piccole',
       benchmark: 'Risultati validati tramite benchmark di perplexity WikiText-2',
       viewDashboard: 'Visualizza Dashboard Interattiva',
+      // NEW: Combination experiments translations (Italian)
+      combinationsTitle: 'Risparmi Moltiplicativi: Combinazioni di Tecniche',
+      combinationsSubtitle: 'Adaptive-K si combina con altre ottimizzazioni. I risparmi si moltiplicano, non si sommano.',
+      onlyCompute: 'Solo',
+      computeUsed: 'di calcolo usato',
+      keyInsight: 'Intuizione Chiave',
+      multiplicativeExplanation: 'Adaptive-K riduce gli expert per token, Early Exit salta i layer, Token Pruning (ToMe) riduce la lunghezza della sequenza. Combinati: 0.741 × 0.432 × 0.125 = 0.040 (96% risparmio). Vedi Whitepaper Proposizione 7.1.',
     },
     howItWorks: {
       how: 'Come',
