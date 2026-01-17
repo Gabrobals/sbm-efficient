@@ -34,6 +34,11 @@ const icons = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
     </svg>
   ),
+  blog: (
+    <svg className="w-8 h-8 text-vs-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
+    </svg>
+  ),
 }
 
 export default function Resources() {
@@ -60,6 +65,13 @@ export default function Resources() {
       descKey: 'dashboardDesc' as const,
       link: '/dashboard.html',
       icon: icons.dashboard,
+    },
+    {
+      typeKey: 'blogType' as const,
+      titleKey: 'blogTitle' as const,
+      descKey: 'blogDesc' as const,
+      link: '/blog/moe-inference-optimization.html',
+      icon: icons.blog,
     },
     {
       typeKey: 'codeType' as const,
