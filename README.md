@@ -1,6 +1,7 @@
 # Adaptive-K: Entropy-Guided Dynamic Expert Selection for MoE
 
 [![PyPI](https://img.shields.io/pypi/v/adaptive-k-routing)](https://pypi.org/project/adaptive-k-routing/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18282008.svg)](https://doi.org/10.5281/zenodo.18282008)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Demo](https://img.shields.io/badge/🤗-Live%20Demo-yellow)](https://huggingface.co/spaces/Gabrobals/adaptive-k-demo)
 [![Whitepaper](https://img.shields.io/badge/📄-Whitepaper-green)](https://adaptive-k.vercel.app/whitepaper-extended.html)

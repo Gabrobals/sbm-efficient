@@ -14,10 +14,20 @@ export default function Hero() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left: Text content */}
           <div className="space-y-6">
-            {/* Tag */}
-            <div className="inline-flex items-center space-x-2 bg-vs-surface border border-vs-border rounded-full px-4 py-1.5">
-              <span className="w-2 h-2 bg-vs-green rounded-full pulse-glow" />
-              <span className="text-vs-sm text-vs-muted">TensorRT-LLM PR #10672</span>
+            {/* Badges row */}
+            <div className="flex flex-wrap gap-2">
+              <div className="inline-flex items-center space-x-2 bg-vs-surface border border-vs-border rounded-full px-4 py-1.5">
+                <span className="w-2 h-2 bg-vs-green rounded-full pulse-glow" />
+                <span className="text-vs-sm text-vs-muted">TensorRT-LLM PR #10672</span>
+              </div>
+              <a 
+                href="https://doi.org/10.5281/zenodo.18282008" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-2 bg-vs-surface border border-vs-border rounded-full px-4 py-1.5 hover:border-vs-blue transition-colors"
+              >
+                <span className="text-vs-sm text-vs-cyan">DOI: 10.5281/zenodo.18282008</span>
+              </a>
             </div>
 
             {/* Headline */}

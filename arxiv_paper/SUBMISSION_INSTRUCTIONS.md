@@ -1,5 +1,11 @@
 # arXiv Submission Instructions
 
+## ✅ Zenodo DOI (Published)
+
+**DOI**: [10.5281/zenodo.18282008](https://doi.org/10.5281/zenodo.18282008)
+
+This provides a citable timestamp for the research.
+
 ## Pre-submission Checklist
 
 ### Files to Upload
