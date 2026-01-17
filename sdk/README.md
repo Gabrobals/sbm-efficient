@@ -3,16 +3,16 @@
 > **Entropy-guided dynamic expert selection for Mixture-of-Experts models**  
 > Reduce inference costs by 30-50% with proven methodology.
 
-[![PyPI](https://img.shields.io/pypi/v/adaptive-k)](https://pypi.org/project/adaptive-k/)
+[![PyPI](https://img.shields.io/pypi/v/adaptive-k-routing)](https://pypi.org/project/adaptive-k-routing/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/pypi/pyversions/adaptive-k)](https://pypi.org/project/adaptive-k/)
+[![Python](https://img.shields.io/pypi/pyversions/adaptive-k-routing)](https://pypi.org/project/adaptive-k-routing/)
 
 ---
 
 ## 🚀 Quick Start
 
 ```bash
-pip install adaptive-k
+pip install adaptive-k-routing
 ```
 
 ```python
@@ -26,6 +26,12 @@ indices, weights, metrics = router.route(router_logits, return_metrics=True)
 
 print(f"Compute savings: {metrics.compute_savings:.1%}")
 # Output: Compute savings: 47.2%
+```
+
+### With Observability Support
+
+```bash
+pip install adaptive-k-routing[observability]
 ```
 
 ---

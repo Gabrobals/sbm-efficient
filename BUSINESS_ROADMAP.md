@@ -59,7 +59,7 @@ Works with:
 ✅ Qwen-MoE (32% savings)  
 ✅ OLMoE-1B-7B (25% savings)
 
-pip install adaptive-k
+pip install adaptive-k-routing
 
 3 lines of code to optimize your MoE model.
 
@@ -106,10 +106,10 @@ Paper + TensorRT-LLM PR in comments 👇
 #### 2.1 SDK Pubblicato ✅
 
 ```bash
-pip install adaptive-k
+pip install adaptive-k-routing
 ```
 
-**PyPI**: https://pypi.org/project/adaptive-k/0.1.2/
+**PyPI**: https://pypi.org/project/adaptive-k-routing/0.1.4/
 
 #### 2.2 Struttura SDK (Implementata)
 

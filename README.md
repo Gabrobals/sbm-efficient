@@ -1,6 +1,6 @@
 # Adaptive-K: Entropy-Guided Dynamic Expert Selection for MoE
 
-[![PyPI](https://img.shields.io/pypi/v/adaptive-k)](https://pypi.org/project/adaptive-k/)
+[![PyPI](https://img.shields.io/pypi/v/adaptive-k-routing)](https://pypi.org/project/adaptive-k-routing/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 > **Reduce MoE inference costs by 30-50%** with entropy-guided dynamic expert selection.  
@@ -9,7 +9,7 @@
 ## 🚀 Quick Install
 
 ```bash
-pip install adaptive-k
+pip install adaptive-k-routing
 ```
 
 ```python
