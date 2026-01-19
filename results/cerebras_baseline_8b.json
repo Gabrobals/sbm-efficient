@@ -1,0 +1,174 @@
+{
+  "provider": "cerebras",
+  "model": "llama3.1-8b",
+  "timestamp": "2026-01-19T11:18:39.045173",
+  "profiles": [
+    {
+      "prompt": "What is 2 + 2?",
+      "category": "simple",
+      "model": "llama3.1-8b",
+      "response": "The answer to 2 + 2 is 4.",
+      "tokens_input": 43,
+      "tokens_output": 13,
+      "latency_ms": 2318.734799977392,
+      "tokens_per_second": 5.606505754830932,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:18:39.045173"
+    },
+    {
+      "prompt": "Say hello in French.",
+      "category": "simple",
+      "model": "llama3.1-8b",
+      "response": "Bonjour. \n\nThis is a common way to say \"hello\" in French, but it typically is used during the daytime. \n\nAt night, you would say: \n\nBonsoir.\n\nFor a more casual greeting, you could use:\n\nSalut.\n\nAnd for a more formal greeting, you could use:\n\nEnchant\u00e9.",
+      "tokens_input": 40,
+      "tokens_output": 67,
+      "latency_ms": 374.06099983491004,
+      "tokens_per_second": 179.11517113403994,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:18:41.364610"
+    },
+    {
+      "prompt": "What color is grass?",
+      "category": "simple",
+      "model": "llama3.1-8b",
+      "response": "Grass can appear in various shades and colors depending on the time of day, season, and specific type of grass. However, the most common colors associated with grass are green and, to a lesser extent, different shades of brown, especially in dry or dormant conditions.\n\nIn ideal conditions, healthy grass typically appears in a vibrant green color due to the presence of chlorophyll, which is essential for photosynthesis. But when grass is exposed to drought, cold temperatures, or other environmental stressors, it may turn brown or a lighter shade of green.\n\nSome specific colors associated with grass include:\n\n- Emerald green (in optimal conditions)\n- Light green or lime green (in spring or after rainfall)\n- Brown (in dry or dormant conditions)\n- Gold or tan (in late fall or winter)\n- Light tan or beige (in overgrown or neglected areas)\n\nKeep in mind that these colors can vary depending on the specific type of grass and environmental factors.",
+      "tokens_input": 40,
+      "tokens_output": 193,
+      "latency_ms": 387.99630012363195,
+      "tokens_per_second": 497.42742376280927,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:18:41.739481"
+    },
+    {
+      "prompt": "Explain photosynthesis in 2 sentences.",
+      "category": "medium",
+      "model": "llama3.1-8b",
+      "response": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy from the sun into chemical energy in the form of glucose, releasing oxygen as a byproduct. This process typically occurs in specialized organelles called chloroplasts, where pigments such as chlorophyll absorb light energy and facilitate the conversion of carbon dioxide and water into glucose and oxygen.",
+      "tokens_input": 44,
+      "tokens_output": 76,
+      "latency_ms": 339.87280004657805,
+      "tokens_per_second": 223.6130693294213,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:18:42.127693"
+    },
+    {
+      "prompt": "What are the three laws of thermodynamics?",
+      "category": "medium",
+      "model": "llama3.1-8b",
+      "response": "The three laws of thermodynamics provide a foundation for understanding the relationships between energy, temperature, and work. Here's an overview of each law:\n\n1. **Zeroth Law of Thermodynamics**: This law states that if two systems are in thermal equilibrium with a third system, then they are also in thermal equilibrium with each other. The zeroth law allows us to define a temperature scale, such as the Celsius or Kelvin scale, which measures the thermal energy of a system.\n\n2. **First Law of Thermodynamics (Law of Energy Conservation)**: This law states that energy cannot be created or destroyed, only converted from one form to another. Mathematically, this is expressed as \u0394E = Q - W, where \u0394E is the change in energy of a system, Q is the heat added to the system, and W is the work done by the system. This law implies that the total energy of an isolated system remains constant over time.\n\n3. **Second Law of Thermodynamics**: This law states that the total entropy of an isolated system will always increase over time, except in reversible processes. Entropy (S) is a measure of disorder or randomness in a system. In other words, as energy is transferred or transformed from one form to another, some of the energy will become unavailable to do useful work due to the increase in entropy.\n\nAdditionally, there is a **Third Law of Thermodynamics**, which states that as the temperature of a system approaches absolute zero (0 K), its entropy will approach a minimum value. This law provides a fundamental limit to the efficiency of any heat engine, as it is impossible to reach absolute zero by any finite number of processes.\n\nThese laws form the basis of our understanding of thermodynamics and its applications in various fields, including engineering, chemistry, and physics.",
+      "tokens_input": 44,
+      "tokens_output": 362,
+      "latency_ms": 457.19710015691817,
+      "tokens_per_second": 791.7810499580054,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:18:42.467321"
+    },
+    {
+      "prompt": "Describe the water cycle briefly.",
+      "category": "medium",
+      "model": "llama3.1-8b",
+      "response": "The water cycle, also known as the hydrologic cycle, is the continuous process by which water is circulated between the Earth and the atmosphere. Here's a brief overview:\n\n1. **Evaporation**: Water from oceans, lakes, rivers, and the ground surface evaporates into the air as water vapor.\n2. **Condensation**: As water vapor rises into the atmosphere, it cools and condenses into clouds.\n3. **Precipitation**: When clouds become saturated with water, the water vapor falls back to the Earth as precipitation (rain, snow, sleet, or hail).\n4. **Runoff**: Precipitation that reaches the ground flows over the surface as runoff, forming streams, rivers, and lakes.\n5. **Infiltration**: Some precipitation seeps into the ground, recharging aquifers and providing water for plants and animals.\n6. **Transpiration**: Plants absorb water from the soil and release it into the air as water vapor through a process called transpiration.\n\nThis process is constantly repeating, and it's essential for life on Earth.",
+      "tokens_input": 41,
+      "tokens_output": 218,
+      "latency_ms": 464.3604999873787,
+      "tokens_per_second": 469.46284192114797,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:18:42.924653"
+    },
+    {
+      "prompt": "A farmer has 17 sheep. All but 9 run away. How many are left? Explain your reasoning.",
+      "category": "reasoning",
+      "model": "llama3.1-8b",
+      "response": "To find out how many sheep are left, we need to subtract the number of sheep that ran away from the total number of sheep.\n\nThe farmer initially has 17 sheep. All but 9 run away, which means 9 sheep stayed behind while the rest left. To find the number of sheep that ran away, we subtract the number that stayed (9) from the total (17).\n\n17 (initial sheep) - 9 (sheep that stayed) = 8\n\nHowever, according to the problem statement, 'all but 9' ran away. This implies that 9 sheep stayed behind, and the remaining sheep ran away. Since there are 8 sheep that ran away (as calculated above), the number of sheep that are left is indeed 9.",
+      "tokens_input": 58,
+      "tokens_output": 157,
+      "latency_ms": 341.1850999109447,
+      "tokens_per_second": 460.1607750191311,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:18:43.389331"
+    },
+    {
+      "prompt": "If it takes 5 machines 5 minutes to make 5 widgets, how long would it take 100 machines to make 100 widgets?",
+      "category": "reasoning",
+      "model": "llama3.1-8b",
+      "response": "If 5 machines can make 5 widgets in 5 minutes, this implies that each machine can make 1 widget in 5 minutes.\n\nNow, if we have 100 machines and each machine can make 1 widget in 5 minutes, it would still take 5 minutes for 100 machines to make 100 widgets.\n\nThe number of machines does not affect the time it takes to make the widgets, assuming each machine works at the same rate.",
+      "tokens_input": 64,
+      "tokens_output": 93,
+      "latency_ms": 1225.6891999859363,
+      "tokens_per_second": 75.87567876184852,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:18:43.731449"
+    },
+    {
+      "prompt": "Write a Python function to check if a number is prime.",
+      "category": "code",
+      "model": "llama3.1-8b",
+      "response": "**Prime Number Checker Function**\n=====================================\n\nHere's a simple Python function that checks if a given number is prime.\n\n```python\ndef is_prime(n):\n    \"\"\"\n    Checks if a number is prime.\n\n    Args:\n        n (int): The number to check.\n\n    Returns:\n        bool: True if the number is prime, False otherwise.\n    \"\"\"\n    if n <= 1:\n        return False\n    for i in range(2, int(n ** 0.5) + 1):\n        if n % i == 0:\n            return False\n    return True\n```\n\n**Explanation**\n---------------\n\nThis function takes an integer `n` as input and checks if it's prime. Here's a step-by-step breakdown:\n\n1. If `n` is less than or equal to 1, it's not prime, so we return `False`.\n2. We only need to check divisibility up to the square root of `n`. This is because a larger factor of `n` would be a multiple of smaller factor that has already been checked.\n3. We iterate from 2 to the square root of `n` (inclusive) and check if `n` is divisible by any of these numbers. If it is, we return `False`.\n4. If `n` is not divisible by any of the numbers in the range, we return `True`, indicating that it's prime.\n\n**Example Use Cases**\n--------------------\n\n```python\nprint(is_prime(25))  # False\nprint(is_prime(23))  # True\nprint(is_prime(37))  # True\nprint(is_prime(48))  # False\n```\n\nYou can use this function to check if any number is prime. Just call the function with the number as an argument and it will return `True` if it's prime and `False` otherwise.",
+      "tokens_input": 47,
+      "tokens_output": 383,
+      "latency_ms": 582.9596999101341,
+      "tokens_per_second": 656.9922415889832,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:18:44.956894"
+    },
+    {
+      "prompt": "Write a Python function to reverse a linked list.",
+      "category": "code",
+      "model": "llama3.1-8b",
+      "response": "**Reversing a Linked List in Python**\n=====================================\n\nBelow is a Python function to reverse a singly linked list. This function uses a recursive approach.\n\n```python\nclass Node:\n    \"\"\"A node in a singly linked list.\"\"\"\n    def __init__(self, data=None):\n        self.data = data\n        self.next = None\n\n\nclass LinkedList:\n    \"\"\"A singly linked list.\"\"\"\n    def __init__(self):\n        self.head = None\n\n    def append(self, data):\n        \"\"\"Append a new node to the end of the list.\"\"\"\n        if not self.head:\n            self.head = Node(data)\n        else:\n            current = self.head\n            while current.next:\n                current = current.next\n            current.next = Node(data)\n\n    def reverse(self):\n        \"\"\"Reverse the linked list.\"\"\"\n        self.head = self._reverse_recursive(self.head)\n\n    def _reverse_recursive(self, node):\n        \"\"\"Recursive helper function to reverse the linked list.\"\"\"\n        if not node or not node.next:\n            return node\n        new_head = self._reverse_recursive(node.next)\n        node.next.next = node\n        node.next = None\n        return new_head\n\n    def print_list(self):\n        \"\"\"Print the linked list.\"\"\"\n        current = self.head\n        while current:\n            print(current.data, end=\" \")\n            current = current.next\n        print()\n\n\n# Example usage\nlinked_list = LinkedList()\nlinked_list.append(1)\nlinked_list.append(2)\nlinked_list.append(3)\nlinked_list.append(4)\nlinked_list.append(5)\n\nprint(\"Original list:\")\nlinked_list.print_list()\n\nlinked_list.reverse()\n\nprint(\"Reversed list:\")\nlinked_list.print_list()\n```\n\nIn this code:\n\n*   We define a `Node` class to represent each node in the linked list.\n*   The `LinkedList` class represents the linked list itself.\n*   The `append` method adds new nodes to the end of the list.\n*   The `reverse` method reverses the linked list using a recursive approach.\n*   The `_reverse_recursive` method is a helper function that recursively reverses the linked list.\n*   The `print_list` method prints the elements in the linked list.\n\nWhen you run this code, it will create a linked list with the elements 1, 2, 3, 4, and 5, print the original list, reverse the list, and then print the reversed list.",
+      "tokens_input": 45,
+      "tokens_output": 497,
+      "latency_ms": 3800.771900219843,
+      "tokens_per_second": 130.7629115999444,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:18:45.540691"
+    },
+    {
+      "prompt": "Write a detailed 500-word essay about the future of artificial intelligence.",
+      "category": "long_output",
+      "model": "llama3.1-8b",
+      "response": "The future of artificial intelligence (AI) is a rapidly evolving and dynamic field that is transforming the way we live, work, and interact with the world around us. As AI technology continues to advance at an exponential rate, it is poised to revolutionize numerous industries, from healthcare and finance to transportation and education. In this essay, we will explore the future of AI, its potential applications, and the implications for society.\n\nOne of the most significant developments in AI is the emergence of machine learning (ML), a subset of AI that enables machines to learn from data and improve their performance over time. ML algorithms can analyze vast amounts of data, identify patterns, and make predictions, which has led to significant breakthroughs in areas such as natural language processing, computer vision, and decision-making.\n\nIn the coming years, AI is expected to play a major role in transforming various industries. In healthcare, AI-powered diagnosis and treatment planning will become increasingly common, enabling doctors to make more accurate diagnoses and develop personalized treatment plans for patients. AI will also revolutionize the healthcare industry by automating administrative tasks, streamlining clinical workflows, and improving patient outcomes.\n\nIn the finance sector, AI will continue to revolutionize the way transactions are processed, risk is assessed, and investments are made. AI-powered chatbots will become more prevalent, enabling customers to interact with financial institutions more seamlessly and efficiently. Additionally, AI will help detect and prevent financial crimes, such as money laundering and cyber attacks.\n\nThe transportation sector is also poised for significant transformation, with AI playing a crucial role in the development of autonomous vehicles. Self-driving cars will revolutionize the way we travel, reducing accidents, traffic congestion, and emissions. AI will also enhance the efficiency and safety of public transportation systems, such as buses and trains.\n\nEducation is another sector that will benefit significantly from AI. AI-powered adaptive learning platforms will enable students to learn at their own pace, receive personalized feedback, and access tailored learning resources. AI will also help teachers to identify areas where students need extra support, reducing the workload and improving academic outcomes.\n\nHowever, the development of AI also raises significant concerns about job displacement, bias, and accountability. As AI assumes more tasks and responsibilities, there is a risk that many jobs will become obsolete, leading to widespread unemployment and social unrest. Furthermore, AI systems can perpetuate existing biases and prejudices, leading to unfair outcomes and decisions.\n\nTo mitigate these risks, it is essential that policymakers, industry leaders, and AI developers work together to establish clear guidelines, regulations, and standards for AI development and deployment. This includes ensuring that AI systems are transparent, explainable, and accountable, and that they are designed to promote fairness and equity.\n\nIn conclusion, the future of AI is both exciting and challenging. On one hand, AI has the potential to transform numerous industries, improve lives, and drive economic growth. On the other hand, AI raises significant concerns about job displacement, bias, and accountability. As we move forward, it is essential that we prioritize responsible AI development and deployment, ensuring that AI benefits society as a whole.\n\nThe future of AI is not a fixed destination, but a dynamic and evolving landscape that will be shaped by the collective efforts of policymakers, industry leaders, and AI developers. As we continue to push the boundaries of AI research and application, we must also prioritize ethics, accountability, and human values, ensuring that AI serves humanity and promotes a better world for all.",
+      "tokens_input": 49,
+      "tokens_output": 690,
+      "latency_ms": 601.7481000162661,
+      "tokens_per_second": 1146.6592083653416,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:18:49.342036"
+    }
+  ],
+  "summary": {
+    "total_requests": 11,
+    "avg_latency_ms": 990.416045469994,
+    "p50_latency_ms": 464.3604999873787,
+    "p99_latency_ms": 3800.771900219843,
+    "avg_tokens_per_second": 421.58698883595486,
+    "max_tokens_per_second": 1146.6592083653416,
+    "by_category": {
+      "long_output": {
+        "count": 1,
+        "avg_latency_ms": 601.7481000162661,
+        "avg_tokens_per_second": 1146.6592083653416
+      },
+      "medium": {
+        "count": 3,
+        "avg_latency_ms": 420.476800063625,
+        "avg_tokens_per_second": 494.9523204028582
+      },
+      "simple": {
+        "count": 3,
+        "avg_latency_ms": 1026.9306999786447,
+        "avg_tokens_per_second": 227.38303355056004
+      },
+      "reasoning": {
+        "count": 2,
+        "avg_latency_ms": 783.4371499484405,
+        "avg_tokens_per_second": 268.0182268904898
+      },
+      "code": {
+        "count": 2,
+        "avg_latency_ms": 2191.8658000649884,
+        "avg_tokens_per_second": 393.8775765944638
+      }
+    }
+  }
+}

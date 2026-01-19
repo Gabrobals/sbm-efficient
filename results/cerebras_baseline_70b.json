@@ -1,0 +1,174 @@
+{
+  "provider": "cerebras",
+  "model": "llama-3.3-70b",
+  "timestamp": "2026-01-19T11:19:07.162780",
+  "profiles": [
+    {
+      "prompt": "What is 2 + 2?",
+      "category": "simple",
+      "model": "llama-3.3-70b",
+      "response": "2 + 2 = 4",
+      "tokens_input": 43,
+      "tokens_output": 8,
+      "latency_ms": 808.5892000235617,
+      "tokens_per_second": 9.893775479275366,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:19:07.163781"
+    },
+    {
+      "prompt": "Say hello in French.",
+      "category": "simple",
+      "model": "llama-3.3-70b",
+      "response": "Bonjour! (Good day!) or Salut! (Hi!)",
+      "tokens_input": 40,
+      "tokens_output": 14,
+      "latency_ms": 368.3738000690937,
+      "tokens_per_second": 38.004874389476406,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:19:07.973025"
+    },
+    {
+      "prompt": "What color is grass?",
+      "category": "simple",
+      "model": "llama-3.3-70b",
+      "response": "Grass is typically green in color. However, it's worth noting that the exact shade of green can vary depending on factors such as the type of grass, the amount of sunlight it receives, and the level of watering and nutrients it gets. Additionally, grass can sometimes appear yellow, brown, or wilted if it's not healthy or if it's under stress. But in general, healthy grass is usually a vibrant green color.",
+      "tokens_input": 40,
+      "tokens_output": 88,
+      "latency_ms": 317.40289996378124,
+      "tokens_per_second": 277.25014487908476,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:19:08.341266"
+    },
+    {
+      "prompt": "Explain photosynthesis in 2 sentences.",
+      "category": "medium",
+      "model": "llama-3.3-70b",
+      "response": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy from the sun into chemical energy in the form of glucose, a type of sugar that serves as a vital source of energy and organic compounds. This process involves the absorption of carbon dioxide and water, followed by the release of oxygen and glucose, and is essential for life on Earth as it provides the primary source of energy and organic compounds for the food chain.",
+      "tokens_input": 44,
+      "tokens_output": 89,
+      "latency_ms": 329.93449992500246,
+      "tokens_per_second": 269.75051114760845,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:19:08.659419"
+    },
+    {
+      "prompt": "What are the three laws of thermodynamics?",
+      "category": "medium",
+      "model": "llama-3.3-70b",
+      "response": "The three laws of thermodynamics are fundamental principles that describe the relationships between heat, energy, and work. They are:\n\n1. **The First Law of Thermodynamics (Law of Energy Conservation):** This law states that energy cannot be created or destroyed, only converted from one form to another. Mathematically, it can be expressed as:\n\n\u0394E = Q - W\n\nWhere \u0394E is the change in energy, Q is the heat added to a system, and W is the work done by the system.\n\n2. **The Second Law of Thermodynamics:** This law states that the total entropy (a measure of disorder or randomness) of an isolated system will always increase over time, or remain constant in idealized reversible processes. In other words, it is impossible to build a machine that can convert all the heat energy put into it into useful work. The second law can be expressed mathematically as:\n\n\u0394S = \u0394Q / T\n\nWhere \u0394S is the change in entropy, \u0394Q is the heat added to a system, and T is the temperature at which the heat is added.\n\n3. **The Third Law of Thermodynamics:** This law states that as the temperature of a system approaches absolute zero (the theoretical temperature at which all matter would have zero entropy), the entropy of the system will approach a minimum value. In other words, it is impossible to reach absolute zero by any finite number of processes. The third law can be expressed mathematically as:\n\nS \u2192 S0 as T \u2192 0\n\nWhere S is the entropy of the system, S0 is the minimum entropy, and T is the temperature.\n\nThese three laws provide a foundation for understanding the behavior of energy and its interactions with matter, and have far-reaching implications in fields such as physics, chemistry, and engineering.",
+      "tokens_input": 44,
+      "tokens_output": 365,
+      "latency_ms": 411.31130000576377,
+      "tokens_per_second": 887.4057192080188,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:19:08.989768"
+    },
+    {
+      "prompt": "Describe the water cycle briefly.",
+      "category": "medium",
+      "model": "llama-3.3-70b",
+      "response": "The water cycle, also known as the hydrologic cycle, is the continuous process by which water is circulated between the Earth's oceans, atmosphere, and land. It involves three main stages:\n\n1. **Evaporation**: Water from oceans, lakes, and rivers evaporates into the air as water vapor.\n2. **Condensation**: Water vapor in the air cools and condenses into clouds, fog, or dew.\n3. **Precipitation**: Water falls back to the Earth as rain, snow, sleet, or hail, replenishing the oceans, lakes, and rivers, and starting the cycle again.",
+      "tokens_input": 41,
+      "tokens_output": 126,
+      "latency_ms": 447.8197998832911,
+      "tokens_per_second": 281.36317338545007,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:19:09.400748"
+    },
+    {
+      "prompt": "A farmer has 17 sheep. All but 9 run away. How many are left? Explain your reasoning.",
+      "category": "reasoning",
+      "model": "llama-3.3-70b",
+      "response": "To solve this problem, let's break it down step by step:\n\n1. The farmer starts with 17 sheep.\n2. The phrase \"All but 9 run away\" means that 9 sheep stay, and the rest run away.\n\nSince \"all but 9\" run away, that implies 9 sheep are left behind. \n\nSo, the farmer has 9 sheep left.\n\nAnswer: 9 sheep are left.",
+      "tokens_input": 58,
+      "tokens_output": 88,
+      "latency_ms": 330.06760012358427,
+      "tokens_per_second": 266.61205149203056,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:19:09.849519"
+    },
+    {
+      "prompt": "If it takes 5 machines 5 minutes to make 5 widgets, how long would it take 100 machines to make 100 widgets?",
+      "category": "reasoning",
+      "model": "llama-3.3-70b",
+      "response": "If 5 machines can make 5 widgets in 5 minutes, then each machine can make 1 widget in 5 minutes.\n\nIf we have 100 machines, and each machine can make 1 widget in 5 minutes, then 100 machines can make 100 widgets in 5 minutes.\n\nSo, the answer is 5 minutes. The number of machines and the number of widgets increase proportionally, but the time it takes to make them remains the same.",
+      "tokens_input": 64,
+      "tokens_output": 96,
+      "latency_ms": 451.03179989382625,
+      "tokens_per_second": 212.845302753816,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:19:10.179509"
+    },
+    {
+      "prompt": "Write a Python function to check if a number is prime.",
+      "category": "code",
+      "model": "llama-3.3-70b",
+      "response": "**Prime Number Checker Function**\n=====================================\n\n### Function Description\n\nThis function checks if a given number is prime. A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.\n\n### Code\n\n```python\ndef is_prime(n: int) -> bool:\n    \"\"\"\n    Checks if a number is prime.\n\n    Args:\n        n (int): The number to check.\n\n    Returns:\n        bool: True if the number is prime, False otherwise.\n    \"\"\"\n    if n <= 1:\n        return False\n    for i in range(2, int(n ** 0.5) + 1):\n        if n % i == 0:\n            return False\n    return True\n\n# Example usage\nif __name__ == \"__main__\":\n    numbers = [2, 3, 4, 5, 6, 7, 8, 9, 10]\n    for num in numbers:\n        print(f\"{num} is prime: {is_prime(num)}\")\n```\n\n### Explanation\n\n1. The function `is_prime` takes an integer `n` as input.\n2. It first checks if `n` is less than or equal to 1. If so, it returns `False` because prime numbers are greater than 1.\n3. It then iterates over the range from 2 to the square root of `n` (inclusive).\n4. For each number `i` in this range, it checks if `n` is divisible by `i` by checking if `n % i == 0`. If it is, `n` is not a prime number, so the function returns `False`.\n5. If the loop completes without finding a divisor, the function returns `True`, indicating that `n` is a prime number.\n\n### Time Complexity\n\nThe time complexity of this function is O(\u221an) because it iterates up to the square root of `n`. This is more efficient than checking all the way up to `n` for larger numbers.",
+      "tokens_input": 47,
+      "tokens_output": 425,
+      "latency_ms": 411.5445001516491,
+      "tokens_per_second": 1032.6951273638517,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:19:10.631097"
+    },
+    {
+      "prompt": "Write a Python function to reverse a linked list.",
+      "category": "code",
+      "model": "llama-3.3-70b",
+      "response": "### Reversing a Linked List in Python\n#### Overview\n\nHere's an example implementation of a function to reverse a linked list in Python. This example uses a basic singly-linked list.\n\n#### Code\n\n```python\nclass Node:\n    \"\"\"Represents a node in the linked list.\"\"\"\n    def __init__(self, data):\n        self.data = data\n        self.next = None\n\nclass LinkedList:\n    \"\"\"Represents a singly-linked list.\"\"\"\n    def __init__(self):\n        self.head = None\n\n    def append(self, data):\n        \"\"\"Adds a new node to the end of the linked list.\"\"\"\n        new_node = Node(data)\n        if not self.head:\n            self.head = new_node\n            return\n        current_node = self.head\n        while current_node.next:\n            current_node = current_node.next\n        current_node.next = new_node\n\n    def reverse(self):\n        \"\"\"Reverses the linked list.\"\"\"\n        prev_node = None\n        current_node = self.head\n        while current_node:\n            next_node = current_node.next\n            current_node.next = prev_node\n            prev_node = current_node\n            current_node = next_node\n        self.head = prev_node\n\n    def print_list(self):\n        \"\"\"Prints the elements of the linked list.\"\"\"\n        current_node = self.head\n        while current_node:\n            print(current_node.data, end=\" \")\n            current_node = current_node.next\n        print()\n\n# Example usage:\nif __name__ == \"__main__\":\n    linked_list = LinkedList()\n    linked_list.append(1)\n    linked_list.append(2)\n    linked_list.append(3)\n    linked_list.append(4)\n    linked_list.append(5)\n\n    print(\"Original Linked List:\")\n    linked_list.print_list()\n\n    linked_list.reverse()\n\n    print(\"Reversed Linked List:\")\n    linked_list.print_list()\n\n```\n\n#### Explanation\n\n1.  The `Node` class represents a single node in the linked list, containing `data` and a reference to the `next` node.\n2.  The `LinkedList` class represents the entire linked list. It has methods to `append` new nodes, `reverse` the list, and `print_list` to display the elements.\n3.  The `reverse` method works by initializing three pointers: `prev_node`, `current_node`, and `next_node`. It iterates through the list, reversing the `next` pointer of each node.\n4.  Finally, the `head` of the list is updated to point to the new first node, which is the last node in the original list.\n\n#### Time Complexity\n\nThe time complexity of the `reverse` method is O(n), where n is the number of nodes in the linked list, since it visits each node once.\n\n#### Space Complexity\n\nThe space complexity is O(1), as it only uses a constant amount of space to store the pointers.",
+      "tokens_input": 45,
+      "tokens_output": 595,
+      "latency_ms": 448.5907000489533,
+      "tokens_per_second": 1326.376137389985,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:19:11.042397"
+    },
+    {
+      "prompt": "Write a detailed 500-word essay about the future of artificial intelligence.",
+      "category": "long_output",
+      "model": "llama-3.3-70b",
+      "response": "The future of artificial intelligence (AI) holds immense promise and potential, with far-reaching implications for various aspects of our lives. As AI technology continues to advance and evolve, it is expected to revolutionize industries, transform the way we work and interact, and raise important questions about the ethics and governance of intelligent machines.\n\nOne of the most significant trends in the future of AI is the increasing use of machine learning and deep learning algorithms. These techniques enable AI systems to learn from vast amounts of data, identify patterns, and make decisions autonomously. This will lead to significant improvements in areas such as image recognition, natural language processing, and predictive analytics. For instance, AI-powered chatbots will become more sophisticated, allowing them to understand and respond to complex customer queries, while AI-driven predictive maintenance will enable industries to anticipate and prevent equipment failures.\n\nAnother area where AI is expected to make a significant impact is in the field of robotics. As AI algorithms become more advanced, robots will be able to learn from their environment, adapt to new situations, and perform tasks with greater precision and accuracy. This will lead to increased productivity and efficiency in manufacturing, logistics, and healthcare, among other industries. Furthermore, the development of autonomous vehicles, powered by AI and machine learning, will transform the transportation sector, reducing accidents and improving traffic flow.\n\nThe future of AI also holds great promise for healthcare and medicine. AI-powered diagnostic tools will enable doctors to identify diseases more accurately and at an early stage, while AI-driven personalized medicine will allow for tailored treatment plans based on individual patient profiles. Additionally, AI-assisted robotic surgery will become more prevalent, enabling surgeons to perform complex procedures with greater precision and minimal invasiveness.\n\nHowever, as AI becomes more pervasive and powerful, there are also concerns about its potential risks and challenges. One of the most significant concerns is the impact of AI on employment, as automation and machine learning replace certain jobs and tasks. Furthermore, there are concerns about bias and fairness in AI decision-making, as well as the potential for AI systems to be used for malicious purposes, such as cyber attacks and surveillance.\n\nTo address these concerns, it is essential to develop and implement robust governance frameworks and regulations for AI. This includes establishing clear guidelines for AI development, deployment, and use, as well as ensuring that AI systems are transparent, explainable, and accountable. Additionally, there is a need for increased investment in AI education and re-skilling programs, to enable workers to adapt to the changing job market and take advantage of new opportunities created by AI.\n\nIn conclusion, the future of artificial intelligence holds immense promise and potential, with the power to transform industries, improve lives, and solve some of humanity's most pressing challenges. However, it also raises important questions about ethics, governance, and responsibility. As we move forward, it is essential to prioritize transparency, accountability, and fairness in AI development and deployment, and to ensure that the benefits of AI are shared by all. By doing so, we can unlock the full potential of AI and create a brighter, more prosperous future for generations to come.",
+      "tokens_input": 49,
+      "tokens_output": 619,
+      "latency_ms": 992.8795001469553,
+      "tokens_per_second": 623.4391987228887,
+      "time_to_first_token_ms": 0.0,
+      "timestamp": "2026-01-19T11:19:11.491091"
+    }
+  ],
+  "summary": {
+    "total_requests": 11,
+    "avg_latency_ms": 483.413236385042,
+    "p50_latency_ms": 411.5445001516491,
+    "p99_latency_ms": 992.8795001469553,
+    "avg_tokens_per_second": 475.05781965558964,
+    "max_tokens_per_second": 1326.376137389985,
+    "by_category": {
+      "code": {
+        "count": 2,
+        "avg_latency_ms": 430.0676001003012,
+        "avg_tokens_per_second": 1179.5356323769183
+      },
+      "reasoning": {
+        "count": 2,
+        "avg_latency_ms": 390.54970000870526,
+        "avg_tokens_per_second": 239.72867712292327
+      },
+      "long_output": {
+        "count": 1,
+        "avg_latency_ms": 992.8795001469553,
+        "avg_tokens_per_second": 623.4391987228887
+      },
+      "simple": {
+        "count": 3,
+        "avg_latency_ms": 498.12196668547887,
+        "avg_tokens_per_second": 108.38293158261217
+      },
+      "medium": {
+        "count": 3,
+        "avg_latency_ms": 396.3551999380191,
+        "avg_tokens_per_second": 479.50646791369246
+      }
+    }
+  }
+}

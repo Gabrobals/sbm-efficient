@@ -1,0 +1,33 @@
+{
+  "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "architecture": {
+    "num_experts": 128,
+    "top_k": 6
+  },
+  "results": [
+    {
+      "difficulty": "easy",
+      "mean_entropy": 5.101611890792847,
+      "projected_k": 4,
+      "savings_pct": 33.333333333333336
+    },
+    {
+      "difficulty": "code",
+      "mean_entropy": 5.253235340118408,
+      "projected_k": 4,
+      "savings_pct": 33.333333333333336
+    },
+    {
+      "difficulty": "hard",
+      "mean_entropy": 5.334706783294678,
+      "projected_k": 4,
+      "savings_pct": 33.333333333333336
+    }
+  ],
+  "avg_entropy": 5.229851404825847,
+  "avg_savings": 33.333333333333336,
+  "timestamp": "2026-01-19 11:59:29",
+  "validation_method": "hook-based router logits extraction",
+  "hardware": "2x A100 SXM4 40GB (Vast.ai Slovenia)",
+  "notes": "First production validation of Adaptive-K on NVIDIA Nemotron 3 Nano MoE"
+}

@@ -107,7 +107,7 @@ Apache 2.0
 
 ```bibtex
 @software{adaptive_speculative_2026,
-  author = {Ballarani, Gabriele},
+  author = {Balsamo, Gabriele},
   title = {Adaptive Speculative Decoding: Entropy-Guided Dynamic Draft Length},
   year = {2026},
   url = {https://github.com/Gabrobals/adaptive-speculative}

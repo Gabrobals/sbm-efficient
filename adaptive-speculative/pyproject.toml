@@ -5,7 +5,7 @@ description = "Entropy-guided dynamic draft length for speculative decoding"
 readme = "README.md"
 license = {text = "Apache-2.0"}
 authors = [
-    {name = "Gabriele Ballarani", email = "gabriele@adaptive-k.dev"}
+    {name = "Gabriele Balsamo", email = "gabriele@adaptive-k.dev"}
 ]
 requires-python = ">=3.10"
 keywords = ["llm", "inference", "speculative-decoding", "entropy", "optimization"]

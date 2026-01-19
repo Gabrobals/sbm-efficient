@@ -3,7 +3,7 @@
 > **Kaizen Philosophy**: Small continuous improvements + One moonshot
 
 **Start Date**: January 2026
-**Author**: Gabriele Ballarani
+**Author**: Gabriele Balsamo
 
 ---
 
