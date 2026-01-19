@@ -81,7 +81,7 @@ export default function Results() {
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-vs-text">{result.model}</h3>
-                <span className={`text-xs px-2 py-1 rounded-full bg-vs-${result.color}/20 text-vs-${result.color}`}>
+                <span translate="no" className={`text-xs px-2 py-1 rounded-full bg-vs-${result.color}/20 text-vs-${result.color}`}>
                   MoE
                 </span>
               </div>
