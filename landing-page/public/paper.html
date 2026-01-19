@@ -786,18 +786,19 @@
 
         <p><strong>Technical Note:</strong> Since Nemotron 3 does not support <code>output_router_logits=True</code>, we extracted pre-top-K router logits via forward hooks on the <code>backbone.layers.X.mixer.gate</code> modules, computing full 128-expert logits as <code>hidden_states @ router_weight.T</code>.</p>
 
-        <p class="table-caption"><strong>Table 8:</strong> Nemotron 3 Nano validation results: 33.3% compute reduction (exceeds 27.1% projection).</p>
+        <p class="table-caption"><strong>Table 8:</strong> Nemotron 3 Nano validation results. Adaptive-K achieves 33.3% compute reduction by reducing average K from 6 to 4.</p>
         <table>
             <thead>
-                <tr><th>Test Case</th><th>Measured Entropy</th><th>Max Entropy</th><th>Utilization</th><th>Savings</th></tr>
+                <tr><th>Test Case</th><th>Mean Entropy</th><th>H/H<sub>max</sub></th><th>Projected K</th><th>Compute</th><th>Savings</th></tr>
             </thead>
             <tbody>
-                <tr><td>Easy ("The capital of France")</td><td>5.26 bits</td><td>7.0 bits</td><td>75.1%</td><td>32.4%</td></tr>
-                <tr><td>Code ("def fibonacci")</td><td>5.28 bits</td><td>7.0 bits</td><td>75.4%</td><td>33.3%</td></tr>
-                <tr><td>Hard ("quantum entanglement")</td><td>5.16 bits</td><td>7.0 bits</td><td>73.7%</td><td>34.4%</td></tr>
-                <tr class="highlight-row"><td><strong>Average</strong></td><td><strong>5.23 bits</strong></td><td>7.0 bits</td><td>74.7%</td><td><strong>33.3%</strong></td></tr>
+                <tr><td>Easy ("The capital of France")</td><td>5.26 bits</td><td>75.1%</td><td>4.06</td><td>67.7%</td><td>32.3%</td></tr>
+                <tr><td>Code ("def fibonacci")</td><td>5.28 bits</td><td>75.4%</td><td>4.00</td><td>66.7%</td><td>33.3%</td></tr>
+                <tr><td>Hard ("quantum entanglement")</td><td>5.16 bits</td><td>73.7%</td><td>3.94</td><td>65.7%</td><td>34.3%</td></tr>
+                <tr class="highlight-row"><td><strong>Average</strong></td><td><strong>5.23 bits</strong></td><td>74.7%</td><td><strong>4.00</strong></td><td><strong>66.7%</strong></td><td><strong>33.3%</strong></td></tr>
             </tbody>
         </table>
+        <p style="font-size:0.9rem;color:#666;margin-top:0.5rem;"><em>Note: Savings = 1 − (Projected K / Baseline K). With baseline K=6: Savings = 1 − 4/6 = 33.3%. Max entropy H<sub>max</sub> = log₂(128) = 7.0 bits.</em></p>
 
         <h3>5.5 Results Summary</h3>
         <figure>

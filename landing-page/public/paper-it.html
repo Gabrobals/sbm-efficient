@@ -746,18 +746,19 @@
 
         <p><strong>Nota Tecnica:</strong> Poiché Nemotron 3 non supporta <code>output_router_logits=True</code>, abbiamo estratto i logit del router pre-top-K tramite hook forward sui moduli <code>backbone.layers.X.mixer.gate</code>.</p>
 
-        <p class="table-caption"><strong>Tabella 8:</strong> Risultati validazione Nemotron 3 Nano: riduzione del calcolo del 33.3%.</p>
+        <p class="table-caption"><strong>Tabella 8:</strong> Risultati validazione Nemotron 3 Nano. Adaptive-K ottiene una riduzione del 33.3% riducendo K medio da 6 a 4.</p>
         <table>
             <thead>
-                <tr><th>Caso di Test</th><th>Entropia Misurata</th><th>Entropia Max</th><th>Utilizzo</th><th>Risparmio</th></tr>
+                <tr><th>Caso di Test</th><th>Entropia Media</th><th>H/H<sub>max</sub></th><th>K Proiettato</th><th>Compute</th><th>Risparmio</th></tr>
             </thead>
             <tbody>
-                <tr><td>Facile ("La capitale della Francia")</td><td>5.26 bit</td><td>7.0 bit</td><td>75.1%</td><td>32.4%</td></tr>
-                <tr><td>Codice ("def fibonacci")</td><td>5.28 bit</td><td>7.0 bit</td><td>75.4%</td><td>33.3%</td></tr>
-                <tr><td>Difficile ("entanglement quantistico")</td><td>5.16 bit</td><td>7.0 bit</td><td>73.7%</td><td>34.4%</td></tr>
-                <tr class="highlight-row"><td><strong>Media</strong></td><td><strong>5.23 bit</strong></td><td>7.0 bit</td><td>74.7%</td><td><strong>33.3%</strong></td></tr>
+                <tr><td>Facile ("La capitale della Francia")</td><td>5.26 bit</td><td>75.1%</td><td>4.06</td><td>67.7%</td><td>32.3%</td></tr>
+                <tr><td>Codice ("def fibonacci")</td><td>5.28 bit</td><td>75.4%</td><td>4.00</td><td>66.7%</td><td>33.3%</td></tr>
+                <tr><td>Difficile ("entanglement quantistico")</td><td>5.16 bit</td><td>73.7%</td><td>3.94</td><td>65.7%</td><td>34.3%</td></tr>
+                <tr class="highlight-row"><td><strong>Media</strong></td><td><strong>5.23 bit</strong></td><td>74.7%</td><td><strong>4.00</strong></td><td><strong>66.7%</strong></td><td><strong>33.3%</strong></td></tr>
             </tbody>
         </table>
+        <p style="font-size:0.9rem;color:#666;margin-top:0.5rem;"><em>Nota: Risparmio = 1 − (K Proiettato / K Baseline). Con K baseline=6: Risparmio = 1 − 4/6 = 33.3%. Entropia massima H<sub>max</sub> = log₂(128) = 7.0 bit.</em></p>
 
         <h3>5.5 Riepilogo Risultati</h3>
         <figure>
