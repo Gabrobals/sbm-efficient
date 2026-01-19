@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "/whitepaper-extended.html",
+      "destination": "/paper.html",
+      "permanent": true
+    },
+    {
+      "source": "/whitepaper-extended",
+      "destination": "/paper.html",
+      "permanent": true
+    }
+  ]
+}
