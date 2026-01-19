@@ -54,7 +54,7 @@ export default function Resources() {
       typeKey: 'paperType' as const,
       titleKey: 'paperTitle' as const,
       descKey: 'paperDesc' as const,
-      link: 'https://github.com/Gabrobals/sbm-efficient/blob/master/Entropy_Guided_Dynamic_Expert_Selection_in_Mixture_of_Experts_Models.pdf',
+      link: '/paper.html',
       icon: icons.paper,
     },
     {
