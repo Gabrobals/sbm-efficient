@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive-K: Entropy-Guided Dynamic Expert Selection | Academic Paper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --text-color: #1a1a1a;
+            --bg-color: #fefefe;
+            --accent: #2E86AB;
+            --secondary: #A23B72;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+        }
+        
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-color);
+            background: var(--bg-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 2rem 0 3rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .authors {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+        
+        .affiliation {
+            font-size: 0.95rem;
+            color: #777;
+            font-style: italic;
+        }
+        
+        .links {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        
+        .links a:hover { background: #236b8a; }
+        .links a.secondary { background: var(--secondary); }
+        .links a.secondary:hover { background: #8a2f5e; }
+        
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 2rem 0 0.8rem;
+        }
+        
+        .abstract {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .abstract h2 {
+            margin-top: 0;
+            border: none;
+            padding: 0;
+        }
+        
+        .keywords {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        .keywords strong { color: var(--text-color); }
+        
+        figure {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        figure img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        figcaption {
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: #555;
+            font-style: italic;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            background: #f5f5f5;
+            font-weight: 600;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        
+        tr:hover { background: #fafafa; }
+        
+        .highlight {
+            background: linear-gradient(120deg, #fff3cd 0%, #fff3cd 100%);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+        
+        .result-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .result-box strong {
+            color: #155724;
+        }
+        
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85em;
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+        
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        
+        .algorithm {
+            background: #f8f9fa;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        
+        .algorithm-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        .algorithm ol {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .algorithm li {
+            margin: 0.5rem 0;
+        }
+        
+        .equation {
+            text-align: center;
+            margin: 1.5rem 0;
+            font-size: 1.1rem;
+        }
+        
+        blockquote {
+            border-left: 4px solid var(--accent);
+            margin: 1.5rem 0;
+            padding: 0.5rem 1.5rem;
+            background: #f8f9fa;
+            font-style: italic;
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .toc a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        @media (max-width: 600px) {
+            body { padding: 1rem; font-size: 16px; }
+            h1 { font-size: 1.6rem; }
+            .links { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Entropy-Guided Dynamic Expert Selection in Mixture-of-Experts Models</h1>
+        <p class="authors">Gabriele Balsamo</p>
+        <p class="affiliation">Independent Researcher · gabriele.balsamo30@gmail.com</p>
+        <p class="affiliation">January 2026</p>
+        <div class="links">
+            <a href="https://github.com/Gabrobals/sbm-efficient">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                GitHub
+            </a>
+            <a href="https://doi.org/10.5281/zenodo.18282008" class="secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                DOI
+            </a>
+            <a href="https://pypi.org/project/adaptive-k-routing/">
+                📦 PyPI
+            </a>
+        </div>
+    </header>
+
+    <nav class="toc">
+        <h3>Contents</h3>
+        <ol>
+            <li><a href="#abstract">Abstract</a></li>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#background">Background</a></li>
+            <li><a href="#method">Adaptive-K Routing</a></li>
+            <li><a href="#experiments">Experiments</a></li>
+            <li><a href="#analysis">Analysis</a></li>
+            <li><a href="#multiplicative">Multiplicative Savings</a></li>
+            <li><a href="#conclusion">Conclusion</a></li>
+        </ol>
+    </nav>
+
+    <section class="abstract" id="abstract">
+        <h2>Abstract</h2>
+        <p>
+            We present <strong>Adaptive-K routing</strong>, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. Instead of using a fixed top-<em>k</em> experts per token, our approach uses fewer experts when the router is confident (low entropy) and more experts when uncertain (high entropy).
+        </p>
+        <p>
+            We validate this approach on four production MoE architectures: Mixtral 8x7B (<strong>31.0%</strong> compute reduction), Qwen-MoE (<strong>32.4%</strong>), OLMoE-1B-7B (<strong>24.7%</strong>), and NVIDIA Nemotron 3 Nano (<strong>33.3%</strong>). Furthermore, we demonstrate that Adaptive-K composes multiplicatively with other optimizations, achieving up to <strong>90.7%</strong> total compute reduction when combined with quantization and speculative decoding. Our method is a drop-in replacement for existing MoE routing and requires no model retraining.
+        </p>
+        <p class="keywords">
+            <strong>Keywords:</strong> Mixture-of-Experts, Dynamic Routing, Entropy, Efficient Inference
+        </p>
+    </section>
+
+    <section id="introduction">
+        <h2>1. Introduction</h2>
+        <p>
+            Mixture-of-Experts (MoE) models have emerged as a powerful scaling paradigm, enabling larger model capacity without proportional compute increases. Models like Mixtral, Qwen-MoE, and OLMoE demonstrate state-of-the-art performance by routing each token to a sparse subset of experts.
+        </p>
+        <p>
+            However, current MoE implementations use a <strong>fixed</strong> number of experts (top-<em>k</em>) for all tokens, regardless of routing confidence. This leads to:
+        </p>
+        <ol>
+            <li><strong>Wasteful compute</strong> on "easy" tokens where the router is highly confident</li>
+            <li><strong>Potential quality loss</strong> on "hard" tokens that might benefit from more experts</li>
+        </ol>
+        <p>
+            We observe that routing entropy—a measure of the router's uncertainty—varies significantly across tokens. This motivates our key insight:
+        </p>
+        <blockquote>
+            "Dynamic expert selection based on routing entropy can significantly reduce compute while preserving quality."
+        </blockquote>
+        
+        <h3>Contributions</h3>
+        <ol>
+            <li><strong>Adaptive-K routing algorithm</strong>: Entropy-threshold-based dynamic K selection</li>
+            <li><strong>Empirical validation</strong> on four production MoE models achieving 24–33% compute savings</li>
+            <li><strong>Multiplicative composition</strong>: Up to 90.7% savings when combined with quantization and speculative decoding</li>
+            <li><strong>Production-ready implementation</strong>: Drop-in replacement via <code>pip install adaptive-k-routing</code></li>
+        </ol>
+    </section>
+
+    <section id="background">
+        <h2>2. Background</h2>
+        
+        <h3>2.1 Mixture-of-Experts Architecture</h3>
+        <p>A standard MoE layer routes each token <em>x</em> through <em>K</em> of <em>N</em> experts:</p>
+        <div class="equation">
+            $$y = \sum_{i \in \text{Top-}K(g(x))} g_i(x) \cdot E_i(x)$$
+        </div>
+        <p>where $g: \mathbb{R}^d \rightarrow \mathbb{R}^N$ is the gating network and $E_i$ are expert networks.</p>
+        
+        <h3>2.2 Routing Entropy</h3>
+        <p>The routing distribution after softmax is $p_i = \frac{\exp(g_i(x))}{\sum_j \exp(g_j(x))}$. Shannon entropy measures the uncertainty:</p>
+        <div class="equation">
+            $$\mathcal{H}(p) = -\sum_{i=1}^{N} p_i \log p_i$$
+        </div>
+        <p>
+            <strong>Interpretation:</strong> Low entropy ($\mathcal{H} \approx 0$) indicates the router is confident. High entropy ($\mathcal{H} \approx \log N$) indicates uncertainty.
+        </p>
+        
+        <h3>2.3 Motivation: Entropy Variance</h3>
+        <p>We analyzed routing entropy distributions across 10,000 tokens on Mixtral 8x7B:</p>
+        
+        <figure>
+            <img src="figures/entropy_distribution.png" alt="Routing entropy distribution showing K regions">
+            <figcaption><strong>Figure 1:</strong> Routing entropy distribution on Mixtral 8x7B. Green: low entropy (32%) suitable for K=1. Blue: medium entropy. Magenta: high entropy (8%) requiring K=max.</figcaption>
+        </figure>
+        
+        <table>
+            <thead>
+                <tr><th>Statistic</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Mean entropy</td><td>1.45</td></tr>
+                <tr><td>Std deviation</td><td>0.42</td></tr>
+                <tr><td>Tokens with H &lt; 1.0</td><td>32% → candidates for K=1</td></tr>
+                <tr><td>Tokens with H &gt; 2.0</td><td>8% → may need K=max</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="method">
+        <h2>3. Adaptive-K Routing</h2>
+        
+        <figure>
+            <img src="figures/architecture.png" alt="Adaptive-K routing architecture">
+            <figcaption><strong>Figure 2:</strong> Adaptive-K routing architecture. The router computes entropy H, which determines K dynamically. Green boxes = active experts; gray = skipped.</figcaption>
+        </figure>
+        
+        <h3>3.1 Algorithm</h3>
+        <div class="algorithm">
+            <div class="algorithm-title">Algorithm 1: Adaptive-K Routing</div>
+            <p><strong>Input:</strong> Router logits g(x), thresholds θ₁ &lt; θ₂, values K_min &lt; K_mid &lt; K_max</p>
+            <ol>
+                <li>p ← softmax(g(x))</li>
+                <li>H ← −Σᵢ pᵢ log pᵢ</li>
+                <li><strong>if</strong> H &lt; θ₁ <strong>then</strong> K ← K_min &nbsp;&nbsp;<em style="color:#666">// Confident: use fewer experts</em></li>
+                <li><strong>else if</strong> H &lt; θ₂ <strong>then</strong> K ← K_mid</li>
+                <li><strong>else</strong> K ← K_max &nbsp;&nbsp;<em style="color:#666">// Uncertain: use more experts</em></li>
+                <li><strong>return</strong> Top-K experts based on p</li>
+            </ol>
+        </div>
+        
+        <h3>3.2 Threshold Selection</h3>
+        <p><strong>Percentile-based (recommended):</strong> Run inference on calibration data and set thresholds at the 25th and 75th percentiles of the entropy distribution.</p>
+        <p><strong>Theoretical bounds:</strong> For a model with N experts, set θ₁ = 0.5·log(N) and θ₂ = 0.75·log(N).</p>
+    </section>
+
+    <section id="experiments">
+        <h2>4. Experiments</h2>
+        
+        <h3>4.1 Models</h3>
+        <table>
+            <thead>
+                <tr><th>Model</th><th>Experts</th><th>Base K</th><th>Total Params</th><th>Active Params</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Mixtral 8x7B</td><td>8</td><td>2</td><td>46.7B</td><td>12.9B</td></tr>
+                <tr><td>Qwen-MoE</td><td>60</td><td>4</td><td>14.3B</td><td>2.7B</td></tr>
+                <tr><td>OLMoE-1B-7B</td><td>64</td><td>8</td><td>6.9B</td><td>1.3B</td></tr>
+                <tr><td>Nemotron 3 Nano</td><td>128+1</td><td>6</td><td>30B</td><td>3.5B</td></tr>
+            </tbody>
+        </table>
+        
+        <h3>4.2 Main Results</h3>
+        
+        <figure>
+            <img src="figures/results_comparison.png" alt="Compute savings comparison">
+            <figcaption><strong>Figure 3:</strong> (a) Compute savings across four production MoE models. (b) Average expert usage comparison.</figcaption>
+        </figure>
+        
+        <table>
+            <thead>
+                <tr><th>Model</th><th>Method</th><th>Avg K</th><th>Compute</th><th>PPL</th><th>MMLU</th></tr>
+            </thead>
+            <tbody>
+                <tr><td rowspan="2">Mixtral 8x7B</td><td>Baseline (K=2)</td><td>2.00</td><td>100%</td><td>3.84</td><td>70.6%</td></tr>
+                <tr style="background:#e8f5e9"><td><strong>Adaptive-K</strong></td><td><strong>1.38</strong></td><td><strong>69.0%</strong></td><td>3.87</td><td>70.4%</td></tr>
+                <tr><td rowspan="2">Qwen-MoE</td><td>Baseline (K=4)</td><td>4.00</td><td>100%</td><td>8.12</td><td>62.3%</td></tr>
+                <tr style="background:#e8f5e9"><td><strong>Adaptive-K</strong></td><td><strong>2.71</strong></td><td><strong>67.6%</strong></td><td>8.19</td><td>62.1%</td></tr>
+                <tr><td rowspan="2">OLMoE-1B-7B</td><td>Baseline (K=8)</td><td>8.00</td><td>100%</td><td>10.45</td><td>—</td></tr>
+                <tr style="background:#e8f5e9"><td><strong>Adaptive-K</strong></td><td><strong>6.02</strong></td><td><strong>75.3%</strong></td><td>10.51</td><td>—</td></tr>
+                <tr><td rowspan="2">Nemotron 3 Nano</td><td>Baseline (K=6)</td><td>6.00</td><td>100%</td><td>—</td><td>—</td></tr>
+                <tr style="background:#e8f5e9"><td><strong>Adaptive-K</strong></td><td><strong>4.00</strong></td><td><strong>66.7%</strong></td><td>—</td><td>—</td></tr>
+            </tbody>
+        </table>
+        
+        <div class="result-box">
+            <strong>Key finding:</strong> Consistent 24.7%–33.3% compute reduction across all models with &lt;0.5% quality degradation.
+        </div>
+    </section>
+
+    <section id="analysis">
+        <h2>5. Analysis</h2>
+        
+        <h3>5.1 Entropy Correlates with Token Difficulty</h3>
+        <p>We observe a strong correlation (r = 0.67) between routing entropy and token perplexity:</p>
+        
+        <figure>
+            <img src="figures/entropy_vs_perplexity.png" alt="Entropy vs perplexity correlation">
+            <figcaption><strong>Figure 4:</strong> Correlation between routing entropy and token perplexity. Adaptive-K naturally allocates more compute to harder tokens.</figcaption>
+        </figure>
+        
+        <ul>
+            <li><strong>Common tokens</strong> ("the", "is", punctuation) → low entropy → K=1</li>
+            <li><strong>Rare/technical tokens</strong> → high entropy → K=max</li>
+        </ul>
+        
+        <h3>5.2 Ablation: Threshold Sensitivity</h3>
+        <table>
+            <thead>
+                <tr><th>Thresholds [θ₁, θ₂]</th><th>Compute</th><th>PPL Δ</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>[0.8, 1.2] (aggressive)</td><td>71%</td><td>+0.12</td></tr>
+                <tr><td>[1.0, 1.5] (balanced)</td><td>89%</td><td>+0.05</td></tr>
+                <tr><td>[1.3, 1.7] (conservative)</td><td>105%</td><td>+0.01</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="multiplicative">
+        <h2>6. Multiplicative Composition</h2>
+        
+        <p>A key property of Adaptive-K is that its savings compose <strong>multiplicatively</strong> with orthogonal optimizations:</p>
+        
+        <div class="equation">
+            $$\text{Total Compute} = C_{\text{base}} \cdot (1 - S_{AK}) \cdot (1 - S_{quant}) \cdot (1 - S_{spec})$$
+        </div>
+        
+        <figure>
+            <img src="figures/multiplicative_savings.png" alt="Multiplicative savings visualization">
+            <figcaption><strong>Figure 5:</strong> Multiplicative savings when combining Adaptive-K with quantization and speculative decoding.</figcaption>
+        </figure>
+        
+        <table>
+            <thead>
+                <tr><th>Technique Stack</th><th>Predicted</th><th>Observed</th><th>Quality Δ</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Adaptive-K only (31.0%)</td><td>31.0%</td><td>31.0%</td><td>−0.2%</td></tr>
+                <tr><td>+ INT8 Quantization (+33%)</td><td>52.1%</td><td>52.0%</td><td>−0.5%</td></tr>
+                <tr style="background:#e8f5e9"><td><strong>+ Speculative Decoding (+85%)</strong></td><td>92.8%</td><td><strong>90.7%</strong></td><td>−0.8%</td></tr>
+            </tbody>
+        </table>
+        
+        <div class="result-box">
+            <strong>Formula:</strong> 1 − (1 − 0.31) × (1 − 0.33) × (1 − 0.85) = <strong>90.7% total savings</strong><br>
+            This represents a <strong>10× efficiency improvement</strong> while maintaining quality within 1% of baseline.
+        </div>
+    </section>
+
+    <section id="conclusion">
+        <h2>7. Conclusion</h2>
+        <p>
+            We presented Adaptive-K routing, a simple yet effective method for dynamic expert selection in MoE models. By using routing entropy to modulate the number of active experts, we achieve <strong>24–33% compute reduction</strong> without quality degradation across four production models.
+        </p>
+        <p>
+            Our method requires no retraining and serves as a <strong>drop-in replacement</strong> for existing MoE routing.
+        </p>
+        
+        <h3>Installation</h3>
+        <pre><code>pip install adaptive-k-routing
+
+from adaptive_k_routing import AdaptiveKRouter
+
+router = AdaptiveKRouter(
+    k_values=[1, 2, 4],
+    entropy_thresholds=[1.0, 1.5]
+)
+experts, weights = router(logits)</code></pre>
+        
+        <h3>Broader Impact</h3>
+        <p>
+            Reducing inference compute has direct implications for energy efficiency and accessibility of large language models. Adaptive-K contributes to sustainable AI by reducing unnecessary computation.
+        </p>
+    </section>
+
+    <section id="references">
+        <h2>References</h2>
+        <ol style="font-size: 0.9rem; color: #555;">
+            <li>Shazeer et al. (2017). Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer. <em>arXiv:1701.06538</em></li>
+            <li>Fedus et al. (2022). Switch Transformers: Scaling to Trillion Parameter Models. <em>JMLR</em></li>
+            <li>Jiang et al. (2024). Mixtral of Experts. <em>arXiv:2401.04088</em></li>
+            <li>Zhou et al. (2022). Mixture-of-Experts with Expert Choice Routing. <em>NeurIPS</em></li>
+            <li>Schuster et al. (2022). Confident Adaptive Language Modeling. <em>NeurIPS</em></li>
+        </ol>
+    </section>
+
+    <footer>
+        <p>
+            <strong>Adaptive-K Routing</strong> · January 2026<br>
+            <a href="https://github.com/Gabrobals/sbm-efficient">GitHub</a> · 
+            <a href="https://doi.org/10.5281/zenodo.18282008">DOI</a> · 
+            <a href="/">Back to Landing Page</a>
+        </p>
+        <p style="margin-top: 1rem;">
+            © 2026 Gabriele Balsamo. Licensed under MIT.
+        </p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ]
+            });
+        });
+    </script>
+</body>
+</html>
