@@ -297,20 +297,22 @@ Expert Compute & 100\% & 66.7\% & \textbf{33.3\% savings} \\
 
 \begin{table}[h]
 \centering
-\begin{tabular}{lccc}
+\begin{tabular}{lcccc}
 \toprule
-\textbf{Thresholds} & \textbf{Avg K} & \textbf{Compute} & \textbf{PPL $\Delta$} \\
+\textbf{Threshold $\theta$} & \textbf{\% K=1} & \textbf{Avg K} & \textbf{Compute} & \textbf{PPL $\Delta$} \\
 \midrule
-{[}0.8, 1.2{]} & 1.42 & 71\% & +0.12 \\
-{[}1.0, 1.5{]} & 1.78 & 89\% & +0.05 \\
-{[}1.3, 1.7{]} & 2.10 & 105\% & +0.01 \\
+0.8 (conservative) & 28\% & 1.72 & 86\% & +0.02 \\
+1.0 & 42\% & 1.58 & 79\% & +0.04 \\
+1.275 (optimal) & 62\% & 1.38 & 69\% & +0.08 \\
+1.5 & 78\% & 1.22 & 61\% & +0.15 \\
+1.8 (aggressive) & 91\% & 1.09 & 54.5\% & +0.31 \\
 \bottomrule
 \end{tabular}
-\caption{Impact of threshold selection on efficiency and quality.}
+\caption{Impact of threshold selection on efficiency and quality. Avg K formula: $(\%K{=}1 \times 1) + (\%K{=}2 \times 2)$, e.g., $\theta{=}1.275$: $0.62 \times 1 + 0.38 \times 2 = 1.38$.}
 \label{tab:thresholds}
 \end{table}
 
-Lower thresholds $\rightarrow$ more aggressive savings but slight quality impact.
+Lower thresholds $\rightarrow$ more aggressive savings but slight quality impact. The optimal threshold $\theta = 1.275$ balances 31\% compute savings with minimal perplexity increase (+0.08).
 
 \subsection{K Value Granularity}
 
