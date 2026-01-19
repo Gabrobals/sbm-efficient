@@ -1,0 +1,55 @@
+version: '3.8'
+
+# VERTEX-RESEARCH n8n Stack
+# Avvia con: docker-compose up -d
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: vertex-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=vertex
+      - N8N_BASIC_AUTH_PASSWORD=research2026
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=Europe/Rome
+      - TZ=Europe/Rome
+      # Encryption key for credentials
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:-vertex-research-secret-key-change-me}
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./workflows:/home/node/workflows
+    networks:
+      - vertex-network
+
+  # Webhook receiver per i risultati degli esperimenti
+  vertex-api:
+    build: 
+      context: ..
+      dockerfile: n8n/Dockerfile.api
+    container_name: vertex-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - N8N_WEBHOOK_URL=http://n8n:5678/webhook
+    volumes:
+      - ../results:/app/results
+      - ../src:/app/src
+    networks:
+      - vertex-network
+    depends_on:
+      - n8n
+
+volumes:
+  n8n_data:
+
+networks:
+  vertex-network:
+    driver: bridge

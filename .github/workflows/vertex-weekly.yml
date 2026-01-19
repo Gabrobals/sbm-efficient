@@ -1,0 +1,39 @@
+name: VERTEX Weekly Report
+
+on:
+  schedule:
+    # Every Friday at 17:00 (UTC+1 = 16:00 UTC)
+    - cron: '0 16 * * 5'
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  weekly-report:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install python-dotenv
+      
+      - name: Generate weekly report
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          RESEARCHER_NAME: ${{ secrets.RESEARCHER_NAME }}
+        run: |
+          python -m src.utils.vertex_simple report weekly
+      
+      - name: Commit report
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add results/vertex/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "📈 Weekly report $(date +%Y-%m-%d)" && git push)
