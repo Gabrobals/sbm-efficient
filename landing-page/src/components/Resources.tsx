@@ -61,7 +61,7 @@ export default function Resources() {
       typeKey: 'whitepaperType' as const,
       titleKey: 'whitepaperTitle' as const,
       descKey: 'whitepaperDesc' as const,
-      link: '/whitepaper.html',
+      link: '/paper.html',
       icon: icons.whitepaper,
     },
     {
