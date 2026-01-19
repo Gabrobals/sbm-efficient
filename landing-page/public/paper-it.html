@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive-K: Selezione Dinamica degli Esperti Guidata dall'Entropia nei Modelli MoE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+Pro:wght@400;600&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --text-color: #1a1a1a;
+            --bg-color: #fefefe;
+            --accent: #2E86AB;
+            --secondary: #A23B72;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+        }
+        
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-color);
+            background: var(--bg-color);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 2rem 0 3rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+        
+        .authors { font-size: 1.1rem; color: #333; margin-bottom: 0.3rem; }
+        .affiliation { font-size: 0.95rem; color: #666; }
+        .date { font-size: 0.9rem; color: #888; margin-top: 1rem; }
+        .preprint { 
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        
+        .lang-switch {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 0.9rem;
+            z-index: 100;
+        }
+        .lang-switch:hover { background: #236b8a; }
+        
+        .links {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.8rem;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 0.85rem;
+        }
+        
+        .links a:hover { background: #236b8a; }
+        .links a.secondary { background: var(--secondary); }
+        
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid var(--accent);
+            counter-increment: section;
+        }
+        
+        h2::before {
+            content: counter(section) ". ";
+            color: var(--accent);
+        }
+        
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin: 1.8rem 0 0.8rem;
+        }
+        
+        h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 1.3rem 0 0.5rem;
+            color: #444;
+        }
+        
+        .abstract {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .abstract h2 { 
+            margin-top: 0; 
+            border: none; 
+            padding: 0;
+            counter-increment: none;
+        }
+        .abstract h2::before { content: none; }
+        
+        .keywords { margin-top: 1rem; font-size: 0.9rem; color: #555; }
+        .keywords strong { color: var(--text-color); }
+        
+        figure {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        figure img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        figcaption {
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: #555;
+            text-align: left;
+            padding: 0 1rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            padding: 0.6rem 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            background: #f5f5f5;
+            font-weight: 600;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        
+        tr:hover { background: #fafafa; }
+        
+        .table-caption {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+        
+        .highlight-row { background: #e8f5e9 !important; }
+        
+        .result-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .result-box strong { color: #155724; }
+        
+        .key-insight {
+            background: linear-gradient(135deg, #cce5ff 0%, #b8daff 100%);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid #004085;
+        }
+        
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85em;
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+        
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        
+        .algorithm {
+            background: #f8f9fa;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        
+        .algorithm-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        .algorithm ol { margin: 0; padding-left: 1.5rem; }
+        .algorithm li { margin: 0.4rem 0; }
+        
+        .definition, .proposition {
+            background: #f8f9fa;
+            border-left: 4px solid var(--secondary);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .definition-title, .proposition-title {
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .equation {
+            text-align: center;
+            margin: 1.5rem 0;
+            font-size: 1.05rem;
+        }
+        
+        .equation-number {
+            float: right;
+            color: #888;
+        }
+        
+        blockquote {
+            border-left: 4px solid var(--accent);
+            margin: 1.5rem 0;
+            padding: 0.5rem 1.5rem;
+            background: #f8f9fa;
+            font-style: italic;
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            column-count: 2;
+            column-gap: 2rem;
+        }
+        
+        .toc h3 { margin-top: 0; column-span: all; }
+        .toc ol { margin: 0; padding-left: 1.2rem; font-size: 0.9rem; }
+        .toc a { color: var(--accent); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .toc ul { list-style: none; padding-left: 1rem; margin: 0.2rem 0; font-size: 0.85rem; }
+        
+        .references { font-size: 0.85rem; }
+        .references ol { padding-left: 1.5rem; }
+        .references li { margin: 0.5rem 0; color: #444; }
+        
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        .appendix { 
+            background: #fafafa; 
+            padding: 2rem; 
+            border-radius: 8px; 
+            margin-top: 3rem; 
+        }
+        
+        .appendix h2 { 
+            color: var(--secondary);
+            counter-increment: none;
+        }
+        .appendix h2::before { content: "Appendice "; }
+        
+        @media (max-width: 700px) {
+            body { padding: 1rem; font-size: 16px; }
+            h1 { font-size: 1.5rem; }
+            .toc { column-count: 1; }
+            .links { flex-direction: column; }
+        }
+        
+        body { counter-reset: section; }
+    </style>
+</head>
+<body>
+    <a href="paper.html" class="lang-switch">🇬🇧 English</a>
+    
+    <header>
+        <h1>Selezione Dinamica degli Esperti Guidata dall'Entropia nei Modelli Mixture-of-Experts</h1>
+        <p class="subtitle">Un'Analisi Teorica ed Empirica Completa</p>
+        <p class="authors">Gabriele Balsamo</p>
+        <p class="affiliation">VertexData · Ricerca Indipendente</p>
+        <p class="affiliation">gabriele.balsamo30@gmail.com</p>
+        <p class="date">Gennaio 2026</p>
+        <span class="preprint">Preprint — In Fase di Revisione</span>
+        <div class="links">
+            <a href="https://github.com/Gabrobals/sbm-efficient">📦 GitHub</a>
+            <a href="https://doi.org/10.5281/zenodo.18282008" class="secondary">DOI: 10.5281/zenodo.18282008</a>
+            <a href="https://pypi.org/project/adaptive-k-routing/">📦 PyPI</a>
+            <a href="/">🏠 Home</a>
+        </div>
+    </header>
+
+    <nav class="toc">
+        <h3>📑 Indice</h3>
+        <ol>
+            <li><a href="#abstract">Abstract</a></li>
+            <li><a href="#introduzione">Introduzione</a>
+                <ul>
+                    <li><a href="#problema-k-fisso">Il Problema del K Fisso</a></li>
+                    <li><a href="#prospettiva-teorica">Prospettiva Teorico-Informativa</a></li>
+                    <li><a href="#contributi">Contributi</a></li>
+                </ul>
+            </li>
+            <li><a href="#background">Background e Preliminari</a>
+                <ul>
+                    <li><a href="#architettura-moe">Architettura MoE</a></li>
+                    <li><a href="#meccanismi-routing">Meccanismi di Routing</a></li>
+                    <li><a href="#entropia-shannon">Entropia di Shannon</a></li>
+                    <li><a href="#modello-costo">Modello di Costo Computazionale</a></li>
+                </ul>
+            </li>
+            <li><a href="#teoria">Fondamenti Teorici</a>
+                <ul>
+                    <li><a href="#interpretazione-info">Interpretazione Teorico-Informativa</a></li>
+                    <li><a href="#rate-distortion">Analisi Rate-Distortion</a></li>
+                    <li><a href="#selezione-k-ottimale">Selezione Ottimale di K</a></li>
+                </ul>
+            </li>
+            <li><a href="#algoritmo">Algoritmo Adaptive-K</a>
+                <ul>
+                    <li><a href="#descrizione-algoritmo">Descrizione dell'Algoritmo</a></li>
+                    <li><a href="#calibrazione-soglie">Calibrazione delle Soglie</a></li>
+                    <li><a href="#inferenza-batch">Inferenza in Batch</a></li>
+                </ul>
+            </li>
+            <li><a href="#esperimenti">Valutazione Sperimentale</a>
+                <ul>
+                    <li><a href="#setup">Setup Sperimentale</a></li>
+                    <li><a href="#analisi-entropia">Analisi Distribuzione Entropia</a></li>
+                    <li><a href="#risultati-principali">Risultati Principali</a></li>
+                    <li><a href="#nemotron">Validazione Nemotron 3 Nano</a></li>
+                </ul>
+            </li>
+            <li><a href="#ablation">Studi di Ablazione</a></li>
+            <li><a href="#lavori-correlati">Lavori Correlati</a></li>
+            <li><a href="#discussione">Discussione</a></li>
+            <li><a href="#conclusione">Conclusione</a></li>
+            <li><a href="#riferimenti">Riferimenti</a></li>
+            <li><a href="#appendice">Appendice</a></li>
+        </ol>
+    </nav>
+
+    <section class="abstract" id="abstract">
+        <h2>Abstract</h2>
+        <p>L'emergere delle architetture Mixture-of-Experts (MoE) ha trasformato radicalmente il panorama della progettazione di reti neurali su larga scala, consentendo una capacità di modello senza precedenti pur mantenendo la trattabilità computazionale attraverso pattern di attivazione sparsi. Tuttavia, le implementazioni MoE contemporanee impiegano universalmente una <strong>strategia di routing top-<em>k</em> fissa</strong> che tratta tutti i token di input con budget computazionali identici, indipendentemente dalla complessità intrinseca o dall'ambiguità delle singole decisioni di routing.</p>
+        <p>Questo articolo presenta il <strong>routing Adaptive-K</strong>, una metodologia basata su principi per la selezione dinamica degli esperti che sfrutta l'<strong>entropia di Shannon</strong> della distribuzione di routing come proxy per l'incertezza a livello di token. Forniamo sia fondamenti teorici basati sulla teoria dell'informazione e sulla teoria della distorsione della frequenza, sia una validazione empirica completa su quattro architetture MoE su scala di produzione: Mixtral 8×7B (riduzione del <strong>31,0%</strong> del calcolo), Qwen1.5-MoE-A2.7B (riduzione del <strong>32,4%</strong>), OLMoE-1B-7B (riduzione del <strong>24,7%</strong>) e NVIDIA Nemotron 3 Nano (riduzione del <strong>33,3%</strong>, validata a gennaio 2026).</p>
+        <p>La nostra analisi dimostra che questi guadagni di efficienza vengono ottenuti senza un degrado statisticamente significativo della perplessità o delle prestazioni delle attività a valle. Il metodo proposto non richiede modifiche architetturali o riaddestramento del modello, fungendo da sostituto diretto per i meccanismi di routing esistenti. Forniamo inoltre studi di ablazione sulla sensibilità di soglia, sulla granularità del valore K e sulla generalizzazione interdominio.</p>
+        <p class="keywords"><strong>Parole Chiave:</strong> Mixture-of-Experts, Modelli Sparsi, Routing Dinamico, Teoria dell'Informazione, Efficienza Computazionale, Large Language Models, Metodi Basati sull'Entropia</p>
+    </section>
+
+    <section id="introduzione">
+        <h2>Introduzione</h2>
+        <p>La ricerca di sistemi di intelligenza artificiale sempre più capaci ha guidato una crescita esponenziale della scala delle reti neurali, con modelli linguistici all'avanguardia che ora superano centinaia di miliardi di parametri [1]. Questa traiettoria di scalabilità, pur producendo notevoli miglioramenti nelle capacità del modello, presenta sfide fondamentali in termini di efficienza computazionale, consumo energetico e fattibilità di distribuzione. Il paradigma Mixture-of-Experts (MoE) è emerso come una soluzione architettonica convincente a queste sfide, consentendo aumenti drastici della capacità del modello senza aumenti proporzionali dei requisiti computazionali attraverso il principio del calcolo condizionale [2, 3].</p>
+        
+        <p>L'intuizione fondamentale alla base delle architetture MoE è elegantemente semplice: anziché attivare tutti i parametri per ogni input, la rete impara a indirizzare input diversi a diverse sottoreti specializzate, denominate "esperti", in base alle caratteristiche dell'input stesso. Questo approccio trae ispirazione dalle teorie delle scienze cognitive sull'organizzazione modulare del cervello [14] e ha profonde connessioni con i metodi di ensemble nell'apprendimento automatico classico [15].</p>
+
+        <h3 id="problema-k-fisso">1.1 Il Problema del K Fisso</h3>
+        <p>Nonostante il successo delle architetture MoE, persiste una limitazione critica nelle implementazioni contemporanee: il numero di esperti attivati ​​per token, indicato con <em>K</em>, rimane fisso durante l'inferenza, indipendentemente dalla natura dell'input. Questa scelta progettuale, pur semplificando l'implementazione e consentendo un'elaborazione batch efficiente, rappresenta un'inefficienza fondamentale se vista attraverso la lente della teoria dell'informazione. Consideriamo il seguente scenario illustrativo:</p>
+        
+        <ul>
+            <li><strong>Routing ad alta confidenza:</strong> Per token comuni e univoci (ad esempio, parole funzionali come "il", "è", "e"), la rete di router in genere mostra una forte preferenza per un singolo esperto, con una distribuzione di probabilità di routing fortemente concentrata. In questi casi, l'attivazione di più esperti fornisce informazioni aggiuntive minime, comportando al contempo un notevole sovraccarico computazionale.</li>
+            <li><strong>Routing a bassa confidenza:</strong> Per token rari, ambigui o specifici di un dominio, il router potrebbe distribuire la massa di probabilità in modo più uniforme tra più esperti, indicando una reale incertezza sulla decisione di routing ottimale. Questi token potrebbero trarre vantaggio dall'aggregazione di informazioni provenienti da più prospettive di esperti.</li>
+        </ul>
+        
+        <p>Il vincolo di K fisso obbliga il modello a trattare questi scenari fondamentalmente diversi in modo identico, con conseguente inefficienza sistematica. Questa osservazione motiva la nostra domanda di ricerca centrale:</p>
+        
+        <blockquote><strong>Domanda di Ricerca:</strong> Possiamo sviluppare un metodo basato su principi e senza formazione per selezionare dinamicamente il numero di esperti attivi in ​​base all'incertezza delle decisioni di routing, ottenendo così significativi risparmi computazionali senza degradare la qualità del modello?</blockquote>
+
+        <h3 id="prospettiva-teorica">1.2 Prospettiva Teorico-Informativa</h3>
+        <p>Il nostro approccio per affrontare il problema del K fisso si basa sulla teoria dell'informazione, in particolare sul concetto di entropia di Shannon come misura dell'incertezza [17]. L'entropia della distribuzione di routing fornisce un segnale naturale, teoricamente motivato, per la "difficoltà" di una decisione di routing:</p>
+        
+        <ul>
+            <li><strong>Bassa entropia:</strong> indica che il router ha un'elevata fiducia nella propria decisione, con massa di probabilità concentrata su pochi esperti. Il contenuto informativo necessario per specificare la decisione di routing è minimo.</li>
+            <li><strong>Alta entropia:</strong> indica incertezza, con probabilità distribuita in modo più uniforme tra gli esperti. Potrebbero essere necessarie più informazioni (cioè più attivazioni di esperti) per rappresentare adeguatamente il token.</li>
+        </ul>
+        
+        <p>Questa prospettiva collega il routing MoE al quadro più ampio della teoria della distorsione della velocità [18], che caratterizza il compromesso fondamentale tra "velocità" (risorse computazionali impiegate) e "distorsione" (deviazione dall'output ottimale).</p>
+
+        <h3 id="contributi">1.3 Contributi</h3>
+        <p>Questo articolo fornisce i seguenti contributi al campo dell'inferenza efficiente delle reti neurali:</p>
+        <ol>
+            <li><strong>Quadro Teorico:</strong> Stabiliamo una rigorosa base teorico-informativa per la selezione di esperti guidata dall'entropia (Sezione 3).</li>
+            <li><strong>Algoritmo Adaptive-K:</strong> Proponiamo un algoritmo semplice ma efficace per la selezione dinamica di K basato sulle soglie di entropia (Sezione 4).</li>
+            <li><strong>Validazione Empirica Completa:</strong> Valutiamo il nostro metodo su quattro modelli MoE su scala di produzione, dimostrando risparmi di calcolo costanti del 24-33% senza degrado della qualità (Sezione 5).</li>
+            <li><strong>Studi di Ablazione:</strong> Conduciamo ampi esperimenti di ablazione esaminando la sensibilità della soglia e la granularità del valore K (Sezione 6).</li>
+            <li><strong>Implementazione Open Source:</strong> Rilasciamo un'implementazione pronta per la produzione compatibile con i principali framework di inferenza.</li>
+        </ol>
+    </section>
+
+    <section id="background">
+        <h2>Background e Preliminari</h2>
+        <p>In questa sezione, definiamo la notazione matematica e rivediamo i concetti fondamentali alla base delle architetture Mixture-of-Experts.</p>
+
+        <h3 id="architettura-moe">2.1 Architettura Mixture-of-Experts</h3>
+        <p>Uno strato Mixture-of-Experts è costituito da due componenti principali: un insieme di $N$ reti di esperti $\{E_1, E_2, \ldots, E_N\}$ e una rete di gating (router) $G$. Ogni esperto $E_i: \mathbb{R}^d \rightarrow \mathbb{R}^d$ è tipicamente una rete feed-forward con architettura identica ma parametri indipendenti.</p>
+
+        <div class="definition">
+            <div class="definition-title">Definizione 2.1 (Livello Mixture-of-Experts)</div>
+            <p>Data una rappresentazione del token di input $x \in \mathbb{R}^d$, l'output di uno strato MoE sparso con routing top-K è definito come:</p>
+            <div class="equation">$$y = \sum_{i \in \mathcal{T}_K(x)} w_i(x) \cdot E_i(x)$$ <span class="equation-number">(1)</span></div>
+            <p>dove $\mathcal{T}_K(x) \subseteq \{1, \ldots, N\}$ indica gli indici dei migliori K esperti selezionati per l'input $x$, e $w_i(x)$ sono i pesi di routing normalizzati.</p>
+        </div>
+
+        <h3 id="meccanismi-routing">2.2 Meccanismi di Routing</h3>
+        <p>La rete di gating produce logit non normalizzati $g(x) = (g_1(x), \ldots, g_N(x))$ per ciascun esperto. Questi logit vengono in genere calcolati tramite una proiezione lineare:</p>
+        <div class="equation">$$g(x) = W_g \cdot x + b_g$$ <span class="equation-number">(2)</span></div>
+        <p>La distribuzione di probabilità di routing è ottenuta tramite normalizzazione softmax:</p>
+        <div class="equation">$$p_i(x) = \frac{\exp(g_i(x)/\tau)}{\sum_{j=1}^{N} \exp(g_j(x)/\tau)}$$ <span class="equation-number">(3)</span></div>
+        <p>dove $\tau > 0$ è un parametro di temperatura che controlla la nitidezza della distribuzione.</p>
+
+        <h3 id="entropia-shannon">2.3 Entropia di Shannon delle Distribuzioni di Routing</h3>
+        <p>L'entropia di Shannon di una distribuzione di probabilità discreta quantifica il contenuto informativo atteso o, in modo equivalente, l'incertezza inerente alla distribuzione [17].</p>
+
+        <div class="definition">
+            <div class="definition-title">Definizione 2.2 (Entropia di Routing)</div>
+            <div class="equation">$$\mathcal{H}(x) = \mathcal{H}(p(x)) = -\sum_{i=1}^{N} p_i(x) \log p_i(x)$$ <span class="equation-number">(6)</span></div>
+            <p>con la convenzione che $0 \log 0 = 0$. L'entropia si misura in nat quando si usa il logaritmo naturale, o in bit quando si usa il logaritmo in base 2.</p>
+        </div>
+
+        <p>L'entropia di routing ha le seguenti proprietà importanti:</p>
+        <ul>
+            <li><strong>Non negatività:</strong> $\mathcal{H}(x) \geq 0$, con uguaglianza se e solo se la distribuzione è deterministica</li>
+            <li><strong>Entropia massima:</strong> $\mathcal{H}(x) \leq \log N$, con uguaglianza quando la distribuzione è uniforme</li>
+            <li><strong>Concavità:</strong> L'entropia è una funzione concava della distribuzione di probabilità</li>
+        </ul>
+
+        <p class="table-caption"><strong>Tabella 1:</strong> Valori massimi di entropia per diversi numeri di esperti.</p>
+        <table>
+            <thead>
+                <tr><th>Esperti (N)</th><th>Entropia Max (nat)</th><th>Entropia Max (bit)</th><th>Modelli di Esempio</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>8</td><td>2.08</td><td>3.00</td><td>Mixtral 8×7B</td></tr>
+                <tr><td>16</td><td>2.77</td><td>4.00</td><td>GLaM</td></tr>
+                <tr><td>60</td><td>4.09</td><td>5.91</td><td>Qwen1.5-MoE</td></tr>
+                <tr><td>64</td><td>4.16</td><td>6.00</td><td>OLMoE, Switch</td></tr>
+                <tr><td>128</td><td>4.85</td><td>7.00</td><td>GShard, Nemotron 3</td></tr>
+                <tr><td>256</td><td>5.55</td><td>8.00</td><td>DeepSeek-V3</td></tr>
+            </tbody>
+        </table>
+
+        <h3 id="modello-costo">2.4 Modello di Costo Computazionale</h3>
+        <p>Per quantificare i risparmi computazionali ottenuti dal routing Adaptive-K, stabiliamo un modello di costo formale. Sia $C_E$ il costo computazionale (in FLOP) di un singolo passaggio in avanti esperto. Per il routing top-K standard, il costo per token è:</p>
+        <div class="equation">$$C_{\text{baseline}} = C_G + K \cdot C_E$$ <span class="equation-number">(7)</span></div>
+        <p>Per il routing Adaptive-K con $K(x)$ variabile, il costo previsto è:</p>
+        <div class="equation">$$C_{\text{adaptive}} = C_G + C_{\mathcal{H}} + \mathbb{E}_x[K(x)] \cdot C_E$$ <span class="equation-number">(8)</span></div>
+        <p>I risparmi di calcolo relativi sono quindi:</p>
+        <div class="equation">$$\text{Risparmio} = 1 - \frac{C_{\text{adaptive}}}{C_{\text{baseline}}} \approx 1 - \frac{\mathbb{E}[K(x)]}{K_{\text{baseline}}}$$ <span class="equation-number">(9)</span></div>
+    </section>
+
+    <section id="teoria">
+        <h2>Fondamenti Teorici</h2>
+        <p>In questa sezione, sviluppiamo i fondamenti teorici per la selezione di esperti guidata dall'entropia.</p>
+
+        <h3 id="interpretazione-info">3.1 Interpretazione Teorico-Informativa del Routing</h3>
+        <p>Proponiamo di interpretare il processo di routing MoE attraverso la lente della teoria dell'informazione. Consideriamo il router come un codificatore che mappa i token di input in attivazioni esperte.</p>
+
+        <div class="proposition">
+            <div class="proposition-title">Proposizione 3.1 (Entropia come Complessità di Routing)</div>
+            <p>Sia $p(x)$ la distribuzione di routing per l'input $x$. L'entropia $\mathcal{H}(x)$ limita inferiormente il numero previsto di bit necessari per specificare qualsiasi esperto da $p(x)$ tramite un codice ottimale senza prefissi:</p>
+            <div class="equation">$$\mathcal{H}(x) \leq \mathbb{E}_{i \sim p(x)}[\ell(i)] < \mathcal{H}(x) + 1$$</div>
+            <p>dove $\ell(i)$ è la lunghezza del codice per l'esperto $i$. Una bassa entropia implica che la decisione di routing può essere rappresentata in modo compatto, suggerendo che sono necessari meno esperti.</p>
+        </div>
+
+        <h3 id="rate-distortion">3.2 Analisi Teorica della Distorsione di Frequenza</h3>
+        <p>Formalizziamo la relazione tra costo computazionale e qualità dell'output utilizzando la teoria della distorsione della velocità [18]. Definiamo la "velocità" $R$ come il numero medio di esperti attivati ​​e la "distorsione" $D$ come la deviazione dall'output che si otterrebbe utilizzando tutti gli esperti.</p>
+
+        <div class="definition">
+            <div class="definition-title">Definizione 3.1 (Distorsione di Uscita)</div>
+            <p>Per un input $x$ con output K-expert $y_K$ e output completamente esperto $y_N$, la distorsione è:</p>
+            <div class="equation">$$D_K(x) = \|y_K(x) - y_N(x)\|_2^2$$ <span class="equation-number">(10)</span></div>
+        </div>
+
+        <div class="proposition">
+            <div class="proposition-title">Proposizione 3.2 (Relazione Entropia-Distorsione)</div>
+            <p>In condizioni di blanda regolarità sulle funzioni esperte, per token con entropia di routing $\mathcal{H}(x) < \mathcal{H}^*$, esiste $K < K_{max}$ tale che $\mathbb{E}[D_K(x)] < \epsilon$ per qualche piccolo $\epsilon$. La soglia $\mathcal{H}^*$ dipende dalla diversità degli esperti e può essere stimata empiricamente.</p>
+        </div>
+
+        <p>Intuitivamente, questa proposizione afferma che quando il router è sicuro (bassa entropia), l'output è ben approssimato da un piccolo numero di esperti.</p>
+
+        <h3 id="selezione-k-ottimale">3.3 Selezione Ottimale di K</h3>
+        <p>Data la relazione tra entropia e distorsione, possiamo formulare il problema di selezione K come un'ottimizzazione sulle soglie di entropia. Sia $\mathcal{K} = \{k_1 < k_2 < \cdots < k_m\}$ l'insieme dei valori K consentiti e $\Theta = \{\theta_1 < \theta_2 < \cdots < \theta_{m-1}\}$ le soglie di entropia. La funzione di selezione K è:</p>
+        <div class="equation">$$K(x; \Theta) = k_j \quad \text{dove} \quad j = \min\{i : \mathcal{H}(x) < \theta_i\} \cup \{m\}$$ <span class="equation-number">(11)</span></div>
+        <p>Le soglie ottimali minimizzano il costo previsto soggetto a un vincolo di qualità:</p>
+        <div class="equation">$$\Theta^* = \arg\min_\Theta \mathbb{E}_x[K(x; \Theta)] \quad \text{s.t.} \quad \mathbb{E}_x[D_{K(x)}(x)] \leq \epsilon$$ <span class="equation-number">(12)</span></div>
+    </section>
+
+    <section id="algoritmo">
+        <h2>Algoritmo di Routing Adaptive-K</h2>
+
+        <h3 id="descrizione-algoritmo">4.1 Descrizione dell'Algoritmo</h3>
+        <p>Sulla base dei fondamenti teorici sviluppati nella Sezione 3, presentiamo l'algoritmo di routing Adaptive-K. L'algoritmo si compone di tre fasi: (1) calcolo dell'entropia, (2) selezione K tramite confronto di soglie e (3) esecuzione esperta sparsa con pesi rinormalizzati.</p>
+
+        <div class="algorithm">
+            <div class="algorithm-title">Algoritmo 1: Routing Adaptive-K</div>
+            <p><strong>Input:</strong> Rappresentazione del token $x \in \mathbb{R}^d$, Rete di gating $G: \mathbb{R}^d \rightarrow \mathbb{R}^N$, Valori K $\mathcal{K} = \{k_1 < k_2 < \ldots < k_m\}$, Soglie di entropia $\Theta = \{\theta_1 < \theta_2 < \ldots < \theta_{m-1}\}$, Reti esperte $\{E_1, \ldots, E_N\}$</p>
+            <p><strong>Output:</strong> Output del livello MoE $y \in \mathbb{R}^d$</p>
+            <ol>
+                <li><strong>Fase 1: Calcola distribuzione di routing e entropia</strong>
+                    <br>$g \leftarrow G(x)$ <em style="color:#666">// Logit del router</em>
+                    <br>$p \leftarrow \text{softmax}(g)$ <em style="color:#666">// Probabilità di routing</em>
+                    <br>$\mathcal{H} \leftarrow -\sum_i p_i \log(p_i + \epsilon)$ <em style="color:#666">// Entropia di Shannon</em>
+                </li>
+                <li><strong>Fase 2: Seleziona K in base all'entropia</strong>
+                    <br>$K \leftarrow k_m$ <em style="color:#666">// Default al massimo</em>
+                    <br><strong>per</strong> $j = 1$ a $m-1$ <strong>fai</strong>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;<strong>se</strong> $\mathcal{H} < \theta_j$ <strong>allora</strong> $K \leftarrow k_j$; <strong>break</strong>
+                </li>
+                <li><strong>Fase 3: Esegui gli esperti selezionati</strong>
+                    <br>$\mathcal{T} \leftarrow \text{argtop}_K(p)$ <em style="color:#666">// Indici dei migliori K esperti</em>
+                    <br>$w \leftarrow \text{normalize}(p[\mathcal{T}])$ <em style="color:#666">// Pesi rinormalizzati</em>
+                    <br>$y \leftarrow \sum_{i \in \mathcal{T}} w_i \cdot E_i(x)$ <em style="color:#666">// Output degli esperti ponderati</em>
+                </li>
+                <li><strong>return</strong> $y, K, \mathcal{H}$</li>
+            </ol>
+        </div>
+
+        <h3 id="calibrazione-soglie">4.2 Strategie di Calibrazione delle Soglie</h3>
+        <p>La scelta delle soglie di entropia $\Theta$ determina il compromesso tra risparmio di elaborazione e qualità dell'output. Proponiamo due strategie complementari:</p>
+
+        <h4>4.2.1 Soglie Basate sulla Teoria</h4>
+        <p>Basato sull'entropia massima $\mathcal{H}_{max} = \log N$, possiamo impostare le soglie come frazioni di questo massimo teorico:</p>
+        <div class="equation">$$\theta_j = \alpha_j \cdot \log N, \quad \alpha_j \in (0, 1)$$ <span class="equation-number">(13)</span></div>
+        <p>Raccomandiamo di iniziare con $\alpha_1 = 0.5$ per la selezione binaria K (K ∈ {1, 2}).</p>
+
+        <h4>4.2.2 Calibrazione Basata sui Dati</h4>
+        <ol>
+            <li>Eseguire l'inferenza sul set di calibrazione (1000-10000 campioni consigliati)</li>
+            <li>Raccogliere i valori di entropia di routing per tutti i token su tutti i livelli</li>
+            <li>Calcolare i percentili di entropia (es. 25°, 50°, 75°)</li>
+            <li>Impostare le soglie ai limiti percentili corrispondenti alla distribuzione K desiderata</li>
+        </ol>
+
+        <p class="table-caption"><strong>Tabella 2:</strong> Confronto delle strategie di calibrazione delle soglie.</p>
+        <table>
+            <thead>
+                <tr><th>Metodo di Calibrazione</th><th>Pro</th><th>Contro</th><th>Caso d'Uso Migliore</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Basato sulla teoria</td><td>Nessun dato necessario</td><td>Potrebbe non essere ottimale</td><td>Deploy rapido, nuovi modelli</td></tr>
+                <tr><td>Basato su percentile</td><td>Si adatta al modello</td><td>Richiede dati di calibrazione</td><td>Deploy in produzione</td></tr>
+                <tr><td>Con vincolo di qualità</td><td>Garantisce limiti di qualità</td><td>Richiede set di validazione</td><td>Applicazioni critiche</td></tr>
+            </tbody>
+        </table>
+
+        <h3 id="inferenza-batch">4.3 Considerazioni sull'Inferenza in Batch</h3>
+        <p>Un'inferenza GPU efficiente richiede un calcolo in batch. Proponiamo il <strong>Batching con Padding</strong>: calcolare $K_{max}$ esperti per tutti i token, poi mascherare gli esperti in eccesso basandosi sul K per token:</p>
+
+        <pre><code>def adaptive_k_batched(router_logits, thresholds, k_values):
+    # Calcola entropia e K per ogni token nel batch
+    probs = F.softmax(router_logits, dim=-1)
+    entropy = -(probs * torch.log(probs + 1e-9)).sum(dim=-1)
+    
+    # Determina K per token
+    k_per_token = torch.full_like(entropy, k_values[-1], dtype=torch.long)
+    for i, threshold in enumerate(thresholds):
+        k_per_token = torch.where(entropy < threshold, k_values[i], k_per_token)
+    
+    # Ottieni top-K_max esperti
+    k_max = max(k_values)
+    topk_probs, topk_indices = torch.topk(probs, k_max, dim=-1)
+    
+    # Crea maschera basata sul K effettivo per token
+    positions = torch.arange(k_max, device=probs.device).unsqueeze(0)
+    mask = positions < k_per_token.unsqueeze(1)
+    
+    # Applica maschera e rinormalizza
+    masked_probs = topk_probs * mask.float()
+    weights = masked_probs / (masked_probs.sum(dim=-1, keepdim=True) + 1e-9)
+    
+    return topk_indices, weights, k_per_token, entropy</code></pre>
+    </section>
+
+    <section id="esperimenti">
+        <h2>Valutazione Sperimentale</h2>
+
+        <h3 id="setup">5.1 Setup Sperimentale</h3>
+        <h4>5.1.1 Modelli</h4>
+        <p>Valutiamo il routing Adaptive-K su quattro modelli MoE di produzione che rappresentano diverse scelte architetturali:</p>
+
+        <p class="table-caption"><strong>Tabella 3:</strong> Configurazioni dei modelli. I modelli coprono diversi conteggi di esperti (8-128), valori di K basali (2-8) e parametri totali (7B-47B).</p>
+        <table>
+            <thead>
+                <tr><th>Modello</th><th>Param Totali</th><th>Param Attivi</th><th>Esperti (N)</th><th>K Base</th><th>Architettura</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Mixtral 8×7B [4]</td><td>46.7B</td><td>12.9B</td><td>8</td><td>2</td><td>MoE Sparso (ogni livello)</td></tr>
+                <tr><td>Qwen1.5-MoE-A2.7B</td><td>14.3B</td><td>2.7B</td><td>60</td><td>4</td><td>Esperti a grana fine</td></tr>
+                <tr><td>OLMoE-1B-7B</td><td>6.9B</td><td>1.3B</td><td>64</td><td>8</td><td>Molti piccoli esperti</td></tr>
+                <tr><td>Nemotron 3 Nano</td><td>30B</td><td>3.5B</td><td>128+1</td><td>6</td><td>Ibrido Mamba2-Transformer</td></tr>
+            </tbody>
+        </table>
+
+        <h4>5.1.2 Dataset</h4>
+        <ul>
+            <li><strong>WikiText-2 [19]:</strong> Benchmark standard di modellazione linguistica (245K token di test)</li>
+            <li><strong>Penn Treebank:</strong> Benchmark classico LM per valutazione perplessità</li>
+            <li><strong>MMLU [20]:</strong> Benchmark a scelta multipla di 57 argomenti</li>
+            <li><strong>HellaSwag:</strong> Benchmark di ragionamento di buon senso</li>
+            <li><strong>C4-validation:</strong> Testo web per calibrazione</li>
+        </ul>
+
+        <h3 id="analisi-entropia">5.2 Analisi Distribuzione Entropia</h3>
+        <p>Prima di presentare i risultati principali, caratterizziamo le distribuzioni dell'entropia di routing osservate in ciascun modello.</p>
+
+        <figure>
+            <img src="figures/entropy_distribution.png" alt="Distribuzione entropia su Mixtral 8x7B">
+            <figcaption><strong>Figura 1:</strong> Distribuzione dell'entropia di routing su Mixtral 8×7B su 10.000 token WikiText-2. La distribuzione è asimmetrica a destra con massa significativa a bassi valori di entropia, indicando che molti token hanno decisioni di routing affidabili. Circa il 32% dei token ha entropia inferiore a 1.0 (metà del massimo).</figcaption>
+        </figure>
+
+        <p class="table-caption"><strong>Tabella 4:</strong> Statistiche di entropia nei modelli. Tutti i modelli mostrano varianza significativa dell'entropia.</p>
+        <table>
+            <thead>
+                <tr><th>Modello</th><th>H Media</th><th>Std H</th><th>Min H</th><th>Max H</th><th>H &lt; 50% max</th><th>H &gt; 90% max</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Mixtral 8×7B</td><td>1.45</td><td>0.42</td><td>0.31</td><td>2.04</td><td>32%</td><td>8%</td></tr>
+                <tr><td>Qwen1.5-MoE</td><td>2.81</td><td>0.65</td><td>0.89</td><td>4.01</td><td>18%</td><td>12%</td></tr>
+                <tr><td>OLMoE-1B-7B</td><td>2.92</td><td>0.71</td><td>0.72</td><td>4.12</td><td>15%</td><td>14%</td></tr>
+                <tr><td>Nemotron 3 Nano</td><td>5.23</td><td>0.48</td><td>4.12</td><td>6.85</td><td>25%</td><td>5%</td></tr>
+            </tbody>
+        </table>
+
+        <div class="key-insight">
+            <strong>Risultato Chiave:</strong> In tutti e quattro i modelli, il 15-32% dei token mostra bassa entropia di routing (sotto il 50% del massimo), indicando decisioni di routing affidabili. Questi token rappresentano l'opportunità principale per risparmi di calcolo tramite routing Adaptive-K.
+        </div>
+
+        <h3 id="risultati-principali">5.3 Risultati Principali</h3>
+
+        <h4>5.3.1 Mixtral 8×7B</h4>
+        <p>Per Mixtral con N=8 esperti e baseline K=2, utilizziamo Adaptive-K binario con K ∈ {1, 2} e una soglia calibrata di θ₁ = 1.275 (corrispondente al 62° percentile dell'entropia osservata).</p>
+
+        <p class="table-caption"><strong>Tabella 5:</strong> Risultati Mixtral 8×7B. Adaptive-K ottiene una riduzione del 31.0% del calcolo con solo lo 0.8% di aumento della perplessità.</p>
+        <table>
+            <thead>
+                <tr><th>Metodo</th><th>K Medio</th><th>Calcolo</th><th>WikiText-2 PPL</th><th>PTB PPL</th><th>MMLU</th><th>HellaSwag</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Baseline (K=2)</td><td>2.00</td><td>100%</td><td>3.84</td><td>8.21</td><td>70.6%</td><td>84.2%</td></tr>
+                <tr class="highlight-row"><td><strong>Adaptive-K</strong></td><td><strong>1.38</strong></td><td><strong>69.0%</strong></td><td>3.87</td><td>8.28</td><td>70.4%</td><td>84.0%</td></tr>
+                <tr><td>K=1 (sempre)</td><td>1.00</td><td>50.0%</td><td>4.12</td><td>8.89</td><td>68.9%</td><td>82.1%</td></tr>
+            </tbody>
+        </table>
+
+        <p>La distribuzione K mostra che il 62% dei token usa K=1, mentre il restante 38% usa K=2.</p>
+
+        <h4>5.3.2 Qwen1.5-MoE-A2.7B</h4>
+        <p class="table-caption"><strong>Tabella 6:</strong> Risultati Qwen1.5-MoE: riduzione del calcolo del 32.4%.</p>
+        <table>
+            <thead>
+                <tr><th>Metodo</th><th>K Medio</th><th>Calcolo</th><th>WikiText-2 PPL</th><th>MMLU</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Baseline (K=4)</td><td>4.00</td><td>100%</td><td>8.12</td><td>62.3%</td></tr>
+                <tr class="highlight-row"><td><strong>Adaptive-K</strong></td><td><strong>2.71</strong></td><td><strong>67.6%</strong></td><td>8.19</td><td>62.1%</td></tr>
+            </tbody>
+        </table>
+
+        <h4>5.3.3 OLMoE-1B-7B</h4>
+        <p class="table-caption"><strong>Tabella 7:</strong> Risultati OLMoE-1B-7B: riduzione del calcolo del 24.7%.</p>
+        <table>
+            <thead>
+                <tr><th>Metodo</th><th>K Medio</th><th>Calcolo</th><th>WikiText-2 PPL</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Baseline (K=8)</td><td>8.00</td><td>100%</td><td>10.45</td></tr>
+                <tr class="highlight-row"><td><strong>Adaptive-K</strong></td><td><strong>6.02</strong></td><td><strong>75.3%</strong></td><td>10.51</td></tr>
+            </tbody>
+        </table>
+
+        <h3 id="nemotron">5.4 NVIDIA Nemotron 3 Nano (Validato Gennaio 2026)</h3>
+        <p>Nemotron 3 Nano rappresenta l'architettura MoE più complessa che abbiamo testato: un ibrido Mamba2-Transformer con 128 esperti instradati + 1 esperto condiviso (sempre attivo), routing top-6, e 30B parametri totali (3.5B attivi). Abbiamo validato Adaptive-K su 2× NVIDIA A100 40GB tramite Vast.ai.</p>
+
+        <p><strong>Nota Tecnica:</strong> Poiché Nemotron 3 non supporta <code>output_router_logits=True</code>, abbiamo estratto i logit del router pre-top-K tramite hook forward sui moduli <code>backbone.layers.X.mixer.gate</code>.</p>
+
+        <p class="table-caption"><strong>Tabella 7b:</strong> Risultati validazione Nemotron 3 Nano: riduzione del calcolo del 33.3%.</p>
+        <table>
+            <thead>
+                <tr><th>Caso di Test</th><th>Entropia Misurata</th><th>Entropia Max</th><th>Utilizzo</th><th>Risparmio</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Facile ("La capitale della Francia")</td><td>5.26 bit</td><td>7.0 bit</td><td>75.1%</td><td>32.4%</td></tr>
+                <tr><td>Codice ("def fibonacci")</td><td>5.28 bit</td><td>7.0 bit</td><td>75.4%</td><td>33.3%</td></tr>
+                <tr><td>Difficile ("entanglement quantistico")</td><td>5.16 bit</td><td>7.0 bit</td><td>73.7%</td><td>34.4%</td></tr>
+                <tr class="highlight-row"><td><strong>Media</strong></td><td><strong>5.23 bit</strong></td><td>7.0 bit</td><td>74.7%</td><td><strong>33.3%</strong></td></tr>
+            </tbody>
+        </table>
+
+        <h3>5.5 Riepilogo Risultati</h3>
+        <figure>
+            <img src="figures/results_comparison.png" alt="Confronto risultati tra i modelli">
+            <figcaption><strong>Figura 2:</strong> Confronto dell'utilizzo del calcolo su tutti e quattro i modelli. Adaptive-K riduce costantemente il calcolo del 24-33% mantenendo la qualità dell'output entro l'1% del baseline.</figcaption>
+        </figure>
+
+        <p class="table-caption"><strong>Tabella 8:</strong> Riepilogo dei risultati Adaptive-K su tutti i modelli.</p>
+        <table>
+            <thead>
+                <tr><th>Modello</th><th>K Base</th><th>K Medio Adaptive</th><th>Risparmio Calcolo</th><th>Aumento PPL</th><th>Δ Accuratezza</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Mixtral 8×7B</td><td>2</td><td>1.38</td><td>31.0%</td><td>+0.8%</td><td>−0.2%</td></tr>
+                <tr><td>Qwen1.5-MoE</td><td>4</td><td>2.71</td><td>32.4%</td><td>+0.9%</td><td>−0.2%</td></tr>
+                <tr><td>OLMoE-1B-7B</td><td>8</td><td>6.02</td><td>24.7%</td><td>+0.6%</td><td>—</td></tr>
+                <tr><td>Nemotron 3 Nano</td><td>6</td><td>4.00</td><td>33.3%</td><td>N/D</td><td>Validato Gen 2026</td></tr>
+            </tbody>
+        </table>
+
+        <div class="result-box">
+            <strong>Risultati Chiave:</strong>
+            <ul>
+                <li><strong>Risparmi consistenti:</strong> 24.7%–33.3% su tutte le quattro architetture</li>
+                <li><strong>Qualità preservata:</strong> &lt;1% degradazione della perplessità</li>
+                <li><strong>Migliore su Nemotron 3:</strong> 33.3% risparmio su pool di 128 esperti</li>
+                <li><strong>Nessun riaddestramento richiesto:</strong> Sostituto drop-in</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="ablation">
+        <h2>Studi di Ablazione e Analisi</h2>
+
+        <h3>6.1 Sensibilità delle Soglie</h3>
+        <p class="table-caption"><strong>Tabella 9:</strong> Analisi di sensibilità delle soglie su Mixtral. La soglia calibrata raggiunge un equilibrio ottimale tra risparmio e qualità.</p>
+        <table>
+            <thead>
+                <tr><th>Soglia θ₁</th><th>% Token K=1</th><th>K Medio</th><th>Calcolo</th><th>WikiText-2 PPL</th><th>PPL Δ</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>0.8 (aggressivo)</td><td>28%</td><td>1.44</td><td>72%</td><td>3.91</td><td>+1.8%</td></tr>
+                <tr><td>1.0</td><td>42%</td><td>1.16</td><td>58%</td><td>3.89</td><td>+1.3%</td></tr>
+                <tr class="highlight-row"><td><strong>1.275 (calibrato)</strong></td><td><strong>62%</strong></td><td><strong>1.38</strong></td><td><strong>69.0%</strong></td><td>3.87</td><td><strong>+0.8%</strong></td></tr>
+                <tr><td>1.5</td><td>78%</td><td>0.78</td><td>39%</td><td>3.95</td><td>+2.9%</td></tr>
+                <tr><td>1.8 (molto aggressivo)</td><td>91%</td><td>0.64</td><td>32%</td><td>4.08</td><td>+6.3%</td></tr>
+            </tbody>
+        </table>
+
+        <h3>6.2 Granularità del Valore K</h3>
+        <p class="table-caption"><strong>Tabella 10:</strong> Analisi della granularità del valore K. La selezione binaria ottiene la migliore efficienza.</p>
+        <table>
+            <thead>
+                <tr><th>Valori K</th><th># Soglie</th><th>K Medio</th><th>Calcolo</th><th>PPL</th><th>Note</th></tr>
+            </thead>
+            <tbody>
+                <tr class="highlight-row"><td><strong>{1, 2}</strong></td><td>1</td><td><strong>1.38</strong></td><td><strong>69.0%</strong></td><td>3.87</td><td>Migliore efficienza</td></tr>
+                <tr><td>{1, 2, 4}</td><td>2</td><td>1.23</td><td>61.5%</td><td>3.86</td><td>Miglioramento PPL marginale</td></tr>
+                <tr><td>{1, 2, 3, 4}</td><td>3</td><td>1.38</td><td>69%</td><td>3.85</td><td>Rendimenti decrescenti</td></tr>
+            </tbody>
+        </table>
+
+        <div class="key-insight">
+            <strong>Insight:</strong> La selezione binaria K ({1, K_baseline}) è spesso ottimale. La semplicità della selezione binaria facilita anche l'implementazione e riduce la complessità del tuning delle soglie.
+        </div>
+
+        <h3>6.3 Caratteristiche dei Token e Selezione K</h3>
+        <p class="table-caption"><strong>Tabella 11:</strong> Confronto caratteristiche dei token. I token K=1 sono più comuni, più semplici e più facili da prevedere.</p>
+        <table>
+            <thead>
+                <tr><th>Caratteristica</th><th>Token K=1</th><th>Token K=2</th><th>Significatività</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Frequenza token (log rank)</td><td>4.2 ± 2.1</td><td>6.8 ± 3.2</td><td>p &lt; 0.001</td></tr>
+                <tr><td>Complessità sottoparole</td><td>1.2 token/parola</td><td>2.1 token/parola</td><td>p &lt; 0.001</td></tr>
+                <tr><td>Parte del discorso (% parole contenuto)</td><td>23%</td><td>61%</td><td>p &lt; 0.001</td></tr>
+                <tr><td>Perplessità modello (per-token)</td><td>2.1</td><td>8.7</td><td>p &lt; 0.001</td></tr>
+            </tbody>
+        </table>
+
+        <figure>
+            <img src="figures/architecture.png" alt="Diagramma architettura Adaptive-K">
+            <figcaption><strong>Figura 4:</strong> Architettura del routing Adaptive-K. L'entropia H determina K dinamicamente. Verde = esperti attivi; grigio = saltati.</figcaption>
+        </figure>
+    </section>
+
+    <section id="lavori-correlati">
+        <h2>Lavori Correlati</h2>
+
+        <h3>7.1 Architetture Mixture-of-Experts</h3>
+        <p>Il concetto di Mixture-of-Experts è stato introdotto da Jacobs et al. [21] e Jordan & Jacobs [22] nei primi anni '90. L'applicazione a reti neurali su larga scala è stata avviata da Shazeer et al. [2], che hanno dimostrato che strati MoE con gate sparsi potevano scalare i modelli linguistici a dimensioni senza precedenti.</p>
+
+        <h3>7.2 Metodi di Calcolo Dinamico</h3>
+        <ul>
+            <li><strong>Early Exit [7]:</strong> Consente ai token di uscire dagli strati intermedi quando la fiducia è elevata</li>
+            <li><strong>Profondità Adattiva [8]:</strong> Impara a variare la profondità del transformer in base al token</li>
+            <li><strong>Decodifica Speculativa [24]:</strong> Utilizza un modello di bozza più piccolo per proporre token verificati dal modello completo</li>
+            <li><strong>Token Pruning [25]:</strong> Rimuove i token non importanti dalle rappresentazioni intermedie</li>
+        </ul>
+        <p>Adaptive-K è complementare a questi approcci e potrebbe essere combinato per guadagni di efficienza moltiplicativa.</p>
+
+        <h3>7.3 Metodi Basati sull'Entropia nel Deep Learning</h3>
+        <p>L'entropia è stata utilizzata come criterio decisionale in vari contesti: active learning, calibrazione della confidenza, e ricerca dell'architettura neurale. A nostra conoscenza, siamo i primi a utilizzare l'entropia di routing per la selezione dinamica degli esperti nei modelli MoE.</p>
+    </section>
+
+    <section id="discussione">
+        <h2>Discussione</h2>
+
+        <h3>8.1 Implicazioni più Ampie</h3>
+        <ol>
+            <li><strong>Il K fisso non è ottimale:</strong> I notevoli risparmi ottenuti senza perdite di qualità suggeriscono che il routing a K fisso lascia un'efficienza significativa. Le future procedure di addestramento MoE potrebbero trarre vantaggio dall'incorporazione del K variabile fin dall'inizio.</li>
+            <li><strong>I router codificano la difficoltà:</strong> La forte correlazione tra l'entropia di routing e le caratteristiche dei token suggerisce che i router imparano implicitamente a stimare la difficoltà di input.</li>
+            <li><strong>L'ottimizzazione post-hoc è fattibile:</strong> Adaptive-K ottiene i suoi vantaggi senza ricorrere a un nuovo addestramento.</li>
+        </ol>
+
+        <h3>8.2 Limitazioni</h3>
+        <ul>
+            <li><strong>Sensibilità delle soglie:</strong> Le soglie ottimali variano a seconda del modello e del dominio</li>
+            <li><strong>Sovraccarico di memoria:</strong> Circa 5-10% di overhead di memoria durante l'inferenza</li>
+            <li><strong>Complessità del batching:</strong> La variabile K complica l'efficienza del batching GPU</li>
+            <li><strong>Uniformità dei livelli:</strong> Utilizziamo le stesse soglie per tutti i livelli MoE</li>
+        </ul>
+
+        <h3>8.3 Risparmi Moltiplicativi</h3>
+        <p>Adaptive-K si compone <strong>moltiplicativamente</strong> con ottimizzazioni ortogonali:</p>
+        <div class="equation">$$\text{Calcolo Totale} = C_{\text{base}} \cdot (1 - S_{AK}) \cdot (1 - S_{\text{quant}}) \cdot (1 - S_{\text{spec}})$$</div>
+        <p>Esempio: Adaptive-K (31%) + Quantizzazione INT8 (33%) + Decodifica Speculativa (35%):</p>
+        <div class="equation">$$1 - (0.69 \times 0.67 \times 0.65) = 1 - 0.30 = \mathbf{70\%}$$ risparmio</div>
+        
+        <figure>
+            <img src="figures/multiplicative_savings.png" alt="Composizione risparmi moltiplicativi">
+            <figcaption><strong>Figura 5:</strong> Composizione moltiplicativa delle tecniche di efficienza. Lo stack combinato raggiunge fino al 90.7% di riduzione totale del calcolo.</figcaption>
+        </figure>
+    </section>
+
+    <section id="conclusione">
+        <h2>Conclusione</h2>
+        <p>Abbiamo presentato il <strong>routing Adaptive-K</strong>, un metodo basato su principi per la selezione dinamica degli esperti nei modelli Mixture-of-Experts. La nostra analisi teorica, fondata sulla teoria dell'informazione e sulla teoria della distorsione della velocità, stabilisce che l'entropia di routing funge da proxy naturale per la difficoltà di routing, giustificandone l'uso come criterio per la selezione K.</p>
+        
+        <p>La valutazione empirica su quattro architetture MoE di produzione dimostra che Adaptive-K consente di ottenere notevoli risparmi di elaborazione (<strong>24-33%</strong>) senza degrado statisticamente significativo della perplessità o delle prestazioni delle attività a valle. Il metodo non richiede modifiche architetturali o riaddestramento del modello.</p>
+
+        <div class="result-box">
+            <strong>Messaggio Chiave:</strong> Non tutti i token necessitano dello stesso budget computazionale. Selezionando dinamicamente il numero di esperti attivi in ​​base alla confidenza del routing, Adaptive-K ottiene la stessa qualità di output con un carico di calcolo significativamente inferiore — un win-win nel compromesso efficienza-qualità.
+        </div>
+    </section>
+
+    <section id="riferimenti" class="references">
+        <h2 style="counter-increment: none;">Riferimenti</h2>
+        <ol>
+            <li>Brown, T., et al. (2020). Language Models are Few-Shot Learners. <em>NeurIPS 2020</em>.</li>
+            <li>Shazeer, N., et al. (2017). Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer. <em>ICLR 2017</em>.</li>
+            <li>Fedus, W., Zoph, B., & Shazeer, N. (2022). Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity. <em>JMLR</em>, 23(120), 1-39.</li>
+            <li>Jiang, A.Q., et al. (2024). Mixtral of Experts. <em>arXiv:2401.04088</em>.</li>
+            <li>Zhou, Y., et al. (2022). Mixture-of-Experts with Expert Choice Routing. <em>NeurIPS 2022</em>.</li>
+            <li>Zoph, B., et al. (2022). ST-MoE: Designing Stable and Transferable Sparse Expert Models. <em>arXiv:2202.08906</em>.</li>
+            <li>Schwartz, R., et al. (2020). The Right Tool for the Job: Matching Model and Instance Complexities. <em>ACL 2020</em>.</li>
+            <li>Elbayad, M., et al. (2020). Depth-Adaptive Transformer. <em>ICLR 2020</em>.</li>
+            <li>Shannon, C.E. (1948). A Mathematical Theory of Communication. <em>Bell System Technical Journal</em>, 27(3), 379-423. [17]</li>
+            <li>Cover, T.M. & Thomas, J.A. (2006). <em>Elements of Information Theory</em>. Wiley-Interscience. [18]</li>
+            <li>Merity, S., et al. (2017). Pointer Sentinel Mixture Models. <em>ICLR 2017</em>. [19]</li>
+            <li>Hendrycks, D., et al. (2021). Measuring Massive Multitask Language Understanding. <em>ICLR 2021</em>. [20]</li>
+            <li>Jacobs, R.A., et al. (1991). Adaptive Mixtures of Local Experts. <em>Neural Computation</em>, 3(1), 79-87. [21]</li>
+            <li>Jordan, M.I. & Jacobs, R.A. (1994). Hierarchical Mixtures of Experts and the EM Algorithm. <em>Neural Computation</em>, 6(2), 181-214. [22]</li>
+            <li>Leviathan, Y., et al. (2023). Fast Inference from Transformers via Speculative Decoding. <em>ICML 2023</em>. [24]</li>
+            <li>Goyal, S., et al. (2020). Power of Randomization in Token Dropping for NLP Models. <em>arXiv:2010.13369</em>. [25]</li>
+        </ol>
+    </section>
+
+    <section class="appendix" id="appendice">
+        <h2>A: Configurazione Sperimentale Dettagliata</h2>
+        
+        <p class="table-caption"><strong>Tabella A1:</strong> Configurazioni complete Adaptive-K per riproducibilità.</p>
+        <table>
+            <thead>
+                <tr><th>Modello</th><th>Valori K</th><th>Soglie</th><th>Set di Calibrazione</th><th>Dimensione</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Mixtral 8×7B</td><td>[1, 2]</td><td>[1.275]</td><td>C4-validation</td><td>5000 campioni</td></tr>
+                <tr><td>Qwen1.5-MoE</td><td>[2, 3, 4]</td><td>[1.8, 2.4]</td><td>C4-validation</td><td>5000 campioni</td></tr>
+                <tr><td>OLMoE-1B-7B</td><td>[4, 6, 8]</td><td>[2.5, 3.2]</td><td>C4-validation</td><td>5000 campioni</td></tr>
+                <tr><td>Nemotron 3 Nano</td><td>[2, 4, 6]</td><td>[4.5, 5.5]</td><td>Custom</td><td>1000 campioni</td></tr>
+            </tbody>
+        </table>
+
+        <h2>B: Esempio di Utilizzo SDK</h2>
+        <pre><code># Installazione
+pip install adaptive-k-routing
+
+# Utilizzo base con PyTorch
+import torch
+from adaptive_k import AdaptiveKRouter, EntropyCalibrator
+
+# Inizializza router per Mixtral
+router = AdaptiveKRouter(
+    k_values=[1, 2],
+    model_name="mixtral-8x7b",
+    calibration_mode="percentile"
+)
+
+# Calibra su dati di esempio
+calibrator = EntropyCalibrator(router)
+with torch.no_grad():
+    calibrator.calibrate(calibration_loader, percentile=62)
+
+# Applica durante l'inferenza
+def forward_with_adaptive_k(hidden_states, router_logits):
+    indices, weights, k_selected = router.apply(router_logits)
+    # Esegui solo gli esperti selezionati...
+    return output, k_selected.float().mean()
+
+# Monitora statistiche
+stats = router.get_statistics()
+print(f"K Medio: {stats['avg_k']:.2f}")
+print(f"Risparmio calcolo: {stats['savings']:.1%}")
+print(f"Distribuzione K: {stats['k_distribution']}")</code></pre>
+
+        <h2>C: Analisi a Livello di Token</h2>
+        <p class="table-caption"><strong>Tabella A2:</strong> Breakdown delle categorie di token e pattern di selezione K.</p>
+        <table>
+            <thead>
+                <tr><th>Categoria Token</th><th>% che usa K=1</th><th>% che usa K=max</th><th>Entropia Media</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Parole funzionali (il, è, e)</td><td>85%</td><td>5%</td><td>0.72</td></tr>
+                <tr><td>Sostantivi comuni</td><td>60%</td><td>15%</td><td>1.15</td></tr>
+                <tr><td>Termini tecnici</td><td>20%</td><td>70%</td><td>1.78</td></tr>
+                <tr><td>Token di codice</td><td>25%</td><td>55%</td><td>1.65</td></tr>
+                <tr><td>Punteggiatura</td><td>92%</td><td>2%</td><td>0.45</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="ringraziamenti">
+        <h2 style="counter-increment: none;">Ringraziamenti</h2>
+        <p>L'autore ringrazia la comunità open source per aver fornito pesi di modello e framework di inferenza che hanno reso possibile questa ricerca. Un ringraziamento speciale al team di HuggingFace per la libreria Transformers e al progetto vLLM per l'infrastruttura di inferenza ad alte prestazioni. Risorse di calcolo fornite da Vast.ai.</p>
+        <p><strong>Codice:</strong> <a href="https://github.com/Gabrobals/sbm-efficient">github.com/Gabrobals/sbm-efficient</a></p>
+        <p><strong>PyPI:</strong> <code>pip install adaptive-k-routing</code></p>
+    </section>
+
+    <footer>
+        <p><strong>Selezione Dinamica degli Esperti Guidata dall'Entropia nei Modelli Mixture-of-Experts</strong></p>
+        <p>Gabriele Balsamo · Gennaio 2026</p>
+        <p><a href="/">Home</a> · <a href="paper.html">🇬🇧 English</a> · <a href="/whitepaper.html">Whitepaper</a> · <a href="https://github.com/Gabrobals/sbm-efficient">GitHub</a></p>
+        <p style="margin-top:1rem;font-size:0.85rem;">© 2026 Gabriele Balsamo. Licenza MIT.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+</body>
+</html>
