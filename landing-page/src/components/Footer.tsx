@@ -35,7 +35,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="https://github.com/Gabrobals/sbm-efficient/blob/master/Entropy_Guided_Dynamic_Expert_Selection_in_Mixture_of_Experts_Models.pdf" target="_blank" rel="noopener noreferrer" className="text-vs-muted hover:text-vs-blue transition-colors">
+                <a href="/paper.html" className="text-vs-muted hover:text-vs-blue transition-colors">
                   {t.footer.paper}
                 </a>
               </li>
