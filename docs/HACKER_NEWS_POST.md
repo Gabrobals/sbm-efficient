@@ -46,7 +46,7 @@ The algorithm is simple (~50 lines):
 I've submitted a PR to TensorRT-LLM (#10672) and published an SDK on PyPI.
 
 Links:
-- Paper: https://github.com/Gabrobals/sbm-efficient/blob/master/Entropy_Guided_Dynamic_Expert_Selection_in_Mixture_of_Experts_Models.pdf
+- Paper: https://adaptive-k.vercel.app/paper.html
 - Code: https://github.com/Gabrobals/sbm-efficient
 - Landing page: https://adaptive-k.vertexdata.it
 - TensorRT-LLM PR: https://github.com/NVIDIA/TensorRT-LLM/pull/10672

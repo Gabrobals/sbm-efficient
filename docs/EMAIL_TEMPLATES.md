@@ -18,7 +18,7 @@ I've developed and validated a technique called **Adaptive-K** that reduces MoE 
 The methodology uses **entropy-guided dynamic expert selection** - adjusting how many experts run per token based on routing confidence. When the router is confident, fewer experts are needed.
 
 **Resources:**
-- Research paper: https://github.com/Gabrobals/sbm-efficient/blob/master/Entropy_Guided_Dynamic_Expert_Selection_in_Mixture_of_Experts_Models.pdf
+- Research paper: https://adaptive-k.vercel.app/paper.html
 - Code: https://github.com/Gabrobals/sbm-efficient
 - TensorRT-LLM PR: https://github.com/NVIDIA/TensorRT-LLM/pull/10672
 
@@ -91,7 +91,7 @@ I offer:
 
 Want to see a savings estimate for your workload? Reply with your current setup and I'll run the numbers.
 
-Paper: https://github.com/Gabrobals/sbm-efficient/blob/master/Entropy_Guided_Dynamic_Expert_Selection_in_Mixture_of_Experts_Models.pdf
+Paper: https://adaptive-k.vercel.app/paper.html
 
 Best,
 Gabriel Ballerini
@@ -116,7 +116,7 @@ I've been following your work on [specific paper/topic]. I recently published re
 
 The approach is simple but effective - when $H(p) < \tau_1$, we use K=1 instead of K=8, saving 87.5% of expert compute for that token.
 
-Paper: https://github.com/Gabrobals/sbm-efficient/blob/master/Entropy_Guided_Dynamic_Expert_Selection_in_Mixture_of_Experts_Models.pdf
+Paper: https://adaptive-k.vercel.app/paper.html
 
 I'd be interested in discussing potential collaboration, especially around:
 - Extending to larger MoE models

@@ -173,6 +173,6 @@ K = 4  se H ≥ τ₂
 
 ## Riferimenti
 
-- Paper: [GitHub](https://github.com/Gabrobals/sbm-efficient/blob/master/Entropy_Guided_Dynamic_Expert_Selection_in_Mixture_of_Experts_Models.pdf)
+- Paper: [Adaptive-K Paper](https://adaptive-k.vercel.app/paper.html)
 - Codice: [GitHub](https://github.com/Gabrobals/sbm-efficient)
 - PR TensorRT-LLM: [#10672](https://github.com/NVIDIA/TensorRT-LLM/pull/10672)

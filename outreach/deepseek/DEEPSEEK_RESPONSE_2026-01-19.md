@@ -54,7 +54,7 @@ Here are all the materials for your evaluation:
 | **Citable DOI (Zenodo)** | https://doi.org/10.5281/zenodo.18282008 |
 | **PyPI Package** | https://pypi.org/project/adaptive-k-routing/ |
 | **Live Demo** | https://huggingface.co/spaces/Gabrobals/adaptive-k-demo |
-| **Technical Paper** | https://github.com/Gabrobals/sbm-efficient/blob/master/Entropy_Guided_Dynamic_Expert_Selection_in_Mixture_of_Experts_Models.pdf |
+| **Technical Paper** | https://adaptive-k.vercel.app/paper.html |
 | **TensorRT-LLM PR** | https://github.com/NVIDIA/TensorRT-LLM/pull/10672 |
 
 ### DeepSeek-V3 Specific Integration Points

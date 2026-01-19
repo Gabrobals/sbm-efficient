@@ -552,7 +552,7 @@ For the $10B OpenAI contract, we project **$150-400M savings** with minimal inte
 | **PyPI Package** | https://pypi.org/project/adaptive-k-routing/ |
 | **Live Demo** | https://huggingface.co/spaces/Gabrobals/adaptive-k-demo |
 | **TensorRT-LLM PR** | https://github.com/NVIDIA/TensorRT-LLM/pull/10672 |
-| **Technical Paper** | [Entropy-Guided Dynamic Expert Selection](https://github.com/Gabrobals/sbm-efficient/blob/master/Entropy_Guided_Dynamic_Expert_Selection_in_Mixture_of_Experts_Models.pdf) |
+| **Technical Paper** | [Entropy-Guided Dynamic Expert Selection](https://adaptive-k.vercel.app/paper.html) |
 
 ---
 

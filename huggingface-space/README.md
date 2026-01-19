@@ -31,7 +31,7 @@ This demo shows how **Adaptive-K** dynamically selects the number of experts bas
 
 ## Links
 
-- 📄 [Paper](https://github.com/Gabrobals/sbm-efficient/blob/master/Entropy_Guided_Dynamic_Expert_Selection_in_Mixture_of_Experts_Models.pdf)
+- 📄 [Paper](https://adaptive-k.vercel.app/paper.html)
 - 📖 [Whitepaper](https://adaptive-k.vertexdata.it/whitepaper.html)
 - 💻 [GitHub](https://github.com/Gabrobals/sbm-efficient)
 - 📦 [PyPI](https://pypi.org/project/adaptive-k-routing/)

@@ -177,7 +177,7 @@ Apache 2.0 - Free for commercial use.
 ## 🔗 Links
 
 - **Website**: https://adaptive-k.vertexdata.it
-- **Paper**: [Entropy-Guided Dynamic Expert Selection](https://github.com/Gabrobals/sbm-efficient/blob/master/Entropy_Guided_Dynamic_Expert_Selection_in_Mixture_of_Experts_Models.pdf)
+- **Paper**: [Entropy-Guided Dynamic Expert Selection](https://adaptive-k.vercel.app/paper.html)
 - **GitHub**: https://github.com/Gabrobals/sbm-efficient
 
 ---
