@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Autodidact to Researcher: How I Reduced AI Costs by 33% | Adaptive-K</title>
+    <meta name="description" content="I'm not a computer engineer. I'm a self-taught researcher who, through rigorous academic protocols and disciplined AI assistance, created a technique that saves 33% on AI computational costs.">
+    <meta name="keywords" content="artificial intelligence, energy savings, AI, efficiency, Mixtral, autodidact, research, scientific protocol">
+    <meta name="author" content="Gabriele Balsamo">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="From Autodidact to Researcher: How I Reduced AI Costs by 33%">
+    <meta property="og:description" content="I'm not a computer engineer. I'm a self-taught researcher who created a revolutionary AI efficiency technique.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://adaptive-k.vercel.app/blog/from-autodidact-to-researcher.html">
+    <meta property="og:image" content="https://adaptive-k.vercel.app/og-image.png">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="From Autodidact to Researcher: How I Reduced AI Costs by 33%">
+    <meta name="twitter:description" content="I'm not a computer engineer. I'm a self-taught researcher who created a revolutionary technique.">
+    
+    <link rel="canonical" href="https://adaptive-k.vercel.app/blog/from-autodidact-to-researcher.html">
+    <link rel="alternate" hreflang="it" href="https://adaptive-k.vercel.app/blog/intelligenza-artificiale-risparmio-energetico.html">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#22c55e',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+        
+        body { font-family: 'Open Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Merriweather', serif; }
+        
+        .prose p { 
+            margin-bottom: 1.5rem; 
+            line-height: 1.9; 
+            font-size: 1.125rem;
+        }
+        .prose h2 { 
+            margin-top: 3rem; 
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+        }
+        
+        .quote-box {
+            border-left: 4px solid #6366f1;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+        
+        .personal-note {
+            border-left: 4px solid #22c55e;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(74, 222, 128, 0.08));
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            font-size: 1.1rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid #334155;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #22c55e, #4ade80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .infographic {
+            background: #1e293b;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            padding-bottom: 1.5rem;
+            border-left: 2px solid #334155;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            background: #6366f1;
+            border-radius: 50%;
+        }
+        .timeline-item:last-child { border-left: none; }
+        
+        .comparison-bar {
+            height: 2rem;
+            border-radius: 0.5rem;
+            transition: width 1s ease-out;
+        }
+        
+        .protocol-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800 z-50">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                Adaptive-K
+            </a>
+            <div class="flex gap-6 text-sm">
+                <a href="/" class="text-slate-400 hover:text-white transition-colors">Home</a>
+                <a href="/paper.html" class="text-slate-400 hover:text-white transition-colors">Paper</a>
+                <a href="/dashboard.html" class="text-slate-400 hover:text-white transition-colors">Data</a>
+                <a href="https://github.com/Gabrobals/sbm-efficient" class="text-slate-400 hover:text-white transition-colors">GitHub</a>
+                <a href="/blog/intelligenza-artificiale-risparmio-energetico.html" class="text-slate-400 hover:text-white transition-colors">🇮🇹 IT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Article Header -->
+    <header class="pt-28 pb-12 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-primary text-sm font-semibold tracking-wide mb-4">RESEARCH • INNOVATION • PERSONAL STORY</div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
+                From Autodidact to Researcher:<br>
+                <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">How I Reduced AI Costs by 33%</span>
+            </h1>
+            <p class="text-xl text-slate-400 mb-8 leading-relaxed">
+                I'm not a computer engineer. I don't have a PhD. But through a rigorous research protocol, 
+                self-directed learning, and disciplined use of AI as a tool, 
+                I developed a technique that's attracting attention from NVIDIA and DeepSeek.
+            </p>
+            <div class="flex items-center gap-4 text-sm text-slate-500 flex-wrap">
+                <img src="https://ui-avatars.com/api/?name=GB&background=6366f1&color=fff&size=40" class="rounded-full" alt="Author">
+                <span class="font-medium text-slate-300">Gabriele Balsamo</span>
+                <span>•</span>
+                <span>January 19, 2026</span>
+                <span>•</span>
+                <span>12 min read</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Article -->
+    <article class="max-w-4xl mx-auto px-6 pb-20">
+        <div class="prose prose-invert max-w-none text-slate-300">
+            
+            <!-- Lead paragraph - Personal -->
+            <p class="text-xl text-slate-200 font-medium leading-relaxed">
+                I want to be honest from the start: I don't have the credentials you'd expect from someone 
+                publishing research on AI optimization. I don't have a computer science degree. 
+                I don't work at a Google or Meta research lab. I'm a freelance consultant 
+                who decided to take an intuition seriously — and follow it with the rigor 
+                a university researcher would use.
+            </p>
+
+            <p>
+                The result? <strong>Adaptive-K</strong>, a technique that saves up to 33% 
+                of computational costs on the world's most advanced AI models. A technique now under review 
+                for integration into NVIDIA's TensorRT-LLM, and that has caught the attention of the DeepSeek team.
+            </p>
+
+            <div class="personal-note">
+                <strong class="text-green-400">💡 My philosophy:</strong> AI is not a replacement for critical thinking — 
+                it's a multiplier. I used Claude and GPT-4 as research assistants, never as authors. 
+                Every hypothesis was formulated by me, every experiment designed following academic protocols, 
+                every result manually verified. AI helped me move faster, 
+                not think less.
+            </div>
+
+            <h2 class="text-white">The problem I discovered</h2>
+
+            <p>
+                Every time we ask ChatGPT to write an email or Claude to summarize a document, 
+                we consume electricity equivalent to a light bulb running for several minutes. 
+                Multiplied by billions of requests per day, AI's energy bill 
+                has become a significant line item in big tech budgets — and in global CO₂ emissions.
+            </p>
+
+            <p>
+                But studying the architectures of the most advanced models, I noticed something that seemed absurd: 
+                <strong>up to 33% of this energy is wasted</strong>. Why? Because AI models use 
+                the same amount of "brainpower" to answer any question, whether it's 
+                "what's 2+2" or "write a doctoral thesis on quantum physics."
+            </p>
+
+            <div class="quote-box">
+                "It's like turning on all the lights in your house just to go to the bathroom at night. 
+                It works, but it's a colossal waste. And nobody seemed to have thought about it."
+            </div>
+
+            <!-- Key Stats -->
+            <div class="grid md:grid-cols-4 gap-4 my-12">
+                <div class="stat-card">
+                    <div class="stat-number">33%</div>
+                    <div class="text-slate-400 mt-2">Maximum validated<br>savings</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4</div>
+                    <div class="text-slate-400 mt-2">Industrial models<br>tested</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <div class="text-slate-400 mt-2">Computer science<br>degrees</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1</div>
+                    <div class="text-slate-400 mt-2">Rigorous<br>protocol</div>
+                </div>
+            </div>
+
+            <h2 class="text-white">My journey: from curiosity to method</h2>
+
+            <p>
+                I started studying machine learning in 2023, self-taught. No university, no mentor, 
+                just an internet connection, lots of curiosity, and a conviction: <em>if I follow the same rules 
+                as real researchers, I can produce real results</em>.
+            </p>
+
+            <p>
+                I spent months studying not just algorithms, but the <strong>scientific method</strong> itself. 
+                I read Karl Popper on falsifiability. I studied the guidelines from conferences like NeurIPS 
+                and ICML. I learned that the difference between an intuition and a scientific discovery lies in the rigor 
+                with which it's tested.
+            </p>
+
+            <div class="protocol-box">
+                <h3 class="text-lg font-bold text-white mb-4">🔬 The VERTEX-RESEARCH Protocol</h3>
+                <p class="text-slate-300 mb-4">
+                    I developed a 10-phase research protocol, inspired by methods from top universities:
+                </p>
+                <ol class="list-decimal pl-6 space-y-2 text-slate-300">
+                    <li><strong>Problem identification</strong> — Define what's not working and why it matters</li>
+                    <li><strong>Systematic literature review</strong> — Map everything that's been done</li>
+                    <li><strong>Theoretical framework</strong> — Build the mathematical foundations</li>
+                    <li><strong>Falsifiable hypothesis formulation</strong> — Specify what would prove me wrong</li>
+                    <li><strong>Experimental design</strong> — Plan experiments that can falsify the hypotheses</li>
+                    <li><strong>Implementation</strong> — Reproducible, versioned, tested code</li>
+                    <li><strong>Experimentation</strong> — Multi-seed, controls, ablation studies</li>
+                    <li><strong>Validation/Falsification</strong> — Actively try to prove myself wrong</li>
+                    <li><strong>Analysis and interpretation</strong> — Understand the why, not just the what</li>
+                    <li><strong>Writing and publication</strong> — Communicate reproducibly</li>
+                </ol>
+                <p class="text-sm text-slate-400 mt-4">
+                    📄 The full protocol is available open source: 
+                    <a href="https://github.com/Gabrobals/sbm-efficient/blob/master/docs/VERTEX_RESEARCH_PROTOCOL.md" class="text-primary hover:underline">VERTEX-RESEARCH Protocol v1.0</a>
+                </p>
+            </div>
+
+            <h2 class="text-white">AI as a tool, not an author</h2>
+
+            <p>
+                I know what you're thinking: "He used ChatGPT to do the research." Yes and no. I used AI extensively, 
+                but with strict rules:
+            </p>
+
+            <ul class="list-none space-y-4 my-6">
+                <li class="flex items-start gap-3">
+                    <span class="text-green-400 text-xl">✓</span>
+                    <span><strong>AI can</strong>: search papers, explain concepts, generate boilerplate code, 
+                    check mathematical errors, suggest experiments</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-red-400 text-xl">✗</span>
+                    <span><strong>AI cannot</strong>: formulate hypotheses (I do that), interpret results 
+                    (I do that), decide if an experiment is valid (I do that)</span>
+                </li>
+            </ul>
+
+            <p>
+                AI was a <strong>speed multiplier</strong>, not a replacement for critical thinking. 
+                It allowed me to cover in weeks ground that would have taken months. But every scientific decision 
+                was mine — and every mistake too.
+            </p>
+
+            <div class="quote-box">
+                "Artificial intelligence is like having a tireless research assistant who knows 
+                all the literature. But intuition, critical judgment, the ability to say 'this doesn't add up' — 
+                that remains human."
+            </div>
+
+            <h2 class="text-white">The technical problem: all tokens are equal (but shouldn't be)</h2>
+
+            <p>
+                The most advanced language models — like Mistral's Mixtral, Alibaba's Qwen, or NVIDIA's Nemotron — 
+                use an architecture called <strong>Mixture-of-Experts (MoE)</strong>. Imagine a team of 
+                specialized consultants: there's the math expert, the history one, the programming one.
+            </p>
+
+            <p>
+                The problem is that the current system summons <em>always the same number of experts</em> for every question. 
+                Two experts for Mixtral. Four for Qwen. Six for Nemotron. Regardless of request complexity.
+            </p>
+
+            <!-- Visual: Expert Selection -->
+            <div class="infographic">
+                <h3 class="text-lg font-bold text-white mb-6 text-center">How it works today vs. Adaptive-K</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="text-red-400 font-semibold mb-3">❌ Traditional system</div>
+                        <div class="bg-slate-800 p-4 rounded-lg mb-4">
+                            <div class="text-sm text-slate-400 mb-2">Simple question: "Hello!"</div>
+                            <div class="flex gap-2">
+                                <div class="w-12 h-12 bg-primary rounded flex items-center justify-center text-xs">E1</div>
+                                <div class="w-12 h-12 bg-primary rounded flex items-center justify-center text-xs">E2</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E3</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E4</div>
+                            </div>
+                            <div class="text-sm text-slate-500 mt-2">→ 2 experts (wasteful!)</div>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-lg">
+                            <div class="text-sm text-slate-400 mb-2">Complex question: "Explain relativity..."</div>
+                            <div class="flex gap-2">
+                                <div class="w-12 h-12 bg-primary rounded flex items-center justify-center text-xs">E1</div>
+                                <div class="w-12 h-12 bg-primary rounded flex items-center justify-center text-xs">E2</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E3</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E4</div>
+                            </div>
+                            <div class="text-sm text-slate-500 mt-2">→ 2 experts (insufficient?)</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-green-400 font-semibold mb-3">✅ Adaptive-K</div>
+                        <div class="bg-slate-800 p-4 rounded-lg mb-4">
+                            <div class="text-sm text-slate-400 mb-2">Simple question: "Hello!"</div>
+                            <div class="flex gap-2">
+                                <div class="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-xs">E1</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E2</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E3</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E4</div>
+                            </div>
+                            <div class="text-sm text-green-400 mt-2">→ 1 expert (50% savings!)</div>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-lg">
+                            <div class="text-sm text-slate-400 mb-2">Complex question: "Explain relativity..."</div>
+                            <div class="flex gap-2">
+                                <div class="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-xs">E1</div>
+                                <div class="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-xs">E2</div>
+                                <div class="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-xs">E3</div>
+                                <div class="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-xs">E4</div>
+                            </div>
+                            <div class="text-sm text-green-400 mt-2">→ 4 experts (when needed!)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-white">The solution: measuring uncertainty</h2>
+
+            <p>
+                The key to the solution lies in an information theory concept: <strong>entropy</strong>. 
+                When the model is confident about its answer, entropy is low. When it's uncertain, entropy is high.
+            </p>
+
+            <p>
+                Adaptive-K uses this information to dynamically decide how many experts to activate:
+            </p>
+
+            <ul class="list-none space-y-3 my-6">
+                <li class="flex items-start gap-3">
+                    <span class="text-green-400 text-xl">●</span>
+                    <span><strong>Low entropy</strong> (model is confident) → fewer experts → savings</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-yellow-400 text-xl">●</span>
+                    <span><strong>Medium entropy</strong> → standard number of experts</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-red-400 text-xl">●</span>
+                    <span><strong>High entropy</strong> (model is uncertain) → more experts → quality preserved</span>
+                </li>
+            </ul>
+
+            <h2 class="text-white">Results: validated on 4 industrial models</h2>
+
+            <p>
+                The research wasn't limited to theoretical simulations. Adaptive-K was tested on four 
+                of the most widely used MoE models in the world, with concrete results:
+            </p>
+
+            <!-- Results Chart -->
+            <div class="infographic">
+                <h3 class="text-lg font-bold text-white mb-6">Computational savings by model</h3>
+                <div class="space-y-6">
+                    <!-- Nemotron -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">NVIDIA Nemotron 3 Nano</span>
+                            <span class="text-green-400 font-bold">33.3%</span>
+                        </div>
+                        <div class="bg-slate-700 rounded-full h-8 overflow-hidden">
+                            <div class="comparison-bar bg-gradient-to-r from-green-500 to-green-400" style="width: 33.3%"></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">128 experts • Mamba2-Transformer Hybrid Architecture</div>
+                    </div>
+                    <!-- Qwen -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Alibaba Qwen-MoE</span>
+                            <span class="text-green-400 font-bold">32.4%</span>
+                        </div>
+                        <div class="bg-slate-700 rounded-full h-8 overflow-hidden">
+                            <div class="comparison-bar bg-gradient-to-r from-green-500 to-green-400" style="width: 32.4%"></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">60 experts • 2.7B active parameters</div>
+                    </div>
+                    <!-- Mixtral -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Mistral Mixtral 8×7B</span>
+                            <span class="text-green-400 font-bold">31.0%</span>
+                        </div>
+                        <div class="bg-slate-700 rounded-full h-8 overflow-hidden">
+                            <div class="comparison-bar bg-gradient-to-r from-green-500 to-green-400" style="width: 31%"></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">8 experts • 46.7B total parameters</div>
+                    </div>
+                    <!-- OLMoE -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Allen AI OLMoE-1B-7B</span>
+                            <span class="text-green-400 font-bold">24.7%</span>
+                        </div>
+                        <div class="bg-slate-700 rounded-full h-8 overflow-hidden">
+                            <div class="comparison-bar bg-gradient-to-r from-green-500 to-green-400" style="width: 24.7%"></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">64 experts • 1B active parameters</div>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 mt-6 text-center">
+                    Source: <a href="/paper.html" class="text-primary hover:underline">Adaptive-K Technical Paper</a> • 
+                    DOI: <a href="https://doi.org/10.5281/zenodo.18282008" class="text-primary hover:underline">10.5281/zenodo.18282008</a>
+                </p>
+            </div>
+
+            <h2 class="text-white">The multiplicative effect: up to 70% savings</h2>
+
+            <p>
+                One of the most surprising discoveries from my research concerns the <strong>combination</strong> 
+                with other optimization techniques. When Adaptive-K is used together with quantization 
+                (which reduces number precision) and speculative decoding (which "predicts" answers), 
+                savings <em>multiply</em>.
+            </p>
+
+            <p>
+                This wasn't obvious. I could have expected the techniques to "cannibalize" each other. 
+                Instead, I mathematically proved (and experimentally validated) that they're orthogonal: 
+                each acts on a different aspect of computation.
+            </p>
+
+            <div class="infographic">
+                <h3 class="text-lg font-bold text-white mb-6 text-center">Technique combination: multiplicative effect</h3>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-center">
+                    <div class="bg-slate-800 p-6 rounded-lg">
+                        <div class="text-3xl font-bold text-primary">69%</div>
+                        <div class="text-sm text-slate-400">Adaptive-K</div>
+                    </div>
+                    <div class="text-2xl text-slate-500">×</div>
+                    <div class="bg-slate-800 p-6 rounded-lg">
+                        <div class="text-3xl font-bold text-secondary">67%</div>
+                        <div class="text-sm text-slate-400">4-bit Quantization</div>
+                    </div>
+                    <div class="text-2xl text-slate-500">×</div>
+                    <div class="bg-slate-800 p-6 rounded-lg">
+                        <div class="text-3xl font-bold text-yellow-400">65%</div>
+                        <div class="text-sm text-slate-400">Speculative Decoding</div>
+                    </div>
+                    <div class="text-2xl text-slate-500">=</div>
+                    <div class="bg-gradient-to-br from-green-500/20 to-green-400/20 p-6 rounded-lg border border-green-500/30">
+                        <div class="text-4xl font-bold text-green-400">30%</div>
+                        <div class="text-sm text-green-300">Remaining compute</div>
+                        <div class="text-xs text-green-400/70 mt-1">70% total savings!</div>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 mt-6 text-center">
+                    Formula: 0.69 × 0.67 × 0.65 = 0.30 → 70% overall savings
+                </p>
+            </div>
+
+            <h2 class="text-white">Why this matters: my experience as an outsider</h2>
+
+            <p>
+                When I started sharing the first results, the most common reaction was skepticism. 
+                "Who are you to say that NVIDIA researchers missed something?" Fair question.
+            </p>
+
+            <p>
+                But here's the point: <strong>I didn't say they got something wrong</strong>. I said there's an opportunity 
+                that hadn't been explored. And I proved it with data, not opinions. When I opened the 
+                pull request on TensorRT-LLM, NVIDIA's reviewers didn't ask for my resume. 
+                They looked at the code, the tests, the benchmarks. And they assigned a reviewer.
+            </p>
+
+            <div class="personal-note">
+                <strong class="text-green-400">🎯 The lesson:</strong> In the open source world and in research, 
+                results speak louder than credentials. If you follow the scientific method correctly, 
+                your data will be evaluated for what it is — not for who you are.
+            </div>
+
+            <h2 class="text-white">Economic implications</h2>
+
+            <p>
+                For companies managing large-scale AI infrastructure, the numbers are significant:
+            </p>
+
+            <div class="bg-slate-800 p-8 rounded-xl my-8">
+                <h3 class="text-xl font-bold text-white mb-6">Scenario: 1 billion tokens per day</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="text-slate-400 mb-2">Current cost (cloud GPU)</div>
+                        <div class="text-3xl font-bold text-white">~$300/day</div>
+                        <div class="text-sm text-slate-500">$109,500/year</div>
+                    </div>
+                    <div>
+                        <div class="text-slate-400 mb-2">With Adaptive-K (31% savings)</div>
+                        <div class="text-3xl font-bold text-green-400">~$207/day</div>
+                        <div class="text-sm text-green-400/70">$75,555/year (-$33,945)</div>
+                    </div>
+                </div>
+            </div>
+
+            <p>
+                But beyond economic savings, there's an environmental issue. It's estimated that training 
+                a single large LLM emits as much as 5 cars over their entire useful life. 
+                Inference — the daily use of these models — is rapidly surpassing training 
+                as the main source of AI energy consumption.
+            </p>
+
+            <div class="quote-box">
+                "Reducing AI inference energy consumption by 30% isn't just a cost issue. 
+                It's a necessity for the sector's sustainability."
+            </div>
+
+            <h2 class="text-white">How it works technically</h2>
+
+            <p>
+                For those who want to dive deeper, here's a more technical explanation. An MoE model's router 
+                produces a probability distribution over available experts. The entropy of this 
+                distribution measures how "undecided" the router is:
+            </p>
+
+            <div class="bg-slate-800 p-6 rounded-lg my-6 font-mono text-sm">
+                <div class="text-slate-400 mb-2"># Routing entropy calculation</div>
+                <div class="text-green-400">H = -Σ p_i × log(p_i)</div>
+                <div class="text-slate-500 mt-2"># Where p_i is the probability assigned to expert i</div>
+            </div>
+
+            <p>
+                Adaptive-K defines entropy thresholds that determine how many experts to activate:
+            </p>
+
+            <ul class="list-disc pl-6 space-y-2">
+                <li>If H &lt; 0.6 → use 1 expert (router is very confident)</li>
+                <li>If 0.6 ≤ H &lt; 1.2 → use 2 experts (moderate uncertainty)</li>
+                <li>If H ≥ 1.2 → use 4 experts (high uncertainty)</li>
+            </ul>
+
+            <p>
+                Thresholds are automatically calibrated on a small representative dataset, 
+                ensuring output quality doesn't degrade.
+            </p>
+
+            <h2 class="text-white">Availability and next steps</h2>
+
+            <p>
+                The technology is already available as an open source package on PyPI:
+            </p>
+
+            <div class="bg-slate-800 p-4 rounded-lg my-6 font-mono">
+                <span class="text-slate-500">$</span> pip install adaptive-k-routing
+            </div>
+
+            <p>
+                A collaboration with NVIDIA is also underway to integrate Adaptive-K into TensorRT-LLM, 
+                the optimized GPU inference framework. A pull request (#10672) is currently under review.
+            </p>
+
+            <div class="infographic">
+                <h3 class="text-lg font-bold text-white mb-6">2026 Roadmap</h3>
+                <div class="space-y-4">
+                    <div class="timeline-item">
+                        <div class="text-sm text-primary font-semibold">January 2026</div>
+                        <div class="text-white">✅ Validation on NVIDIA Nemotron 3 Nano (33.3% savings)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="text-sm text-primary font-semibold">Q1 2026</div>
+                        <div class="text-white">TensorRT-LLM integration (PR #10672 under review)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="text-sm text-primary font-semibold">Q2 2026</div>
+                        <div class="text-white">Integration with vLLM and HuggingFace Transformers</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="text-sm text-primary font-semibold">Q3 2026</div>
+                        <div class="text-white">Validation on DeepSeek-V3 (256 experts)</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-white">A message for fellow autodidacts</h2>
+
+            <p>
+                If you're reading this article and feeling discouraged because you don't have the "right credentials," 
+                I want to tell you something: <strong>the scientific method doesn't ask for passports</strong>.
+            </p>
+
+            <p>
+                I'm not saying it's easy. I spent nights studying papers I didn't understand. I threw away 
+                weeks of work when experiments failed. I had to learn to distinguish between 
+                "my code has a bug" and "my hypothesis is wrong" — two very different things.
+            </p>
+
+            <p>
+                But if you commit to following the rules of the game — falsifiable hypotheses, reproducible experiments, 
+                honest interpretation of results — your contributions will have value. Not because someone 
+                gave you a stamp, but because they work.
+            </p>
+
+            <h2 class="text-white">Conclusion: what I learned</h2>
+
+            <p>
+                Adaptive-K isn't just an optimization technique. For me, it's proof that:
+            </p>
+
+            <ul class="list-none space-y-3 my-6">
+                <li class="flex items-start gap-3">
+                    <span class="text-primary text-xl">1.</span>
+                    <span><strong>Rigor beats credentials</strong> — If you follow the scientific method, 
+                    results speak for themselves</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-primary text-xl">2.</span>
+                    <span><strong>AI is a multiplier</strong> — Used correctly, it lets you 
+                    do research at speeds that were previously impossible for an individual</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-primary text-xl">3.</span>
+                    <span><strong>"Obvious" problems are often unsolved</strong> — Nobody had thought 
+                    to use fewer experts when the router is confident. It was right in front of everyone.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-primary text-xl">4.</span>
+                    <span><strong>Open source opens doors</strong> — NVIDIA doesn't know me. But they looked at 
+                    my code, and they're evaluating it for integration.</span>
+                </li>
+            </ul>
+
+            <p>
+                Artificial intelligence is becoming increasingly pervasive in our lives, 
+                and with it grow energy and environmental costs. Adaptive-K demonstrates that 
+                <strong>we don't have to choose between performance and efficiency</strong>: with smart approaches, 
+                we can have both.
+            </p>
+
+            <p>
+                And sometimes, these ideas come from where you least expect them.
+            </p>
+
+        </div>
+
+        <!-- CTA Box -->
+        <div class="bg-gradient-to-r from-primary/20 to-secondary/20 p-8 rounded-xl mt-12 text-center">
+            <h3 class="text-2xl font-bold text-white mb-4">Want to learn more?</h3>
+            <p class="text-slate-300 mb-6">
+                Read the complete technical paper, explore the research protocol, or try the interactive demo.
+            </p>
+            <div class="flex justify-center gap-4 flex-wrap">
+                <a href="/paper.html" class="bg-primary hover:bg-primary/80 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    📄 Scientific Paper
+                </a>
+                <a href="https://github.com/Gabrobals/sbm-efficient/blob/master/docs/VERTEX_RESEARCH_PROTOCOL.md" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    🔬 VERTEX Protocol
+                </a>
+                <a href="/dashboard.html" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    📊 Interactive Dashboard
+                </a>
+                <a href="https://huggingface.co/spaces/Gabrobals/adaptive-k-demo" class="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    🚀 Live Demo
+                </a>
+            </div>
+        </div>
+
+        <!-- Author Bio -->
+        <div class="border-t border-slate-700 mt-12 pt-8">
+            <div class="flex items-start gap-4">
+                <img src="https://ui-avatars.com/api/?name=GB&background=6366f1&color=fff&size=64" class="rounded-full" alt="Author">
+                <div>
+                    <div class="font-bold text-white">Gabriele Balsamo</div>
+                    <div class="text-slate-400 text-sm mb-2">Self-taught researcher • Vertex Data Founder</div>
+                    <p class="text-slate-500 text-sm">
+                        Not a computer engineer. An autodidact who developed the VERTEX-RESEARCH protocol 
+                        for conducting rigorous ML research. Author of Adaptive-K routing, contributor to TensorRT-LLM (NVIDIA).
+                        Believes the scientific method doesn't ask for credentials, only rigor.
+                    </p>
+                    <div class="flex gap-3 mt-3">
+                        <a href="mailto:gabriele.balsamo30@gmail.com" class="text-primary hover:text-secondary text-sm">Email</a>
+                        <a href="https://github.com/Gabrobals" class="text-primary hover:text-secondary text-sm">GitHub</a>
+                        <a href="https://linkedin.com/in/gabriele-balsamo" class="text-primary hover:text-secondary text-sm">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="border-t border-slate-700 mt-12 pt-8">
+            <h3 class="text-xl font-bold text-white mb-6">Related resources</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <a href="/whitepaper.html" class="bg-slate-800 p-6 rounded-lg hover:bg-slate-700 transition-colors">
+                    <div class="text-sm text-primary mb-2">WHITEPAPER</div>
+                    <div class="font-bold text-white mb-2">Adaptive-K Technical Whitepaper</div>
+                    <div class="text-sm text-slate-400">Complete technical documentation for enterprise implementations.</div>
+                </a>
+                <a href="/blog/intelligenza-artificiale-risparmio-energetico.html" class="bg-slate-800 p-6 rounded-lg hover:bg-slate-700 transition-colors">
+                    <div class="text-sm text-primary mb-2">🇮🇹 VERSIONE ITALIANA</div>
+                    <div class="font-bold text-white mb-2">Da Autodidatta a Ricercatore</div>
+                    <div class="text-sm text-slate-400">Read this article in Italian.</div>
+                </a>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-12">
+        <div class="max-w-4xl mx-auto px-6 text-center text-slate-500">
+            <p>&copy; 2026 Adaptive-K by Vertex Data. MIT License.</p>
+            <div class="flex justify-center gap-6 mt-4 text-sm">
+                <a href="/" class="hover:text-white transition-colors">Home</a>
+                <a href="/paper.html" class="hover:text-white transition-colors">Paper</a>
+                <a href="/dashboard.html" class="hover:text-white transition-colors">Data</a>
+                <a href="https://github.com/Gabrobals/sbm-efficient" class="hover:text-white transition-colors">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        "headline": "From Autodidact to Researcher: How I Reduced AI Costs by 33%",
+        "description": "A new technique allows saving up to 33% on computational costs of the most advanced AI models. Validated on 4 industrial architectures.",
+        "author": {
+            "@type": "Person",
+            "name": "Gabriele Balsamo",
+            "url": "https://github.com/Gabrobals"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Vertex Data",
+            "url": "https://vertexdata.it"
+        },
+        "datePublished": "2026-01-19",
+        "dateModified": "2026-01-19",
+        "mainEntityOfPage": "https://adaptive-k.vercel.app/blog/from-autodidact-to-researcher.html",
+        "image": "https://adaptive-k.vercel.app/og-image.png",
+        "keywords": ["artificial intelligence", "energy efficiency", "AI", "savings", "sustainability"],
+        "articleSection": "Technology",
+        "inLanguage": "en-US",
+        "wordCount": 2500
+    }
+    </script>
+
+    <!-- Animation Script -->
+    <script>
+        // Animate bars on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.comparison-bar');
+                    bars.forEach(bar => {
+                        bar.style.width = bar.style.width;
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.infographic').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

@@ -75,7 +75,7 @@ export default function Resources() {
       typeKey: 'blogType' as const,
       titleKey: 'blogTitle' as const,
       descKey: 'blogDesc' as const,
-      link: '/blog/intelligenza-artificiale-risparmio-energetico.html',
+      link: '/blog/from-autodidact-to-researcher.html',
       icon: icons.blog,
     },
     {
