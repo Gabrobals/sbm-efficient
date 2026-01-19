@@ -400,9 +400,10 @@
                 complexity or ambiguity of individual routing decisions. This paper presents <strong>Adaptive-K routing</strong>, 
                 a principled methodology for dynamic expert selection that leverages Shannon entropy of the routing distribution 
                 as a proxy for token-level uncertainty. We provide both theoretical foundations grounded in information theory 
-                and rate-distortion theory, as well as comprehensive empirical validation across three production-scale MoE 
+                and rate-distortion theory, as well as comprehensive empirical validation across four production-scale MoE 
                 architectures: Mixtral 8×7B (achieving <strong>52.5%</strong> compute reduction), Qwen1.5-MoE-A2.7B 
-                (<strong>32.4%</strong> reduction), and OLMoE-1B-7B (<strong>24.7%</strong> reduction). Our analysis demonstrates 
+                (<strong>32.4%</strong> reduction), OLMoE-1B-7B (<strong>24.7%</strong> reduction), and <strong>NVIDIA Nemotron 3 Nano</strong>
+                (<strong>33.3%</strong> reduction, validated January 2026). Our analysis demonstrates 
                 that these efficiency gains are achieved without statistically significant degradation in perplexity or downstream 
                 task performance. The proposed method requires no architectural modifications or model retraining, serving as a 
                 drop-in replacement for existing routing mechanisms. We further provide ablation studies on threshold sensitivity, 
@@ -1271,13 +1272,76 @@
             <caption><strong>Table 7:</strong> OLMoE-1B-7B results: <strong>24.7% compute reduction</strong>.</caption>
         </table>
 
+        <h4>5.3.4 NVIDIA Nemotron 3 Nano (Validated January 2026)</h4>
+        
+        <p>
+            Nemotron 3 Nano represents the most complex MoE architecture we tested: a Mamba2-Transformer hybrid with 
+            128 routed experts plus 1 shared expert (always active), top-6 routing, and 30B total parameters (3.5B active).
+            We validated Adaptive-K on 2× NVIDIA A100 40GB GPUs via Vast.ai.
+        </p>
+        
+        <p>
+            <strong>Technical note:</strong> Since Nemotron 3 does not support <code>output_router_logits=True</code>, 
+            we extracted pre-top-K router logits via forward hooks on <code>backbone.layers.X.mixer.gate</code> modules, 
+            computing full 128-expert logits as <code>hidden_states @ router_weight.T</code>.
+        </p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Test Case</th>
+                    <th>Measured Entropy</th>
+                    <th>Max Entropy</th>
+                    <th>Utilization</th>
+                    <th>Savings</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Easy ("The capital of France")</td>
+                    <td>5.26 bits</td>
+                    <td>7.0 bits</td>
+                    <td>75.1%</td>
+                    <td>32.4%</td>
+                </tr>
+                <tr>
+                    <td>Code ("def fibonacci")</td>
+                    <td>5.28 bits</td>
+                    <td>7.0 bits</td>
+                    <td>75.4%</td>
+                    <td>33.3%</td>
+                </tr>
+                <tr>
+                    <td>Hard ("quantum entanglement")</td>
+                    <td>5.16 bits</td>
+                    <td>7.0 bits</td>
+                    <td>73.7%</td>
+                    <td>34.4%</td>
+                </tr>
+                <tr style="background: #f0fdf4;">
+                    <td><strong>Average</strong></td>
+                    <td><strong>5.23 bits</strong></td>
+                    <td>7.0 bits</td>
+                    <td><strong>74.7%</strong></td>
+                    <td><strong>33.3%</strong></td>
+                </tr>
+            </tbody>
+            <caption><strong>Table 7b:</strong> Nemotron 3 Nano results: <strong>33.3% compute reduction</strong> (exceeds 27.1% projection).</caption>
+        </table>
+        
+        <p>
+            For full methodology and detailed analysis, see the 
+            <a href="https://github.com/Gabrobals/sbm-efficient/blob/master/outreach/cerebras/ADAPTIVE_K_CEREBRAS_WHITEPAPER.md">
+            Cerebras Technical Whitepaper</a>.
+        </p>
+
         <h3>5.4 Summary of Results</h3>
         
         <figure>
             <div class="chart-container">
                 <canvas id="savingsChart"></canvas>
             </div>
-            <figcaption><strong>Figure 2:</strong> Compute usage comparison across all three models. Adaptive-K 
+            <figcaption><strong>Figure 2:</strong> Compute usage comparison across all four models. Adaptive-K 
             consistently reduces compute by 24-52% while maintaining output quality within 1% of baseline.</figcaption>
         </figure>
         
@@ -1316,6 +1380,14 @@
                     <td><strong>24.7%</strong></td>
                     <td>+0.6%</td>
                     <td>—</td>
+                </tr>
+                <tr style="background: #ecfdf5;">
+                    <td><strong>Nemotron 3 Nano</strong></td>
+                    <td>6</td>
+                    <td>4.00</td>
+                    <td><strong>33.3%</strong></td>
+                    <td>N/A</td>
+                    <td>Validated Jan 2026</td>
                 </tr>
             </tbody>
             <caption><strong>Table 8:</strong> Summary of Adaptive-K results across all models.</caption>
@@ -1904,17 +1976,17 @@ stats = router.get_statistics()
         new Chart(document.getElementById('savingsChart'), {
             type: 'bar',
             data: {
-                labels: ['Mixtral 8×7B', 'Qwen1.5-MoE', 'OLMoE-1B-7B'],
+                labels: ['Mixtral 8×7B', 'Qwen1.5-MoE', 'OLMoE-1B-7B', 'Nemotron 3 Nano'],
                 datasets: [
                     {
                         label: 'Baseline (100%)',
-                        data: [100, 100, 100],
+                        data: [100, 100, 100, 100],
                         backgroundColor: colors.muted,
                         borderRadius: 4
                     },
                     {
                         label: 'Adaptive-K',
-                        data: [47.5, 67.6, 75.3],
+                        data: [47.5, 67.6, 75.3, 66.7],
                         backgroundColor: colors.success,
                         borderRadius: 4
                     }
