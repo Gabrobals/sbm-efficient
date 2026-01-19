@@ -42,9 +42,11 @@ This fixed-$K$ approach leads to:
 
 We observe that **routing entropy**—a measure of the router's uncertainty—varies significantly across tokens:
 
-$$H(p) = -\sum_{i=1}^{N} p_i \log p_i$$
+$$H(p) = -\sum_{i=1}^{N} p_i \log_2 p_i \text{ (bits)}$$
 
 where $p_i$ is the softmax probability for expert $i$.
+
+> **Note**: Throughout this paper, entropy is measured in bits ($\log_2$).
 
 **Empirical observation** from our experiments (Mixtral 8x7B, 10,000 tokens from WikiText-2):
 - Mean entropy: 1.45
@@ -168,7 +170,7 @@ For DeepSeek-V3 ($N=256$): $H_{\max} = \log(256) = 5.55$
 | Baseline ($K=4$) | 4.00 | 100% | 8.12 | 62.3% |
 | **Adaptive-K** | **2.71** | **67.6%** | 8.19 | 62.1% |
 
-**$K$ distribution**: $K=2$: 45%, $K=3$: 35%, $K=4$: 20%
+**$K$ distribution**: $K=2$: 50%, $K=3$: 30%, $K=4$: 20%
 
 **Result**: **32.4% compute reduction** with 0.3% perplexity increase.
 
@@ -198,12 +200,14 @@ For DeepSeek-V3 ($N=256$): $H_{\max} = \log(256) = 5.55$
 | Baseline $K$ | 6 (fixed top-K) |
 | Max Entropy | 7.0 bits ($\log_2(128)$) |
 
-| Test Case | Measured Entropy | Savings | Effective $K$ |
-|-----------|------------------|---------|---------------|
+| Test Case | Measured Entropy | Savings | Avg $K$* |
+|-----------|------------------|---------|----------|
 | Easy ("The capital of France") | 5.26 bits | 32.4% | 4.1 |
 | Code ("def fibonacci") | 5.28 bits | 33.3% | 4.0 |
 | Hard ("quantum entanglement") | 5.16 bits | 34.4% | 3.9 |
 | **Average** | **5.23 bits** | **33.3%** | **4.0** |
+
+*\*Avg K represents the mean K value across tokens in this category*
 
 **Methodology**: Since Nemotron 3 does not support `output_router_logits=True`, we extracted pre-top-K router logits via forward hooks on `backbone.layers.X.mixer.gate` modules. Full 128-expert logits were computed as `hidden_states @ router_weight.T`.
 
@@ -425,7 +429,7 @@ $$\text{Gross Savings} = \$10B \times 0.70 \times 0.50 = \$3.5B$$
 
 **Net realistic savings**: **$150M - $400M** over contract lifetime.
 
-*Note: The gap between gross ($1.5B-$3.5B) and net ($150M-$400M) reflects real-world deployment constraints. Our estimates are intentionally conservative to set realistic expectations.*
+*Note: The gap between gross ($1.5B-$3.5B) and net ($150M-$400M) reflects real-world deployment constraints. Our estimates are intentionally conservative to set realistic expectations. These projections assume Adaptive-K is deployed on MoE workloads only and do not account for potential changes in OpenAI's model architecture strategy.*
 
 ### 6.4 ROI Analysis
 
@@ -436,7 +440,7 @@ $$\text{Gross Savings} = \$10B \times 0.70 \times 0.50 = \$3.5B$$
 | Production monitoring | $50K - $100K/year |
 | **Total first-year cost** | **$400K - $900K** |
 
-**ROI at minimum savings ($150M)**:
+**ROI at minimum savings ($150M)** using worst-case cost ($0.9M):
 $$\text{ROI} = \frac{\$150M - \$0.9M}{\$0.9M} = 165.67\times \text{ (>16,000\%)}$$
 
 **Payback period**: < 1 week of production deployment.
