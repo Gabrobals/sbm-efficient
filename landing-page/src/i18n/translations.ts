@@ -39,7 +39,7 @@ export const translations = {
       onlyCompute: 'Only',
       computeUsed: 'compute used',
       keyInsight: 'Key Insight',
-      multiplicativeExplanation: 'Adaptive-K reduces experts per token, Early Exit skips layers, Token Pruning (ToMe) reduces sequence length. Combined: 0.741 × 0.432 × 0.125 = 0.040 (96% savings). See Whitepaper Proposition 7.1.',
+      multiplicativeExplanation: 'Adaptive-K reduces experts per token, Early Exit skips layers, Token Pruning (ToMe) reduces sequence length. Combined: 0.69 × 0.687 × 0.65 = 0.093 (90.7% savings). See Whitepaper Proposition 7.1.',
     },
     howItWorks: {
       how: 'How',
@@ -220,7 +220,7 @@ export const translations = {
       onlyCompute: 'Solo',
       computeUsed: 'di calcolo usato',
       keyInsight: 'Intuizione Chiave',
-      multiplicativeExplanation: 'Adaptive-K riduce gli expert per token, Early Exit salta i layer, Token Pruning (ToMe) riduce la lunghezza della sequenza. Combinati: 0.741 × 0.432 × 0.125 = 0.040 (96% risparmio). Vedi Whitepaper Proposizione 7.1.',
+      multiplicativeExplanation: 'Adaptive-K riduce gli expert per token, Early Exit salta i layer, Token Pruning (ToMe) riduce la lunghezza della sequenza. Combinati: 0.69 × 0.687 × 0.65 = 0.093 (90.7% risparmio). Vedi Whitepaper Proposizione 7.1.',
     },
     howItWorks: {
       how: 'Come',

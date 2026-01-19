@@ -341,7 +341,7 @@ def select_k(router_probs, thresholds=[0.6, 1.2], k_values=[1, 2, 4]):
                 <strong class="text-white">The Math:</strong><br>
                 When techniques are orthogonal, compute fractions multiply:<br>
                 <code>C_combined = C_AK × C_EE × C_TP</code><br>
-                For our validated experiments: 0.741 × 0.432 × 0.125 = <strong>0.040 (96% savings!)</strong>
+                For our validated experiments: 0.69 × 0.687 × 0.65 = <strong>0.093 (90.7% savings!)</strong>
             </div>
             
             <table class="comparison-table">
@@ -374,8 +374,8 @@ def select_k(router_probs, thresholds=[0.6, 1.2], k_values=[1, 2, 4]):
                     </tr>
                     <tr style="background: rgba(78, 201, 176, 0.1);">
                         <td><strong>🏆 Triple Combo</strong></td>
-                        <td><strong>4.0%</strong></td>
-                        <td><strong>96.0%</strong></td>
+                        <td><strong>9.3%</strong></td>
+                        <td><strong>90.7%</strong></td>
                         <td>✅ Validated</td>
                     </tr>
                 </tbody>
@@ -400,7 +400,7 @@ pipeline = TripleComboPipeline(
     token_merger=TokenMerger(r=0.5)  # 50% token reduction
 )
 
-# Result: 96% compute reduction with ~1% quality loss
+# Result: 90.7% compute reduction with ~1% quality loss
 output = pipeline.forward(input_tokens)</code></pre>
             
             <p>

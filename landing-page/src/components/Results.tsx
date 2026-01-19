@@ -53,8 +53,8 @@ export default function Results() {
     },
     {
       name: 'Triple Combo',
-      savings: '96.0%',
-      compute: '4.0%',
+      savings: '90.7%',
+      compute: '9.3%',
       badge: 'MAX',
     },
   ]
