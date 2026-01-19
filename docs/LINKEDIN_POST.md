@@ -4,7 +4,7 @@
 
 ---
 
-🚀 **52.5% Compute Reduction in Mixtral 8x7B - Without Retraining!**
+🚀 **33.3% Compute Reduction in Nemotron 3 Nano - Without Retraining!**
 
 I'm excited to share results from my research on **Adaptive-K routing** for Mixture-of-Experts (MoE) models.
 
@@ -20,7 +20,7 @@ I'm excited to share results from my research on **Adaptive-K routing** for Mixt
 
 | Model | Compute Reduction |
 |-------|-------------------|
-| 🔥 Mixtral 8x7B | **52.5%** |
+| 🔥 Mixtral 8x7B | **31.0%** |
 | Qwen-MoE | **32.4%** |
 | OLMoE-1B-7B | **24.7%** |
 
@@ -28,7 +28,7 @@ All with <0.5% quality impact!
 
 **Key Stats (Mixtral)**:
 - 62% of tokens use K=1 (instead of K=2)
-- Average K dropped from 2.0 to 0.95
+- Average K dropped from 2.0 to 1.38
 - Perplexity increased by only 0.03
 
 **Why This Matters**:
@@ -53,14 +53,14 @@ Would love to hear your thoughts! Have you experimented with dynamic expert sele
 
 ---
 
-🎯 **52.5% compute savings in Mixtral 8x7B!**
+🎯 **33.3% compute savings in Nemotron 3 Nano!**
 
 My Adaptive-K routing method dynamically selects the number of experts based on routing entropy:
 - Confident routing → fewer experts
 - Uncertain routing → more experts
 
 Tested on 3 production MoE models:
-- Mixtral: 52.5% reduction
+- Mixtral: 31.0% reduction
 - Qwen-MoE: 32.4% reduction  
 - OLMoE: 24.7% reduction
 
@@ -107,6 +107,6 @@ Paper + code coming soon!
 Create a simple infographic showing:
 1. Traditional MoE: All tokens → K=2 experts
 2. Adaptive-K: Easy tokens → K=1, Hard tokens → K=2
-3. Result: 52.5% compute savings
+3. Result: 31.0% compute savings
 
 Tools: Canva, Figma, or simple matplotlib chart

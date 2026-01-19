@@ -31,7 +31,7 @@ git add .
 git commit -m "feat: Add AdaptiveKMoeRoutingMethod for dynamic expert selection
 
 Adds entropy-based adaptive K selection for MoE routing.
-- 52.5% compute reduction on Mixtral 8x7B
+- 31.0% compute reduction on Mixtral 8x7B
 - 32.4% on Qwen-MoE
 - 24.7% on OLMoE-1B-7B
 
@@ -77,7 +77,7 @@ Gabriele Balsamo
 
 **Abstract:**
 ```
-We present Adaptive-K routing, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. Instead of using a fixed top-k experts per token, our approach uses fewer experts when the router is confident (low entropy) and more experts when uncertain (high entropy). We validate this approach on three production MoE architectures: Mixtral 8x7B (52.5% compute reduction), Qwen-MoE (32.4%), and OLMoE-1B-7B (24.7%), demonstrating significant efficiency gains without quality degradation. Our method is a drop-in replacement for existing MoE routing and requires no model retraining.
+We present Adaptive-K routing, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. Instead of using a fixed top-k experts per token, our approach uses fewer experts when the router is confident (low entropy) and more experts when uncertain (high entropy). We validate this approach on four production MoE architectures: Nemotron 3 Nano (33.3% compute reduction), Mixtral 8x7B (31.0%), Qwen-MoE (32.4%), and OLMoE-1B-7B (24.7%), demonstrating significant efficiency gains without quality degradation. Our method is a drop-in replacement for existing MoE routing and requires no model retraining.
 ```
 
 **Comments:**
@@ -101,7 +101,7 @@ We present Adaptive-K routing, a method that dynamically selects the number of e
 ### Step 3.2: Copy Post Text
 
 ```
-🚀 52.5% Compute Reduction in Mixtral 8x7B - Without Retraining!
+🚀 33.3% Compute Reduction in Nemotron 3 Nano - Without Retraining!
 
 I'm excited to share results from my research on Adaptive-K routing for Mixture-of-Experts (MoE) models.
 
@@ -114,7 +114,7 @@ The Solution: Adaptive-K dynamically selects K based on entropy:
 • High entropy → more experts → maintain quality
 
 Results on Production Models:
-• 🔥 Mixtral 8x7B: 52.5% reduction
+• 🔥 Mixtral 8x7B: 31.0% reduction
 • Qwen-MoE: 32.4% reduction
 • OLMoE-1B-7B: 24.7% reduction
 
@@ -122,7 +122,7 @@ All with <0.5% quality impact!
 
 Key Stats (Mixtral):
 • 62% of tokens use K=1 (instead of K=2)
-• Average K dropped from 2.0 to 0.95
+• Average K dropped from 2.0 to 1.38
 • Perplexity increased by only 0.03
 
 Why This Matters:

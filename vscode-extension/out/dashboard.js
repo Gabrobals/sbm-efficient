@@ -203,12 +203,12 @@ class DashboardPanel {
     
     <div class="grid">
         <div class="metric">
-            <div class="value">36.5%</div>
+            <div class="value">30.4%</div>
             <div class="label">Avg Compute Savings</div>
         </div>
         <div class="metric blue">
-            <div class="value">52.5%</div>
-            <div class="label">Max Savings (Mixtral)</div>
+            <div class="value">33.3%</div>
+            <div class="label">Max Savings (Nemotron 3)</div>
         </div>
     </div>
 
@@ -266,7 +266,7 @@ class DashboardPanel {
             <tr>
                 <td>Mixtral 8x7B</td>
                 <td>8</td>
-                <td>52.5%</td>
+                <td>31.0%</td>
                 <td class="status">✓ Validated</td>
             </tr>
             <tr>

@@ -37,14 +37,14 @@ class WorkloadProfile:
 class SavingsEstimate:
     """Projected savings from Adaptive-K."""
     conservative: float  # 25% savings
-    moderate: float      # 40% savings  
-    aggressive: float    # 52.5% savings
+    moderate: float      # 31% savings  
+    aggressive: float    # 33% savings
     
     def to_dict(self):
         return {
             "conservative_25pct": self.conservative,
-            "moderate_40pct": self.moderate,
-            "aggressive_52pct": self.aggressive
+            "moderate_31pct": self.moderate,
+            "aggressive_33pct": self.aggressive
         }
 
 
@@ -54,8 +54,8 @@ def estimate_savings(profile: WorkloadProfile) -> dict:
     
     Savings ranges based on empirical results:
     - Conservative (25%): Low-entropy workloads, safety-critical applications
-    - Moderate (40%): Typical production workloads
-    - Aggressive (52.5%): High-entropy workloads, latency-tolerant applications
+    - Moderate (31%): Typical production workloads (Mixtral-level)
+    - Aggressive (33%): High-entropy workloads, Nemotron 3 Nano level
     """
     
     annual_cost = profile.annual_cost
@@ -63,8 +63,8 @@ def estimate_savings(profile: WorkloadProfile) -> dict:
     # Savings percentages from experiments
     savings = SavingsEstimate(
         conservative=annual_cost * 0.25,
-        moderate=annual_cost * 0.40,
-        aggressive=annual_cost * 0.525
+        moderate=annual_cost * 0.31,
+        aggressive=annual_cost * 0.33
     )
     
     # Integration costs (one-time)

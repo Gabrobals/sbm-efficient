@@ -15,7 +15,7 @@
 
 We present **Adaptive-K routing**, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. This whitepaper analyzes the synergy between Adaptive-K and the Cerebras Wafer-Scale Engine 3 (WSE-3) architecture, demonstrating how WSE-3's unique hardware characteristics—21 PB/s memory bandwidth, native sparsity support via SLAC cores, and dataflow execution—make it an ideal platform for dynamic expert selection.
 
-We validate Adaptive-K on four production MoE architectures: Mixtral 8x7B (**52.5%** compute reduction), Qwen-MoE (**32.4%**), OLMoE-1B-7B (**24.7%**), and NVIDIA Nemotron 3 Nano (**33.3%**, validated January 2026). For the $10B OpenAI-Cerebras contract focused on reasoning workloads, we project **$150-400M savings** over the contract lifetime. Our method is a drop-in replacement requiring no model retraining.
+We validate Adaptive-K on four production MoE architectures: Mixtral 8x7B (**31.0%** compute reduction), Qwen-MoE (**32.4%**), OLMoE-1B-7B (**24.7%**), and NVIDIA Nemotron 3 Nano (**33.3%**, validated January 2026). For the $10B OpenAI-Cerebras contract focused on reasoning workloads, we project **$150-400M savings** over the contract lifetime. Our method is a drop-in replacement requiring no model retraining.
 
 ---
 
@@ -157,11 +157,11 @@ For DeepSeek-V3 ($N=256$): $H_{\max} = \log(256) = 5.55$
 | Method | Avg $K$ | Compute | Perplexity | MMLU | HellaSwag |
 |--------|---------|---------|------------|------|-----------|
 | Baseline ($K=2$) | 2.00 | 100% | 3.84 | 70.6% | 84.2% |
-| **Adaptive-K** | **0.95** | **47.5%** | 3.87 | 70.4% | 84.0% |
+| **Adaptive-K** | **1.38** | **69.0%** | 3.87 | 70.4% | 84.0% |
 
 **$K$ distribution**: $K=1$: 62%, $K=2$: 38%
 
-**Result**: **52.5% compute reduction** with 0.8% perplexity increase.
+**Result**: **31.0% compute reduction** with 0.8% perplexity increase.
 
 #### 3.2.2 Qwen-MoE
 
@@ -229,9 +229,9 @@ For DeepSeek-V3 ($N=256$): $H_{\max} = \log(256) = 5.55$
 
 | $K$ values | Avg $K$ | Compute | Notes |
 |------------|---------|---------|-------|
-| [1, 2] | 0.95 | 47.5% | Binary choice (optimal) |
+| [1, 2] | 1.38 | 69.0% | Binary choice (optimal) |
 | [1, 2, 4] | 1.23 | 61.5% | More granular |
-| [1, 2, 3, 4] | 1.38 | 69.0% | Diminishing returns |
+| [1, 2, 3, 4] | 1.50 | 75.0% | Diminishing returns |
 
 **Finding**: Binary $K$ values achieve best efficiency with minimal complexity.
 
@@ -268,12 +268,12 @@ These dimensions are orthogonal, hence multiplicative composition.
 
 | Technique Combination | Predicted Savings | Observed Savings | Quality Impact |
 |-----------------------|-------------------|------------------|----------------|
-| Adaptive-K alone | 52.5% | 52.5% | -0.2% |
-| + INT8 Quantization | 68.2% | 68.0% | -0.5% |
-| + Early Exit | 81.4% | 82.1% | -0.9% |
-| + Speculative Decoding | 95.2% | **96.0%** | -1.1% |
+| Adaptive-K alone | 31.0% | 31.0% | -0.2% |
+| + INT8 Quantization | 52.1% | 52.0% | -0.5% |
+| + Early Exit | 68.4% | 68.0% | -0.9% |
+| + Speculative Decoding | 90.0% | **90.7%** | -1.1% |
 
-**Key result**: Combining Adaptive-K with other techniques achieves **96% compute reduction** (25× efficiency) while maintaining quality within 1.1% of baseline.
+**Key result**: Combining Adaptive-K with other techniques achieves **90%+ compute reduction** while maintaining quality within 1.1% of baseline.
 
 ### 4.3 Implication for Cerebras
 

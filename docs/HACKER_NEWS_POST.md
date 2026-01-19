@@ -33,7 +33,7 @@ I built Adaptive-K, an open-source technique to reduce Mixture-of-Experts infere
 The key insight: routing entropy predicts when fewer experts are sufficient. Low entropy = confident routing = use K=1 instead of K=8. High entropy = uncertain = use full K.
 
 Results on production models:
-- Mixtral 8x7B: 52.5% compute reduction, 99.8% accuracy retained
+- Mixtral 8x7B: 31.0% compute reduction, 99.8% accuracy retained
 - Qwen-MoE: 32.4% reduction, 99.9% accuracy  
 - OLMoE-1B-7B: 24.7% reduction, 99.7% accuracy
 

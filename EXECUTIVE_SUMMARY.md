@@ -109,7 +109,7 @@ If you spend **$100K/month** on inference for an "easy" workload:
 | Automated tooling | ✅ Scoreboard generation |
 | **Real MoE validation** | ✅ **32.4% expert compute reduction** (Qwen-MoE) |
 | **SLM validation** | ✅ **24.7% compute reduction** (OLMoE-1B-7B) |
-| **Mixtral 8x7B** | ✅ **52.5% compute reduction** 🔥 |
+| **Mixtral 8x7B** | ✅ **31.0% compute reduction** |
 
 **TRL: 7** (validated across 3 major MoE architectures)
 
@@ -181,7 +181,7 @@ Layers with **high entropy variance** benefit from adaptive-K:
 
 1. ✅ ~~Perplexity validation~~ - Quality maintained (PPL 8.61 on WikiText-2)
 2. ✅ ~~SLM testing~~ - OLMoE-1B-7B: 24.7% reduction
-3. ✅ ~~Mixtral 8x7B testing~~ - **52.5% compute reduction!**
+3. ✅ ~~Mixtral 8x7B testing~~ - **31.0% compute reduction**
 4. **TensorRT-LLM integration** - Contribute `AdaptiveKRoutingMethod` to NVIDIA
 5. **arXiv paper draft** - "Entropy-Guided Dynamic Compute in MoE Models"
 

@@ -68,7 +68,7 @@ Open Settings (Ctrl+,) and search for "Adaptive-K":
 | Model | Experts | Expected Savings | Status |
 |-------|---------|------------------|--------|
 | DeepSeek-V3 | 256 | 35% | ✅ Validated |
-| Mixtral 8x7B | 8 | 52.5% | ✅ Validated |
+| Mixtral 8x7B | 8 | 31.0% | ✅ Validated |
 | Qwen1.5-MoE | 60 | 32.4% | ✅ Validated |
 | OLMoE 1B-7B | 64 | 24.7% | ✅ Validated |
 | Qwen3-235B | 128 | 30% | 🔄 Estimated |

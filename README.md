@@ -30,7 +30,7 @@ print(f"Compute savings: {metrics.compute_savings:.1%}")
 | Model | Compute Savings | Quality Impact | Avg K |
 |-------|-----------------|----------------|-------|
 | **Nemotron 3 Nano** | **33.3%** | Validated Jan 2026 | 4.0 |
-| Mixtral 8x7B | **52.5%** | +0.8% PPL | 1.48 |
+| Mixtral 8x7B | **31.0%** | +0.8% PPL | 1.38 |
 | Qwen-MoE | **32.4%** | +0.3% PPL | 1.65 |
 | OLMoE-1B-7B | **24.7%** | +0.5% PPL | 1.75 |
 

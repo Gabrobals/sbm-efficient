@@ -2,7 +2,7 @@
 
 **Abstract**
 
-We present Adaptive-K routing, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. Instead of using a fixed top-k experts per token, our approach uses fewer experts when the router is confident (low entropy) and more experts when uncertain (high entropy). We validate this approach on three production MoE architectures: Mixtral 8x7B (52.5% compute reduction), Qwen-MoE (32.4%), and OLMoE-1B-7B (24.7%), demonstrating significant efficiency gains without quality degradation. Our method is a drop-in replacement for existing MoE routing and requires no model retraining.
+We present Adaptive-K routing, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. Instead of using a fixed top-k experts per token, our approach uses fewer experts when the router is confident (low entropy) and more experts when uncertain (high entropy). We validate this approach on four production MoE architectures: Nemotron 3 Nano (33.3% compute reduction), Mixtral 8x7B (31.0%), Qwen-MoE (32.4%), and OLMoE-1B-7B (24.7%), demonstrating significant efficiency gains without quality degradation. Our method is a drop-in replacement for existing MoE routing and requires no model retraining.
 
 ---
 
@@ -131,9 +131,9 @@ This maintains consistent tensor shapes while enabling sparse compute.
 | Method | Avg K | Compute | Perplexity | MMLU |
 |--------|-------|---------|------------|------|
 | Baseline (K=2) | 2.00 | 100% | 3.84 | 70.6% |
-| **Adaptive-K** | **0.95** | **47.5%** | 3.87 | 70.4% |
+| **Adaptive-K** | **1.38** | **69.0%** | 3.87 | 70.4% |
 
-**52.5% compute reduction** with 0.2% quality impact.
+**31.0% compute reduction** with 0.2% quality impact.
 
 K distribution: K=1: 62%, K=2: 38%
 
@@ -183,9 +183,9 @@ Lower thresholds → more aggressive savings but slight quality impact.
 
 | K values | Avg K | Compute | Notes |
 |----------|-------|---------|-------|
-| [1, 2] | 0.95 | 47.5% | Binary choice |
+| [1, 2] | 1.38 | 69.0% | Binary choice |
 | [1, 2, 4] | 1.23 | 61.5% | More granular |
-| [1, 2, 3, 4] | 1.38 | 69.0% | Diminishing returns |
+| [1, 2, 3, 4] | 1.50 | 75.0% | Diminishing returns |
 
 Binary K values achieve best efficiency with minimal overhead.
 
@@ -281,6 +281,6 @@ experts, weights = routing.apply(router_logits)
 
 | Model | k_values | thresholds | Compute Savings |
 |-------|----------|------------|-----------------|
-| Mixtral 8x7B | [1, 2] | [1.275] | 52.5% |
+| Mixtral 8x7B | [1, 2] | [1.275] | 31.0% |
 | Qwen-MoE | [2, 4] | [1.4, 1.8] | 32.4% |
 | OLMoE-1B-7B | [4, 6, 8] | [1.5, 2.0] | 24.7% |

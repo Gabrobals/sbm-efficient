@@ -318,15 +318,15 @@ def generate_html_dashboard(output_path: str = "workspace/adaptive_k_dashboard.h
             <h3>📊 Summary Statistics</h3>
             <div class="stat">
                 <span>Models Validated</span>
-                <span class="stat-value">3</span>
+                <span class="stat-value">4</span>
             </div>
             <div class="stat">
                 <span>Avg Compute Savings</span>
-                <span class="stat-value">36.5%</span>
+                <span class="stat-value">30.4%</span>
             </div>
             <div class="stat">
                 <span>Max Compute Savings</span>
-                <span class="stat-value">52.5%</span>
+                <span class="stat-value">33.3%</span>
             </div>
             <div class="stat">
                 <span>Max Accuracy Drop</span>
@@ -379,10 +379,10 @@ def generate_html_dashboard(output_path: str = "workspace/adaptive_k_dashboard.h
                     <td><strong>Mixtral 8x7B</strong></td>
                     <td>46.7B</td>
                     <td>8</td>
-                    <td>8 → 3.80</td>
+                    <td>2 → 1.38</td>
                     <td>
-                        <div class="savings-bar"><div class="savings-fill" style="width: 52.5%"></div></div>
-                        <span style="font-size: 0.9rem; color: var(--success);">52.5%</span>
+                        <div class="savings-bar"><div class="savings-fill" style="width: 31%"></div></div>
+                        <span style="font-size: 0.9rem; color: var(--success);">31.0%</span>
                     </td>
                     <td class="status-validated">✓ Validated</td>
                 </tr>

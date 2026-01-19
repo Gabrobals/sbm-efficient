@@ -401,9 +401,10 @@ def print_results(results: ProfilingResults):
         print(f"  Adaptive-K: {adaptive_compute} expert-activations")
         print(f"  Estimated Savings: {savings:.1f}%")
         print(f"\nThis aligns with our validated results:")
-        print(f"  - Mixtral 8x7B: 52.5% savings")
-        print(f"  - OLMoE 1B-7B: 24.7% savings")
+        print(f"  - Nemotron 3 Nano: 33.3% savings")
+        print(f"  - Mixtral 8x7B: 31.0% savings")
         print(f"  - Qwen1.5-MoE: 32.4% savings")
+        print(f"  - OLMoE 1B-7B: 24.7% savings")
 
 
 def save_results(results: ProfilingResults, output_path: str):

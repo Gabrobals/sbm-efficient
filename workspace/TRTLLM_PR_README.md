@@ -12,7 +12,7 @@ We validated this approach on multiple production MoE models:
 
 | Model | Architecture | Compute Reduction | Notes |
 |-------|--------------|-------------------|-------|
-| **Mixtral 8x7B** | 8 experts, top-2 | **52.5%** | Quality preserved |
+| **Mixtral 8x7B** | 8 experts, top-2 | **31.0%** | Quality preserved |
 | **Qwen-MoE** | 60 experts, top-4 | **32.4%** | Natural language benchmarks |
 | **OLMoE-1B-7B** | 64 experts, top-8 | **24.7%** | Billion-scale model |
 

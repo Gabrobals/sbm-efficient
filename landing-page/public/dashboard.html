@@ -359,15 +359,15 @@
         <!-- Summary Stats -->
         <div class="grid grid-4">
             <div class="metric-box">
-                <div class="value">3</div>
+                <div class="value">4</div>
                 <div class="label">Models Validated</div>
             </div>
             <div class="metric-box">
-                <div class="value">36.5%</div>
+                <div class="value">30.4%</div>
                 <div class="label">Avg Compute Savings</div>
             </div>
             <div class="metric-box blue">
-                <div class="value">96.0%</div>
+                <div class="value">90.7%</div>
                 <div class="label">Max (Triple Combo)</div>
             </div>
             <div class="metric-box cyan">
@@ -397,8 +397,8 @@
                         <td>8</td>
                         <td>8 → 3.80</td>
                         <td>
-                            <div class="progress-bar"><div class="progress-fill green" style="width: 52.5%"></div></div>
-                            <span style="color: var(--vs-green);">52.5%</span>
+                            <div class="progress-bar"><div class="progress-fill green" style="width: 31%"></div></div>
+                            <span style="color: var(--vs-green);">31.0%</span>
                         </td>
                         <td><span class="status validated">✓ Validated</span></td>
                     </tr>
@@ -577,7 +577,7 @@
                     <label style="margin-top: 1rem;">MoE Model</label>
                     <select id="modelSelect" onchange="calculateROI()">
                         <option value="0.14" data-savings="35">DeepSeek-V3 ($0.14/1M)</option>
-                        <option value="0.24" data-savings="52.5">Mixtral 8x7B ($0.24/1M)</option>
+                        <option value="0.24" data-savings="31.0">Mixtral 8x7B ($0.24/1M)</option>
                         <option value="0.65" data-savings="32.4" selected>Qwen-MoE ($0.65/1M)</option>
                         <option value="2.00" data-savings="30">Qwen3-Coder-480B ($2.00/1M)</option>
                     </select>
@@ -716,7 +716,7 @@
             type: 'bar',
             data: {
                 labels: ['Mixtral 8x7B', 'Qwen1.5-MoE', 'OLMoE 1B-7B', 'DeepSeek-V3', 'DBRX'],
-                datasets: [{ data: [52.5, 32.4, 24.7, 0, 0], backgroundColor: [chartColors.green, chartColors.green, chartColors.green, chartColors.border, chartColors.border], borderRadius: 6 }]
+                datasets: [{ data: [31.0, 32.4, 24.7, 0, 0], backgroundColor: [chartColors.green, chartColors.green, chartColors.green, chartColors.border, chartColors.border], borderRadius: 6 }]
             },
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 60, grid: { color: chartColors.border }, ticks: { color: chartColors.text } }, x: { grid: { display: false }, ticks: { color: chartColors.text } } } }
         });

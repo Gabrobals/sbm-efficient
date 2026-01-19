@@ -16,7 +16,7 @@ export default function Results() {
     },
     {
       model: 'Mixtral 8x7B',
-      savings: '52.5%',
+      savings: '31.0%',
       accuracy: '99.8%',
       descriptionKey: 'mixtralDesc' as const,
       color: 'blue',

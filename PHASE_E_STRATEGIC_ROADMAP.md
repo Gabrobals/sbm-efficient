@@ -12,7 +12,7 @@ After completing Mixtral validation, this document guides the next strategic pha
 |-------------|--------|--------|
 | Qwen-MoE validation | **32.4% compute reduction** | ✅ Done |
 | OLMoE-1B-7B validation | **24.7% compute reduction** | ✅ Done |
-| Mixtral 8x7B validation | **52.5% compute reduction** | ✅ Done |
+| Mixtral 8x7B validation | **31.0% compute reduction** | ✅ Done |
 | TensorRT-LLM implementation | `AdaptiveKMoeRoutingMethod` class | ✅ Done |
 | arXiv paper draft | `docs/ARXIV_PAPER_DRAFT.md` | ✅ Done |
 
@@ -286,7 +286,7 @@ class AdaptiveKRoutingMethod(BaseMoeRoutingMethod):
 ## 7. Immediate Action Plan (Updated 2026-01-06)
 
 ### Week 1: Consolidation ✅ COMPLETE
-- [x] Complete Mixtral test → **52.5% compute reduction**
+- [x] Complete Mixtral test → **31.0% compute reduction**
 - [x] Document results in EXECUTIVE_SUMMARY.md → **TRL 7**
 - [x] Test OLMoE-1B-7B → **24.7% compute reduction**
 

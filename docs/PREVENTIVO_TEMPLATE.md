@@ -135,7 +135,7 @@ Il presente preventivo è valido per **30 giorni** dalla data di emissione.
 
 | Fornitore | Cliente |
 |-----------|---------|
-| Gabriel Ballerini | [NOME] |
+| Gabriele Balsamo | [NOME] |
 | Data: ____________ | Data: ____________ |
 | Firma: ____________ | Firma: ____________ |
 
@@ -167,7 +167,7 @@ K = 4  se H ≥ τ₂
 
 | Modello | Risparmio Compute | Accuracy Relativa |
 |---------|-------------------|-------------------|
-| Mixtral 8x7B | 52.5% | 99.8% |
+| Mixtral 8x7B | 31.0% | 99.8% |
 | Qwen-MoE | 32.4% | 99.9% |
 | OLMoE-1B-7B | 24.7% | 99.7% |
 

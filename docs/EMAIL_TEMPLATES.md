@@ -11,7 +11,7 @@ Hi [Name],
 I've developed and validated a technique called **Adaptive-K** that reduces MoE inference compute by 30-50% with minimal quality loss.
 
 **Key results on Mixtral 8x7B:**
-- 52.5% compute reduction
+- 31.0% compute reduction
 - 99.8% relative accuracy (WikiText-2 perplexity)
 - K=1 routing effective for 78% of tokens
 
@@ -43,7 +43,7 @@ I've submitted a PR to TensorRT-LLM (#10672) adding **AdaptiveKMoeRoutingMethod*
 **Validated results:**
 | Model | Compute Reduction | Accuracy Retained |
 |-------|-------------------|-------------------|
-| Mixtral 8x7B | 52.5% | 99.8% |
+| Mixtral 8x7B | 31.0% | 99.8% |
 | Qwen-MoE | 32.4% | 99.9% |
 | OLMoE-1B-7B | 24.7% | 99.7% |
 
@@ -78,7 +78,7 @@ If you're running Mixtral, Qwen-MoE, or similar MoE models, you're likely using 
 I've developed **Adaptive-K routing** that reduces MoE inference costs by 30-50% by dynamically selecting how many experts to use per token. The key insight: when routing is confident, one expert is enough.
 
 **Quick numbers:**
-- Mixtral: 52.5% savings
+- Mixtral: 31.0% savings
 - Qwen-MoE: 32.4% savings
 - Accuracy loss: <0.3%
 

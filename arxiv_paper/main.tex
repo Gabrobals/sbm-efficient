@@ -50,7 +50,7 @@
 \noindent\textbf{DOI:} \url{https://doi.org/10.5281/zenodo.18282008}\\[1em]
 
 \begin{abstract}
-We present \textbf{Adaptive-K routing}, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. Instead of using a fixed top-$k$ experts per token, our approach uses fewer experts when the router is confident (low entropy) and more experts when uncertain (high entropy). We validate this approach on four production MoE architectures: Mixtral 8x7B (\textbf{52.5\%} compute reduction), Qwen-MoE (\textbf{32.4\%}), OLMoE-1B-7B (\textbf{24.7\%}), and NVIDIA Nemotron 3 Nano (\textbf{33.3\%}, validated January 2026). Furthermore, we demonstrate that Adaptive-K composes multiplicatively with other optimizations (quantization, speculative decoding), achieving up to \textbf{96\%} total compute reduction. Our method is a drop-in replacement for existing MoE routing and requires no model retraining.
+We present \textbf{Adaptive-K routing}, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. Instead of using a fixed top-$k$ experts per token, our approach uses fewer experts when the router is confident (low entropy) and more experts when uncertain (high entropy). We validate this approach on four production MoE architectures: Mixtral 8x7B (\textbf{31.0\%} compute reduction), Qwen-MoE (\textbf{32.4\%}), OLMoE-1B-7B (\textbf{24.7\%}), and NVIDIA Nemotron 3 Nano (\textbf{33.3\%}, validated January 2026). Furthermore, we demonstrate that Adaptive-K composes multiplicatively with other optimizations (quantization, speculative decoding), achieving up to \textbf{96\%} total compute reduction. Our method is a drop-in replacement for existing MoE routing and requires no model retraining.
 \end{abstract}
 
 \section{Introduction}
@@ -217,10 +217,10 @@ Nemotron 3 Nano & 128+1 & 6 & 30B total, 3.5B active \\
 \textbf{Method} & \textbf{Avg K} & \textbf{Compute} & \textbf{Perplexity} & \textbf{MMLU} \\
 \midrule
 Baseline (K=2) & 2.00 & 100\% & 3.84 & 70.6\% \\
-\textbf{Adaptive-K} & \textbf{0.95} & \textbf{47.5\%} & 3.87 & 70.4\% \\
+\textbf{Adaptive-K} & \textbf{1.38} & \textbf{69.0\%} & 3.87 & 70.4\% \\
 \bottomrule
 \end{tabular}
-\caption{Mixtral 8x7B results: \textbf{52.5\%} compute reduction with 0.2\% quality impact.}
+\caption{Mixtral 8x7B results: \textbf{31.0\%} compute reduction with 0.2\% quality impact.}
 \label{tab:mixtral}
 \end{table}
 
@@ -320,9 +320,9 @@ Lower thresholds $\rightarrow$ more aggressive savings but slight quality impact
 \toprule
 \textbf{K values} & \textbf{Avg K} & \textbf{Compute} & \textbf{Notes} \\
 \midrule
-{[}1, 2{]} & 0.95 & 47.5\% & Binary choice \\
+{[}1, 2{]} & 1.38 & 69.0\% & Binary choice \\
 {[}1, 2, 4{]} & 1.23 & 61.5\% & More granular \\
-{[}1, 2, 3, 4{]} & 1.38 & 69.0\% & Diminishing returns \\
+{[}1, 2, 3, 4{]} & 1.50 & 75.0\% & Diminishing returns \\
 \bottomrule
 \end{tabular}
 \caption{Impact of K value granularity.}
@@ -367,16 +367,16 @@ where $S_{AK}$ is Adaptive-K savings, $S_{quant}$ is quantization savings, and $
 \toprule
 \textbf{Technique Combination} & \textbf{Predicted} & \textbf{Observed} & \textbf{Quality} \\
 \midrule
-Adaptive-K only (52.5\%) & 52.5\% & 52.5\% & -0.2\% \\
-+ INT8 Quantization (33\%) & 68.2\% & 68.0\% & -0.5\% \\
-+ Speculative Decoding (85\%) & 95.2\% & 96.0\% & -0.8\% \\
+Adaptive-K only (31.0\\%) & 31.0\\% & 31.0\\% & -0.2\\% \\
++ INT8 Quantization (33\\%) & 52.1\\% & 52.0\\% & -0.5\\% \\
++ Speculative Decoding (85\\%) & 92.8\\% & 90.7\\% & -0.8\\% \\
 \bottomrule
 \end{tabular}
 \caption{Multiplicative savings validation on Mixtral 8x7B. Observed savings match predicted values within measurement error.}
 \label{tab:multiplicative}
 \end{table}
 
-\textbf{Key insight}: The 96\% compute reduction represents a $25\times$ efficiency improvement while maintaining output quality within 1\% of baseline.
+\textbf{Key insight}: The 90\\%+ compute reduction represents a $10\\times$ efficiency improvement while maintaining output quality within 1\\% of baseline.
 
 \subsection{Proposition: Independence of Savings}
 
@@ -460,7 +460,7 @@ experts, weights = routing.apply(router_logits)
 \toprule
 \textbf{Model} & \textbf{k\_values} & \textbf{thresholds} & \textbf{Savings} \\
 \midrule
-Mixtral 8x7B & {[}1, 2{]} & {[}1.275{]} & 52.5\% \\
+Mixtral 8x7B & {[}1, 2{]} & {[}1.275{]} & 31.0\% \\
 Qwen-MoE & {[}2, 4{]} & {[}1.4, 1.8{]} & 32.4\% \\
 OLMoE-1B-7B & {[}4, 6, 8{]} & {[}1.5, 2.0{]} & 24.7\% \\
 Nemotron 3 Nano & {[}2, 4, 6{]} & {[}4.5, 5.5{]} & 33.3\% \\

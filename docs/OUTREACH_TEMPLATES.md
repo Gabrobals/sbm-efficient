@@ -30,7 +30,7 @@ I wanted to share a complementary approach we've developed: **Adaptive-K routing
 **The key insight**: Current optimizations (quantization, PagedAttention, batching) reduce the cost *per expert operation*. Adaptive-K reduces the *number of expert operations* per token by dynamically selecting K based on routing entropy.
 
 **Results on production MoE models**:
-- Mixtral 8×7B: 52.5% compute reduction
+- Mixtral 8×7B: 31.0% compute reduction
 - Qwen1.5-MoE: 32.4% reduction  
 - OLMoE-1B-7B: 24.7% reduction
 
@@ -209,7 +209,7 @@ model = apply_adaptive_k(model, k_values=[1, 2])
 ## Benchmarks
 | Model | Baseline K | Adaptive-K Avg | Compute | PPL Δ |
 |-------|------------|----------------|---------|-------|
-| Mixtral 8×7B | 2 | 0.95 | 47.5% | +0.8% |
+| Mixtral 8×7B | 2 | 1.38 | 69.0% | +0.8% |
 | Qwen1.5-MoE | 4 | 2.71 | 67.6% | +0.9% |
 
 ## Implementation
@@ -244,7 +244,7 @@ We built Adaptive-K routing:
 ✅ Complex tokens → 2 experts (high entropy = needs more compute)
 
 Results on Mixtral 8×7B:
-📉 52.5% less compute
+📉 31.0% less compute
 📊 <1% perplexity change
 ⚡ Zero retraining needed
 

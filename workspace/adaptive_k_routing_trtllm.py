@@ -10,7 +10,7 @@ are needed. Higher entropy means uncertainty, requiring more experts.
 
 Research validation:
 - Qwen-MoE: 32.4% compute reduction
-- Mixtral 8x7B: 52.5% compute reduction  
+- Mixtral 8x7B: 31.0% compute reduction  
 - OLMoE-1B-7B: 24.7% compute reduction
 
 Author: Gabriele Balsamo (gabriele.balsamo30@gmail.com)
@@ -66,7 +66,7 @@ class AdaptiveKMoeRoutingMethod(nn.Module):
     - High entropy (uncertain routing) -> more experts -> maintain quality
     
     This implements the SBM-Efficient Adaptive-K algorithm validated on:
-    - Mixtral 8x7B: 52.5% compute reduction
+    - Mixtral 8x7B: 31.0% compute reduction
     - Qwen-MoE: 32.4% compute reduction
     
     Compatible with TensorRT-LLM's BaseMoeRoutingMethod interface.

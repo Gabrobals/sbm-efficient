@@ -49,7 +49,7 @@ Gabriele Balsamo
 
 **Abstract**:
 ```
-We present Adaptive-K routing, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. Instead of using a fixed top-k experts per token, our approach uses fewer experts when the router is confident (low entropy) and more experts when uncertain (high entropy). We validate this approach on three production MoE architectures: Mixtral 8x7B (52.5% compute reduction), Qwen-MoE (32.4%), and OLMoE-1B-7B (24.7%). Furthermore, we demonstrate that Adaptive-K composes multiplicatively with other optimizations, achieving up to 96% total compute reduction. Our method is a drop-in replacement for existing MoE routing and requires no model retraining.
+We present Adaptive-K routing, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. Instead of using a fixed top-k experts per token, our approach uses fewer experts when the router is confident (low entropy) and more experts when uncertain (high entropy). We validate this approach on four production MoE architectures: Nemotron 3 Nano (33.3% compute reduction), Mixtral 8x7B (31.0%), Qwen-MoE (32.4%), and OLMoE-1B-7B (24.7%). Furthermore, we demonstrate that Adaptive-K composes multiplicatively with other optimizations, achieving up to 90.7% total compute reduction. Our method is a drop-in replacement for existing MoE routing and requires no model retraining.
 ```
 
 **Comments**:

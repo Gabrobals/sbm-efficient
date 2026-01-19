@@ -16,7 +16,7 @@ Hi @QiJune 👋
 Thanks for being assigned as reviewer! I wanted to follow up on this PR.
 
 **Quick summary**: This adds entropy-based Adaptive-K routing for MoE models, validated to achieve:
-- **52.5%** compute reduction on Mixtral 8x7B
+- **31.0%** compute reduction on Mixtral 8x7B
 - **32.4%** on Qwen-MoE
 - **24.7%** on OLMoE
 
@@ -77,7 +77,7 @@ With 256 experts and K=8 baseline:
 
 | Model | Experts | Baseline K | Adaptive K̄ | Savings |
 |-------|---------|------------|-------------|---------|
-| Mixtral 8x7B | 8 | 2 | 1.2 | 52.5% |
+| Mixtral 8x7B | 8 | 2 | 1.38 | 31.0% |
 | Qwen-MoE | 60 | 4 | 2.7 | 32.4% |
 | OLMoE 1B-7B | 64 | 8 | 6.0 | 24.7% |
 
@@ -154,7 +154,7 @@ Key insight: routing entropy predicts when fewer experts are needed. Simple idea
 3/ Key insight: routing entropy = confidence signal. Low entropy → fewer experts needed
 
 4/ Validated savings:
-   - Mixtral: 52.5%
+   - Mixtral: 31.0%
    - Qwen-MoE: 32.4%
    - OLMoE: 24.7%
 

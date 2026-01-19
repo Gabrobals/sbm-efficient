@@ -17,7 +17,7 @@ All notable changes to the Adaptive-K Toolkit extension will be documented in th
 
 ### Models Supported
 - DeepSeek-V3 (256 experts, 35% savings)
-- Mixtral 8x7B (8 experts, 52.5% savings)
+- Mixtral 8x7B (8 experts, 31.0% savings)
 - Qwen1.5-MoE (60 experts, 32.4% savings)
 - OLMoE 1B-7B (64 experts, 24.7% savings)
 - Qwen3-235B-MoE (128 experts, 30% estimated)

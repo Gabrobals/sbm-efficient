@@ -59,7 +59,7 @@ export default function Hero() {
             {/* Quick stats */}
             <div className="flex flex-wrap gap-8 pt-6 border-t border-vs-border">
               <div>
-                <div className="stat-number text-3xl">52.5%</div>
+                <div className="stat-number text-3xl">31.0%</div>
                 <div className="text-vs-muted text-sm">{t.hero.mixtralSavings}</div>
               </div>
               <div>

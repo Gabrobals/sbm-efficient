@@ -401,7 +401,7 @@
                 a principled methodology for dynamic expert selection that leverages Shannon entropy of the routing distribution 
                 as a proxy for token-level uncertainty. We provide both theoretical foundations grounded in information theory 
                 and rate-distortion theory, as well as comprehensive empirical validation across four production-scale MoE 
-                architectures: Mixtral 8×7B (achieving <strong>52.5%</strong> compute reduction), Qwen1.5-MoE-A2.7B 
+                architectures: Mixtral 8×7B (achieving <strong>31.0%</strong> compute reduction), Qwen1.5-MoE-A2.7B 
                 (<strong>32.4%</strong> reduction), OLMoE-1B-7B (<strong>24.7%</strong> reduction), and <strong>NVIDIA Nemotron 3 Nano</strong>
                 (<strong>33.3%</strong> reduction, validated January 2026). Our analysis demonstrates 
                 that these efficiency gains are achieved without statistically significant degradation in perplexity or downstream 
@@ -1175,8 +1175,8 @@
                 </tr>
                 <tr style="background: #f0fdf4;">
                     <td><strong>Adaptive-K</strong></td>
-                    <td><strong>0.95</strong></td>
-                    <td><strong>47.5%</strong></td>
+                    <td><strong>1.38</strong></td>
+                    <td><strong>69.0%</strong></td>
                     <td>3.87</td>
                     <td>8.28</td>
                     <td>70.4%</td>
@@ -1192,7 +1192,7 @@
                     <td>82.1%</td>
                 </tr>
             </tbody>
-            <caption><strong>Table 5:</strong> Mixtral 8×7B results. Adaptive-K achieves <strong>52.5% compute 
+            <caption><strong>Table 5:</strong> Mixtral 8×7B results. Adaptive-K achieves <strong>31.0% compute 
             reduction</strong> with only 0.8% perplexity increase and no significant downstream degradation. 
             Note that always using K=1 significantly degrades quality, demonstrating the value of dynamic selection.</caption>
         </table>
@@ -1360,8 +1360,8 @@
                 <tr>
                     <td>Mixtral 8×7B</td>
                     <td>2</td>
-                    <td>0.95</td>
-                    <td><strong>52.5%</strong></td>
+                    <td>1.38</td>
+                    <td><strong>31.0%</strong></td>
                     <td>+0.8%</td>
                     <td>-0.2%</td>
                 </tr>
@@ -1434,8 +1434,8 @@
                 <tr style="background: #f0fdf4;">
                     <td><strong>1.275 (calibrated)</strong></td>
                     <td><strong>62%</strong></td>
-                    <td><strong>0.95</strong></td>
-                    <td><strong>47.5%</strong></td>
+                    <td><strong>1.38</strong></td>
+                    <td><strong>69.0%</strong></td>
                     <td><strong>3.87</strong></td>
                     <td><strong>+0.8%</strong></td>
                 </tr>
@@ -1488,8 +1488,8 @@
                 <tr style="background: #f0fdf4;">
                     <td><strong>{1, 2}</strong></td>
                     <td>1</td>
-                    <td>0.95</td>
-                    <td>47.5%</td>
+                    <td>1.38</td>
+                    <td>69.0%</td>
                     <td>3.87</td>
                     <td><strong>Best efficiency</strong></td>
                 </tr>
@@ -1592,7 +1592,7 @@
                 <canvas id="kDistChart"></canvas>
             </div>
             <figcaption><strong>Figure 4:</strong> Distribution of selected K values on Mixtral 8×7B with 
-            calibrated thresholds. 62% of tokens use K=1, contributing to the 52.5% compute savings.</figcaption>
+            calibrated thresholds. 62% of tokens use K=1, contributing to the 31.0% compute savings.</figcaption>
         </figure>
 
         <!-- 7. Related Work -->

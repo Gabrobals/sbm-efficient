@@ -19,7 +19,7 @@ By adapting K per-token, we achieve significant compute savings while maintainin
 
 | Model | Architecture | Compute Reduction | Quality Impact |
 |-------|--------------|-------------------|----------------|
-| Mixtral 8x7B | 8 experts, top-2 | **52.5%** | <0.5% PPL increase |
+| Mixtral 8x7B | 8 experts, top-2 | **31.0%** | <0.5% PPL increase |
 | Qwen-MoE | 60 experts, top-4 | **32.4%** | <0.3% PPL increase |
 | OLMoE-1B-7B | 64 experts, top-8 | **24.7%** | <0.2% PPL increase |
 

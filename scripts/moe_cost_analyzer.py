@@ -101,7 +101,7 @@ MODEL_PRICING = {
 
 # Validated Adaptive-K savings from our experiments
 VALIDATED_SAVINGS = {
-    "mixtral-8x7b": 0.525,      # 52.5%
+    "mixtral-8x7b": 0.31,      # 31.0%
     "qwen-moe": 0.324,          # 32.4% (Qwen1.5-MoE)
     "olmoe": 0.247,             # 24.7%
     # Estimates for untested models (conservative)

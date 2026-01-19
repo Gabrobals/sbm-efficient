@@ -127,15 +127,15 @@ export const MoESpectrum: React.FC = () => {
         {/* Stats Cards */}
         <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12">
           <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 rounded-xl p-6 border border-emerald-500/20">
-            <div className="text-4xl font-bold text-emerald-400 mb-2">36.5%</div>
+            <div className="text-4xl font-bold text-emerald-400 mb-2">30.4%</div>
             <div className="text-slate-400">Average Compute Savings</div>
             <div className="text-slate-500 text-sm mt-1">Across validated models</div>
           </div>
           
           <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 rounded-xl p-6 border border-cyan-500/20">
-            <div className="text-4xl font-bold text-cyan-400 mb-2">52.5%</div>
+            <div className="text-4xl font-bold text-cyan-400 mb-2">33.3%</div>
             <div className="text-slate-400">Max Savings Achieved</div>
-            <div className="text-slate-500 text-sm mt-1">Mixtral 8x7B</div>
+            <div className="text-slate-500 text-sm mt-1">Nemotron 3 Nano</div>
           </div>
           
           <div className="bg-gradient-to-br from-violet-500/10 to-violet-500/5 rounded-xl p-6 border border-violet-500/20">

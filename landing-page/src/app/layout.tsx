@@ -149,7 +149,7 @@ const faqJsonLd = {
       name: 'Which MoE models are compatible with Adaptive-K?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Adaptive-K is validated on Mixtral 8x7B (52.5% savings), OLMoE 1B-7B (24.7% savings), Qwen1.5-MoE (32.4% savings), and is being tested on DeepSeek-V3, DBRX, and Grok-1. It works with any router-based MoE architecture.',
+        text: 'Adaptive-K is validated on Nemotron 3 Nano (33.3% savings), Mixtral 8x7B (31.0% savings), Qwen1.5-MoE (32.4% savings), OLMoE 1B-7B (24.7% savings), and is being tested on DeepSeek-V3, DBRX, and Grok-1. It works with any router-based MoE architecture.',
       },
     },
     {

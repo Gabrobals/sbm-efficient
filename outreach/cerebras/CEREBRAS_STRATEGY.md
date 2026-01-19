@@ -207,7 +207,7 @@ the number of MoE experts based on input complexity. Validated results:
 
 | Model | Compute Reduction | Quality Impact |
 |-------|-------------------|----------------|
-| Mixtral 8x7B | 52.5% | +0.8% PPL |
+| Mixtral 8x7B | 31.0% | +0.8% PPL |
 | Qwen-MoE | 32.4% | +0.3% PPL |
 | OLMoE-1B-7B | 24.7% | +0.5% PPL |
 
