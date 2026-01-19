@@ -75,7 +75,7 @@ export default function Resources() {
       typeKey: 'blogType' as const,
       titleKey: 'blogTitle' as const,
       descKey: 'blogDesc' as const,
-      link: '/blog/moe-inference-optimization.html',
+      link: '/blog/intelligenza-artificiale-risparmio-energetico.html',
       icon: icons.blog,
     },
     {
