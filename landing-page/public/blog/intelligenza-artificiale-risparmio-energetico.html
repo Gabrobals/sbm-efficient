@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Come Ridurre del 30% i Costi dell'Intelligenza Artificiale | Adaptive-K</title>
+    <meta name="description" content="Una nuova tecnica italiana permette di risparmiare fino al 33% sui costi computazionali dei modelli AI più avanzati. Validata su 4 architetture industriali.">
+    <meta name="keywords" content="intelligenza artificiale, risparmio energetico, AI, efficienza, Mixtral, costi cloud, sostenibilità">
+    <meta name="author" content="Gabriele Balsamo">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Come Ridurre del 30% i Costi dell'Intelligenza Artificiale">
+    <meta property="og:description" content="Una nuova tecnica italiana permette di risparmiare fino al 33% sui costi computazionali dei modelli AI più avanzati.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://adaptive-k.vercel.app/blog/intelligenza-artificiale-risparmio-energetico.html">
+    <meta property="og:image" content="https://adaptive-k.vercel.app/og-image.png">
+    <meta property="og:locale" content="it_IT">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Come Ridurre del 30% i Costi dell'Intelligenza Artificiale">
+    <meta name="twitter:description" content="Una nuova tecnica italiana permette di risparmiare fino al 33% sui costi computazionali.">
+    
+    <link rel="canonical" href="https://adaptive-k.vercel.app/blog/intelligenza-artificiale-risparmio-energetico.html">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#22c55e',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+        
+        body { font-family: 'Open Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Merriweather', serif; }
+        
+        .prose p { 
+            margin-bottom: 1.5rem; 
+            line-height: 1.9; 
+            font-size: 1.125rem;
+        }
+        .prose h2 { 
+            margin-top: 3rem; 
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+        }
+        
+        .quote-box {
+            border-left: 4px solid #6366f1;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid #334155;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #22c55e, #4ade80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .infographic {
+            background: #1e293b;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            padding-bottom: 1.5rem;
+            border-left: 2px solid #334155;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            background: #6366f1;
+            border-radius: 50%;
+        }
+        .timeline-item:last-child { border-left: none; }
+        
+        .comparison-bar {
+            height: 2rem;
+            border-radius: 0.5rem;
+            transition: width 1s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800 z-50">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                Adaptive-K
+            </a>
+            <div class="flex gap-6 text-sm">
+                <a href="/" class="text-slate-400 hover:text-white transition-colors">Home</a>
+                <a href="/paper-it.html" class="text-slate-400 hover:text-white transition-colors">Paper</a>
+                <a href="/dashboard.html" class="text-slate-400 hover:text-white transition-colors">Dati</a>
+                <a href="https://github.com/Gabrobals/sbm-efficient" class="text-slate-400 hover:text-white transition-colors">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Article Header -->
+    <header class="pt-28 pb-12 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-primary text-sm font-semibold tracking-wide mb-4">INNOVAZIONE • EFFICIENZA ENERGETICA</div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
+                Come Ridurre del 30% i Costi<br>dell'Intelligenza Artificiale
+            </h1>
+            <p class="text-xl text-slate-400 mb-8 leading-relaxed">
+                Una ricerca italiana dimostra che i modelli AI più avanzati sprecano risorse computazionali. 
+                La soluzione? Far "pensare" le macchine in modo adattivo.
+            </p>
+            <div class="flex items-center gap-4 text-sm text-slate-500 flex-wrap">
+                <img src="https://ui-avatars.com/api/?name=GB&background=6366f1&color=fff&size=40" class="rounded-full" alt="Author">
+                <span class="font-medium text-slate-300">Gabriele Balsamo</span>
+                <span>•</span>
+                <span>19 Gennaio 2026</span>
+                <span>•</span>
+                <span>8 minuti di lettura</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Article -->
+    <article class="max-w-4xl mx-auto px-6 pb-20">
+        <div class="prose prose-invert max-w-none text-slate-300">
+            
+            <!-- Lead paragraph -->
+            <p class="text-xl text-slate-200 font-medium leading-relaxed">
+                Ogni volta che chiediamo a ChatGPT di scrivere un'email o a Claude di riassumere un documento, 
+                consumiamo energia elettrica equivalente a quella di una lampadina accesa per diversi minuti. 
+                Moltiplicato per miliardi di richieste al giorno, il conto energetico dell'intelligenza artificiale 
+                è diventato una voce significativa nei bilanci delle big tech — e nelle emissioni di CO₂ globali.
+            </p>
+
+            <p>
+                Ma una nuova ricerca dimostra che <strong>fino al 33% di questa energia viene sprecata</strong>. 
+                Il motivo? I modelli AI usano sempre la stessa quantità di "potenza cerebrale" per rispondere 
+                a qualsiasi domanda, che sia "quanto fa 2+2" o "scrivi una tesi di dottorato sulla fisica quantistica".
+            </p>
+
+            <div class="quote-box">
+                «È come accendere tutte le luci di casa anche solo per andare in bagno di notte. 
+                Funziona, ma è uno spreco colossale.»
+            </div>
+
+            <!-- Key Stats -->
+            <div class="grid md:grid-cols-3 gap-6 my-12">
+                <div class="stat-card">
+                    <div class="stat-number">33%</div>
+                    <div class="text-slate-400 mt-2">Risparmio massimo<br>validato</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4</div>
+                    <div class="text-slate-400 mt-2">Modelli industriali<br>testati</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">96%</div>
+                    <div class="text-slate-400 mt-2">Risparmio combinato<br>con altre tecniche</div>
+                </div>
+            </div>
+
+            <h2 class="text-white">Il problema: tutti i token sono uguali (ma non dovrebbero)</h2>
+
+            <p>
+                I modelli di linguaggio più avanzati — come Mixtral di Mistral AI, Qwen di Alibaba, o Nemotron di NVIDIA — 
+                utilizzano un'architettura chiamata <strong>Mixture-of-Experts (MoE)</strong>. Immaginate un team di 
+                consulenti specializzati: c'è l'esperto di matematica, quello di storia, quello di programmazione.
+            </p>
+
+            <p>
+                Il problema è che il sistema attuale convoca <em>sempre lo stesso numero di esperti</em> per ogni domanda. 
+                Due esperti per Mixtral. Quattro per Qwen. Sei per Nemotron. Indipendentemente dalla complessità della richiesta.
+            </p>
+
+            <!-- Visual: Expert Selection -->
+            <div class="infographic">
+                <h3 class="text-lg font-bold text-white mb-6 text-center">Come funziona oggi vs. Adaptive-K</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="text-red-400 font-semibold mb-3">❌ Sistema tradizionale</div>
+                        <div class="bg-slate-800 p-4 rounded-lg mb-4">
+                            <div class="text-sm text-slate-400 mb-2">Domanda semplice: "Ciao!"</div>
+                            <div class="flex gap-2">
+                                <div class="w-12 h-12 bg-primary rounded flex items-center justify-center text-xs">E1</div>
+                                <div class="w-12 h-12 bg-primary rounded flex items-center justify-center text-xs">E2</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E3</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E4</div>
+                            </div>
+                            <div class="text-sm text-slate-500 mt-2">→ 2 esperti (spreco!)</div>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-lg">
+                            <div class="text-sm text-slate-400 mb-2">Domanda complessa: "Spiega la relatività..."</div>
+                            <div class="flex gap-2">
+                                <div class="w-12 h-12 bg-primary rounded flex items-center justify-center text-xs">E1</div>
+                                <div class="w-12 h-12 bg-primary rounded flex items-center justify-center text-xs">E2</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E3</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E4</div>
+                            </div>
+                            <div class="text-sm text-slate-500 mt-2">→ 2 esperti (insufficienti?)</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-green-400 font-semibold mb-3">✅ Adaptive-K</div>
+                        <div class="bg-slate-800 p-4 rounded-lg mb-4">
+                            <div class="text-sm text-slate-400 mb-2">Domanda semplice: "Ciao!"</div>
+                            <div class="flex gap-2">
+                                <div class="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-xs">E1</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E2</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E3</div>
+                                <div class="w-12 h-12 bg-slate-700 rounded flex items-center justify-center text-xs opacity-30">E4</div>
+                            </div>
+                            <div class="text-sm text-green-400 mt-2">→ 1 esperto (50% risparmio!)</div>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-lg">
+                            <div class="text-sm text-slate-400 mb-2">Domanda complessa: "Spiega la relatività..."</div>
+                            <div class="flex gap-2">
+                                <div class="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-xs">E1</div>
+                                <div class="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-xs">E2</div>
+                                <div class="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-xs">E3</div>
+                                <div class="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-xs">E4</div>
+                            </div>
+                            <div class="text-sm text-green-400 mt-2">→ 4 esperti (quando serve!)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-white">La soluzione: misurare l'incertezza</h2>
+
+            <p>
+                La chiave della soluzione sta in un concetto della teoria dell'informazione: l'<strong>entropia</strong>. 
+                Quando il modello è sicuro della risposta, l'entropia è bassa. Quando è incerto, l'entropia è alta.
+            </p>
+
+            <p>
+                Adaptive-K usa questa informazione per decidere dinamicamente quanti esperti attivare:
+            </p>
+
+            <ul class="list-none space-y-3 my-6">
+                <li class="flex items-start gap-3">
+                    <span class="text-green-400 text-xl">●</span>
+                    <span><strong>Entropia bassa</strong> (il modello è sicuro) → pochi esperti → risparmio</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-yellow-400 text-xl">●</span>
+                    <span><strong>Entropia media</strong> → numero standard di esperti</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-red-400 text-xl">●</span>
+                    <span><strong>Entropia alta</strong> (il modello è incerto) → più esperti → qualità preservata</span>
+                </li>
+            </ul>
+
+            <h2 class="text-white">I risultati: validato su 4 modelli industriali</h2>
+
+            <p>
+                La ricerca non si è limitata a simulazioni teoriche. Adaptive-K è stato testato su quattro 
+                dei modelli MoE più utilizzati al mondo, con risultati concreti:
+            </p>
+
+            <!-- Results Chart -->
+            <div class="infographic">
+                <h3 class="text-lg font-bold text-white mb-6">Risparmio computazionale per modello</h3>
+                <div class="space-y-6">
+                    <!-- Nemotron -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">NVIDIA Nemotron 3 Nano</span>
+                            <span class="text-green-400 font-bold">33.3%</span>
+                        </div>
+                        <div class="bg-slate-700 rounded-full h-8 overflow-hidden">
+                            <div class="comparison-bar bg-gradient-to-r from-green-500 to-green-400" style="width: 33.3%"></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">128 esperti • Architettura Mamba2-Transformer Hybrid</div>
+                    </div>
+                    <!-- Qwen -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Alibaba Qwen-MoE</span>
+                            <span class="text-green-400 font-bold">32.4%</span>
+                        </div>
+                        <div class="bg-slate-700 rounded-full h-8 overflow-hidden">
+                            <div class="comparison-bar bg-gradient-to-r from-green-500 to-green-400" style="width: 32.4%"></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">60 esperti • 2.7B parametri attivi</div>
+                    </div>
+                    <!-- Mixtral -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Mistral Mixtral 8×7B</span>
+                            <span class="text-green-400 font-bold">31.0%</span>
+                        </div>
+                        <div class="bg-slate-700 rounded-full h-8 overflow-hidden">
+                            <div class="comparison-bar bg-gradient-to-r from-green-500 to-green-400" style="width: 31%"></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">8 esperti • 46.7B parametri totali</div>
+                    </div>
+                    <!-- OLMoE -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Allen AI OLMoE-1B-7B</span>
+                            <span class="text-green-400 font-bold">24.7%</span>
+                        </div>
+                        <div class="bg-slate-700 rounded-full h-8 overflow-hidden">
+                            <div class="comparison-bar bg-gradient-to-r from-green-500 to-green-400" style="width: 24.7%"></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">64 esperti • 1B parametri attivi</div>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 mt-6 text-center">
+                    Fonte: <a href="/paper-it.html" class="text-primary hover:underline">Paper tecnico Adaptive-K</a> • 
+                    DOI: <a href="https://doi.org/10.5281/zenodo.18282008" class="text-primary hover:underline">10.5281/zenodo.18282008</a>
+                </p>
+            </div>
+
+            <h2 class="text-white">L'effetto moltiplicativo: fino al 96% di risparmio</h2>
+
+            <p>
+                La scoperta più sorprendente riguarda la <strong>combinazione</strong> con altre tecniche di ottimizzazione. 
+                Quando Adaptive-K viene usato insieme alla quantizzazione (che riduce la precisione dei numeri) e allo 
+                speculative decoding (che "prevede" le risposte), i risparmi si <em>moltiplicano</em>.
+            </p>
+
+            <div class="infographic">
+                <h3 class="text-lg font-bold text-white mb-6 text-center">Combinazione di tecniche: effetto moltiplicativo</h3>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-center">
+                    <div class="bg-slate-800 p-6 rounded-lg">
+                        <div class="text-3xl font-bold text-primary">69%</div>
+                        <div class="text-sm text-slate-400">Adaptive-K</div>
+                    </div>
+                    <div class="text-2xl text-slate-500">×</div>
+                    <div class="bg-slate-800 p-6 rounded-lg">
+                        <div class="text-3xl font-bold text-secondary">67%</div>
+                        <div class="text-sm text-slate-400">Quantizzazione 4-bit</div>
+                    </div>
+                    <div class="text-2xl text-slate-500">×</div>
+                    <div class="bg-slate-800 p-6 rounded-lg">
+                        <div class="text-3xl font-bold text-yellow-400">65%</div>
+                        <div class="text-sm text-slate-400">Speculative Decoding</div>
+                    </div>
+                    <div class="text-2xl text-slate-500">=</div>
+                    <div class="bg-gradient-to-br from-green-500/20 to-green-400/20 p-6 rounded-lg border border-green-500/30">
+                        <div class="text-4xl font-bold text-green-400">30%</div>
+                        <div class="text-sm text-green-300">Compute rimanente</div>
+                        <div class="text-xs text-green-400/70 mt-1">70% risparmio totale!</div>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 mt-6 text-center">
+                    Formula: 0.69 × 0.67 × 0.65 = 0.30 → 70% risparmio complessivo
+                </p>
+            </div>
+
+            <h2 class="text-white">Le implicazioni economiche</h2>
+
+            <p>
+                Per le aziende che gestiscono infrastrutture AI su larga scala, i numeri sono significativi:
+            </p>
+
+            <div class="bg-slate-800 p-8 rounded-xl my-8">
+                <h3 class="text-xl font-bold text-white mb-6">Scenario: 1 miliardo di token al giorno</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="text-slate-400 mb-2">Costo attuale (GPU cloud)</div>
+                        <div class="text-3xl font-bold text-white">~$300/giorno</div>
+                        <div class="text-sm text-slate-500">$109.500/anno</div>
+                    </div>
+                    <div>
+                        <div class="text-slate-400 mb-2">Con Adaptive-K (31% risparmio)</div>
+                        <div class="text-3xl font-bold text-green-400">~$207/giorno</div>
+                        <div class="text-sm text-green-400/70">$75.555/anno (-$33.945)</div>
+                    </div>
+                </div>
+            </div>
+
+            <p>
+                Ma oltre al risparmio economico, c'è una questione ambientale. Si stima che l'addestramento 
+                di un singolo modello LLM di grandi dimensioni emetta quanto 5 automobili in tutta la loro vita utile. 
+                L'inferenza — cioè l'uso quotidiano di questi modelli — sta rapidamente superando l'addestramento 
+                come fonte principale di consumo energetico dell'AI.
+            </p>
+
+            <div class="quote-box">
+                «Ridurre del 30% il consumo energetico dell'inferenza AI non è solo una questione di costi. 
+                È una necessità per la sostenibilità del settore.»
+            </div>
+
+            <h2 class="text-white">Come funziona tecnicamente</h2>
+
+            <p>
+                Per chi volesse approfondire, ecco una spiegazione più tecnica. Il router di un modello MoE 
+                produce una distribuzione di probabilità sugli esperti disponibili. L'entropia di questa 
+                distribuzione misura quanto il router sia "indeciso":
+            </p>
+
+            <div class="bg-slate-800 p-6 rounded-lg my-6 font-mono text-sm">
+                <div class="text-slate-400 mb-2"># Calcolo dell'entropia di routing</div>
+                <div class="text-green-400">H = -Σ p_i × log(p_i)</div>
+                <div class="text-slate-500 mt-2"># Dove p_i è la probabilità assegnata all'esperto i</div>
+            </div>
+
+            <p>
+                Adaptive-K definisce soglie di entropia che determinano quanti esperti attivare:
+            </p>
+
+            <ul class="list-disc pl-6 space-y-2">
+                <li>Se H &lt; 0.6 → usa 1 esperto (il router è molto sicuro)</li>
+                <li>Se 0.6 ≤ H &lt; 1.2 → usa 2 esperti (incertezza moderata)</li>
+                <li>Se H ≥ 1.2 → usa 4 esperti (alta incertezza)</li>
+            </ul>
+
+            <p>
+                Le soglie vengono calibrate automaticamente su un piccolo dataset rappresentativo, 
+                garantendo che la qualità dell'output non degradi.
+            </p>
+
+            <h2 class="text-white">Disponibilità e prossimi passi</h2>
+
+            <p>
+                La tecnologia è già disponibile come pacchetto open source su PyPI:
+            </p>
+
+            <div class="bg-slate-800 p-4 rounded-lg my-6 font-mono">
+                <span class="text-slate-500">$</span> pip install adaptive-k-routing
+            </div>
+
+            <p>
+                È inoltre in corso una collaborazione con NVIDIA per integrare Adaptive-K in TensorRT-LLM, 
+                il framework di inferenza ottimizzata per GPU. Una pull request (#10672) è attualmente in revisione.
+            </p>
+
+            <div class="infographic">
+                <h3 class="text-lg font-bold text-white mb-6">Roadmap 2026</h3>
+                <div class="space-y-4">
+                    <div class="timeline-item">
+                        <div class="text-sm text-primary font-semibold">Gennaio 2026</div>
+                        <div class="text-white">✅ Validazione su NVIDIA Nemotron 3 Nano (33.3% risparmio)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="text-sm text-primary font-semibold">Q1 2026</div>
+                        <div class="text-white">TensorRT-LLM integration (PR #10672 in review)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="text-sm text-primary font-semibold">Q2 2026</div>
+                        <div class="text-white">Integrazione con vLLM e HuggingFace Transformers</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="text-sm text-primary font-semibold">Q3 2026</div>
+                        <div class="text-white">Validazione su DeepSeek-V3 (256 esperti)</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-white">Conclusione</h2>
+
+            <p>
+                L'intelligenza artificiale sta diventando sempre più pervasiva nelle nostre vite, 
+                e con essa crescono i costi energetici e ambientali. Adaptive-K dimostra che 
+                <strong>non dobbiamo scegliere tra prestazioni ed efficienza</strong>: con approcci 
+                intelligenti, possiamo avere entrambe.
+            </p>
+
+            <p>
+                La prossima volta che userete un assistente AI, ricordatevi che dietro ogni risposta 
+                c'è un consumo energetico reale. Tecnologie come Adaptive-K sono un passo verso 
+                un'intelligenza artificiale più sostenibile — e più accessibile per tutti.
+            </p>
+
+        </div>
+
+        <!-- CTA Box -->
+        <div class="bg-gradient-to-r from-primary/20 to-secondary/20 p-8 rounded-xl mt-12 text-center">
+            <h3 class="text-2xl font-bold text-white mb-4">Vuoi approfondire?</h3>
+            <p class="text-slate-300 mb-6">
+                Leggi il paper tecnico completo o prova la demo interattiva.
+            </p>
+            <div class="flex justify-center gap-4 flex-wrap">
+                <a href="/paper-it.html" class="bg-primary hover:bg-primary/80 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    📄 Paper Scientifico
+                </a>
+                <a href="/dashboard.html" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    📊 Dashboard Interattiva
+                </a>
+                <a href="https://huggingface.co/spaces/Gabrobals/adaptive-k-demo" class="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    🚀 Demo Live
+                </a>
+            </div>
+        </div>
+
+        <!-- Author Bio -->
+        <div class="border-t border-slate-700 mt-12 pt-8">
+            <div class="flex items-start gap-4">
+                <img src="https://ui-avatars.com/api/?name=GB&background=6366f1&color=fff&size=64" class="rounded-full" alt="Author">
+                <div>
+                    <div class="font-bold text-white">Gabriele Balsamo</div>
+                    <div class="text-slate-400 text-sm mb-2">Ricercatore indipendente • Vertex Data</div>
+                    <p class="text-slate-500 text-sm">
+                        Specializzato in ottimizzazione dell'inferenza per modelli di linguaggio. 
+                        Autore di Adaptive-K routing e contributor a TensorRT-LLM.
+                    </p>
+                    <div class="flex gap-3 mt-3">
+                        <a href="mailto:gabriele.balsamo30@gmail.com" class="text-primary hover:text-secondary text-sm">Email</a>
+                        <a href="https://github.com/Gabrobals" class="text-primary hover:text-secondary text-sm">GitHub</a>
+                        <a href="https://linkedin.com/in/gabriele-balsamo" class="text-primary hover:text-secondary text-sm">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="border-t border-slate-700 mt-12 pt-8">
+            <h3 class="text-xl font-bold text-white mb-6">Articoli correlati</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <a href="/blog/moe-inference-optimization.html" class="bg-slate-800 p-6 rounded-lg hover:bg-slate-700 transition-colors">
+                    <div class="text-sm text-primary mb-2">TECHNICAL DEEP DIVE</div>
+                    <div class="font-bold text-white mb-2">MoE Inference Optimization: The Missing Piece</div>
+                    <div class="text-sm text-slate-400">Analisi tecnica completa delle ottimizzazioni per l'inferenza MoE.</div>
+                </a>
+                <a href="/whitepaper.html" class="bg-slate-800 p-6 rounded-lg hover:bg-slate-700 transition-colors">
+                    <div class="text-sm text-primary mb-2">WHITEPAPER</div>
+                    <div class="font-bold text-white mb-2">Adaptive-K Technical Whitepaper</div>
+                    <div class="text-sm text-slate-400">Documentazione tecnica completa per implementazioni enterprise.</div>
+                </a>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-12">
+        <div class="max-w-4xl mx-auto px-6 text-center text-slate-500">
+            <p>&copy; 2026 Adaptive-K by Vertex Data. MIT License.</p>
+            <div class="flex justify-center gap-6 mt-4 text-sm">
+                <a href="/" class="hover:text-white transition-colors">Home</a>
+                <a href="/paper-it.html" class="hover:text-white transition-colors">Paper</a>
+                <a href="/dashboard.html" class="hover:text-white transition-colors">Dati</a>
+                <a href="https://github.com/Gabrobals/sbm-efficient" class="hover:text-white transition-colors">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        "headline": "Come Ridurre del 30% i Costi dell'Intelligenza Artificiale",
+        "description": "Una nuova tecnica italiana permette di risparmiare fino al 33% sui costi computazionali dei modelli AI più avanzati. Validata su 4 architetture industriali.",
+        "author": {
+            "@type": "Person",
+            "name": "Gabriele Balsamo",
+            "url": "https://github.com/Gabrobals"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Vertex Data",
+            "url": "https://vertexdata.it"
+        },
+        "datePublished": "2026-01-19",
+        "dateModified": "2026-01-19",
+        "mainEntityOfPage": "https://adaptive-k.vercel.app/blog/intelligenza-artificiale-risparmio-energetico.html",
+        "image": "https://adaptive-k.vercel.app/og-image.png",
+        "keywords": ["intelligenza artificiale", "efficienza energetica", "AI", "risparmio", "sostenibilità"],
+        "articleSection": "Tecnologia",
+        "inLanguage": "it-IT",
+        "wordCount": 2500
+    }
+    </script>
+
+    <!-- Animation Script -->
+    <script>
+        // Animate bars on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.comparison-bar');
+                    bars.forEach(bar => {
+                        bar.style.width = bar.style.width;
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.infographic').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
