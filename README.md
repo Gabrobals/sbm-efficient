@@ -4,7 +4,9 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18282008.svg)](https://doi.org/10.5281/zenodo.18282008)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Demo](https://img.shields.io/badge/🤗-Live%20Demo-yellow)](https://huggingface.co/spaces/Gabrobals/adaptive-k-demo)
-[![Whitepaper](https://img.shields.io/badge/📄-Paper-green)](https://adaptive-k.vercel.app/paper.html)
+[![Paper](https://img.shields.io/badge/📄-Paper-green)](https://adaptive-k.vercel.app/paper.html)
+
+> **📄 Paper:** [**Read the full research paper →**](https://adaptive-k.vercel.app/paper.html) | [🇮🇹 Italiano](https://adaptive-k.vercel.app/paper-it.html)
 
 > **Reduce MoE inference costs by 30-50%** with entropy-guided dynamic expert selection.  
 > Same accuracy, dramatically lower compute. **Validated on 4 production models including Nemotron 3.**
