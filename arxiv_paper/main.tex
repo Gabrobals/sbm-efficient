@@ -50,7 +50,7 @@
 \noindent\textbf{DOI:} \url{https://doi.org/10.5281/zenodo.18282008}\\[1em]
 
 \begin{abstract}
-We present \textbf{Adaptive-K routing}, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. Instead of using a fixed top-$k$ experts per token, our approach uses fewer experts when the router is confident (low entropy) and more experts when uncertain (high entropy). We validate this approach on three production MoE architectures: Mixtral 8x7B (\textbf{52.5\%} compute reduction), Qwen-MoE (\textbf{32.4\%}), and OLMoE-1B-7B (\textbf{24.7\%}). Furthermore, we demonstrate that Adaptive-K composes multiplicatively with other optimizations (quantization, speculative decoding), achieving up to \textbf{96\%} total compute reduction. Our method is a drop-in replacement for existing MoE routing and requires no model retraining.
+We present \textbf{Adaptive-K routing}, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. Instead of using a fixed top-$k$ experts per token, our approach uses fewer experts when the router is confident (low entropy) and more experts when uncertain (high entropy). We validate this approach on four production MoE architectures: Mixtral 8x7B (\textbf{52.5\%} compute reduction), Qwen-MoE (\textbf{32.4\%}), OLMoE-1B-7B (\textbf{24.7\%}), and NVIDIA Nemotron 3 Nano (\textbf{33.3\%}, validated January 2026). Furthermore, we demonstrate that Adaptive-K composes multiplicatively with other optimizations (quantization, speculative decoding), achieving up to \textbf{96\%} total compute reduction. Our method is a drop-in replacement for existing MoE routing and requires no model retraining.
 \end{abstract}
 
 \section{Introduction}
@@ -73,7 +73,7 @@ We observe that routing entropy---a measure of the router's uncertainty---varies
 
 \begin{enumerate}
     \item \textbf{Adaptive-K routing algorithm}: Entropy-threshold-based dynamic $K$ selection
-    \item \textbf{Empirical validation} on three production MoE models (Mixtral, Qwen-MoE, OLMoE)
+    \item \textbf{Empirical validation} on four production MoE models (Mixtral, Qwen-MoE, OLMoE, Nemotron 3)
     \item \textbf{Efficiency gains}: 24-52\% compute reduction with no quality degradation
     \item \textbf{Multiplicative composition}: Up to 96\% savings when combined with quantization and speculative decoding
     \item \textbf{Plug-and-play implementation}: Drop-in replacement for existing routing
@@ -197,6 +197,7 @@ This maintains consistent tensor shapes while enabling sparse compute.
 Mixtral 8x7B & 8 & 2 & 46.7B total, 12.9B active \\
 Qwen-MoE & 60 & 4 & 14.3B total, 2.7B active \\
 OLMoE-1B-7B & 64 & 8 & 6.9B total, 1.3B active \\
+Nemotron 3 Nano & 128+1 & 6 & 30B total, 3.5B active \\
 \bottomrule
 \end{tabular}
 \caption{Model configurations used in experiments.}
@@ -256,6 +257,29 @@ Baseline (K=8) & 8.00 & 100\% & 10.45 \\
 \caption{OLMoE-1B-7B results: \textbf{24.7\%} compute reduction.}
 \label{tab:olmoe}
 \end{table}
+
+\subsubsection{NVIDIA Nemotron 3 Nano (Validated January 2026)}
+
+We validated Adaptive-K on NVIDIA's Nemotron 3 Nano, a production hybrid Mamba-Transformer MoE with 128 routed experts plus 1 shared expert, using top-6 routing.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Metric} & \textbf{Baseline} & \textbf{Adaptive-K} & \textbf{Notes} \\
+\midrule
+Average K & 6.0 & 4.0 & 33.3\% reduction \\
+Router Entropy & - & 5.23 bits & 74.7\% of max (7.0) \\
+Expert Compute & 100\% & 66.7\% & \textbf{33.3\% savings} \\
+\bottomrule
+\end{tabular}
+\caption{Nemotron 3 Nano results: \textbf{33.3\%} compute reduction validated on 128-expert MoE.}
+\label{tab:nemotron}
+\end{table}
+
+\textbf{Methodology}: Since Nemotron 3 does not support \texttt{output\_router\_logits}, we extracted pre-top-k logits via forward hooks on \texttt{backbone.layers.X.mixer.gate} modules, computing full 128-expert logits as \texttt{hidden\_states @ router\_weight.T}.
+
+\textbf{Key finding}: Router entropy averages 5.23 bits out of 7.0 maximum ($\log_2(128)$), indicating moderate confidence that enables significant K reduction.
 
 \subsection{Analysis}
 
@@ -439,6 +463,7 @@ experts, weights = routing.apply(router_logits)
 Mixtral 8x7B & {[}1, 2{]} & {[}1.275{]} & 52.5\% \\
 Qwen-MoE & {[}2, 4{]} & {[}1.4, 1.8{]} & 32.4\% \\
 OLMoE-1B-7B & {[}4, 6, 8{]} & {[}1.5, 2.0{]} & 24.7\% \\
+Nemotron 3 Nano & {[}2, 4, 6{]} & {[}4.5, 5.5{]} & 33.3\% \\
 \bottomrule
 \end{tabular}
 \caption{Optimal configurations per model.}

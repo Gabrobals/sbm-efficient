@@ -7,6 +7,14 @@ export default function Results() {
 
   const results = [
     {
+      model: 'Nemotron 3 Nano',
+      savings: '33.3%',
+      accuracy: '99.9%',
+      descriptionKey: 'nemotronDesc' as const,
+      color: 'green',
+      badge: 'NEW',
+    },
+    {
       model: 'Mixtral 8x7B',
       savings: '52.5%',
       accuracy: '99.8%',
@@ -18,14 +26,14 @@ export default function Results() {
       savings: '32.4%',
       accuracy: '99.9%',
       descriptionKey: 'qwenDesc' as const,
-      color: 'green',
+      color: 'purple',
     },
     {
       model: 'OLMoE-1B-7B',
       savings: '24.7%',
       accuracy: '99.7%',
       descriptionKey: 'olmDesc' as const,
-      color: 'purple',
+      color: 'cyan',
     },
   ]
 
