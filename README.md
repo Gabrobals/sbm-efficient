@@ -6,8 +6,8 @@
 [![Demo](https://img.shields.io/badge/🤗-Live%20Demo-yellow)](https://huggingface.co/spaces/Gabrobals/adaptive-k-demo)
 [![Whitepaper](https://img.shields.io/badge/📄-Whitepaper-green)](https://adaptive-k.vercel.app/whitepaper-extended.html)
 
-> **Reduce MoE inference costs by 40-60%** with entropy-guided dynamic expert selection.  
-> Same accuracy, dramatically lower compute. **Deploy in 2-5 days.**
+> **Reduce MoE inference costs by 30-50%** with entropy-guided dynamic expert selection.  
+> Same accuracy, dramatically lower compute. **Validated on 4 production models including Nemotron 3.**
 
 ## 🚀 Quick Start
 
@@ -29,6 +29,7 @@ print(f"Compute savings: {metrics.compute_savings:.1%}")
 
 | Model | Compute Savings | Quality Impact | Avg K |
 |-------|-----------------|----------------|-------|
+| **Nemotron 3 Nano** | **33.3%** | Validated Jan 2026 | 4.0 |
 | Mixtral 8x7B | **52.5%** | +0.8% PPL | 1.48 |
 | Qwen-MoE | **32.4%** | +0.3% PPL | 1.65 |
 | OLMoE-1B-7B | **24.7%** | +0.5% PPL | 1.75 |

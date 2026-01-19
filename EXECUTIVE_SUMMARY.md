@@ -16,6 +16,12 @@ This is validated across 2 datasets with 5-seed statistical rigor.
 - **Perplexity: 8.61** (WikiText-2) — quality maintained
 - Validated on RTX 4090 with 4-bit quantization
 
+**🆕 January 2026: NVIDIA Nemotron 3 Nano Validated**:
+- **33.3% compute savings** on 128-expert architecture
+- Architecture: Mamba2-Transformer Hybrid MoE, 30B total / 3.5B active
+- Avg entropy 5.23 bits (74.7% of max) → exceeds 27.1% projection
+- Validated on 2× A100 40GB (Vast.ai)
+
 ---
 
 ## The Problem

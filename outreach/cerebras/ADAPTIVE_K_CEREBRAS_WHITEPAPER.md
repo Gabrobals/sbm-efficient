@@ -15,7 +15,7 @@
 
 We present **Adaptive-K routing**, a method that dynamically selects the number of experts in Mixture-of-Experts (MoE) models based on routing entropy. This whitepaper analyzes the synergy between Adaptive-K and the Cerebras Wafer-Scale Engine 3 (WSE-3) architecture, demonstrating how WSE-3's unique hardware characteristics—21 PB/s memory bandwidth, native sparsity support via SLAC cores, and dataflow execution—make it an ideal platform for dynamic expert selection.
 
-We validate Adaptive-K on three production MoE architectures: Mixtral 8x7B (**52.5%** compute reduction), Qwen-MoE (**32.4%**), and OLMoE-1B-7B (**24.7%**). For the $10B OpenAI-Cerebras contract focused on reasoning workloads, we project **$150-400M savings** over the contract lifetime. Our method is a drop-in replacement requiring no model retraining.
+We validate Adaptive-K on four production MoE architectures: Mixtral 8x7B (**52.5%** compute reduction), Qwen-MoE (**32.4%**), OLMoE-1B-7B (**24.7%**), and NVIDIA Nemotron 3 Nano (**33.3%**, validated January 2026). For the $10B OpenAI-Cerebras contract focused on reasoning workloads, we project **$150-400M savings** over the contract lifetime. Our method is a drop-in replacement requiring no model retraining.
 
 ---
 
