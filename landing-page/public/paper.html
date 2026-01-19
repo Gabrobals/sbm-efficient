@@ -786,7 +786,7 @@
 
         <p><strong>Technical Note:</strong> Since Nemotron 3 does not support <code>output_router_logits=True</code>, we extracted pre-top-K router logits via forward hooks on the <code>backbone.layers.X.mixer.gate</code> modules, computing full 128-expert logits as <code>hidden_states @ router_weight.T</code>.</p>
 
-        <p class="table-caption"><strong>Table 7b:</strong> Nemotron 3 Nano validation results: 33.3% compute reduction (exceeds 27.1% projection).</p>
+        <p class="table-caption"><strong>Table 8:</strong> Nemotron 3 Nano validation results: 33.3% compute reduction (exceeds 27.1% projection).</p>
         <table>
             <thead>
                 <tr><th>Test Case</th><th>Measured Entropy</th><th>Max Entropy</th><th>Utilization</th><th>Savings</th></tr>
@@ -805,7 +805,7 @@
             <figcaption><strong>Figure 2:</strong> Compute utilization comparison across all four models. Adaptive-K consistently reduces compute by 24-33% while maintaining output quality within 1% of baseline.</figcaption>
         </figure>
 
-        <p class="table-caption"><strong>Table 8:</strong> Summary of Adaptive-K results across all models.</p>
+        <p class="table-caption"><strong>Table 9:</strong> Summary of Adaptive-K results across all models.</p>
         <table>
             <thead>
                 <tr><th>Model</th><th>Base K</th><th>Adaptive Avg K</th><th>Compute Savings</th><th>PPL Increase</th><th>Accuracy Δ</th></tr>
@@ -835,17 +835,17 @@
         <h3 id="threshold-sensitivity">6.1 Threshold Sensitivity</h3>
         <p>We investigate how sensitive Adaptive-K performance is to the choice of entropy thresholds. Experiments are conducted on Mixtral 8×7B with varying threshold values.</p>
 
-        <p class="table-caption"><strong>Table 9:</strong> Threshold sensitivity analysis on Mixtral. The calibrated threshold achieves optimal balance between savings and quality. Very aggressive thresholds yield diminishing returns with accelerating quality degradation.</p>
+        <p class="table-caption"><strong>Table 10:</strong> Threshold sensitivity analysis on Mixtral. The calibrated threshold achieves optimal balance between savings and quality. Very aggressive thresholds yield diminishing returns with accelerating quality degradation.</p>
         <table>
             <thead>
                 <tr><th>Threshold θ₁</th><th>% Tokens K=1</th><th>Avg K</th><th>Compute</th><th>WikiText-2 PPL</th><th>PPL Δ</th></tr>
             </thead>
             <tbody>
-                <tr><td>0.8 (aggressive)</td><td>28%</td><td>1.44</td><td>72%</td><td>3.91</td><td>+1.8%</td></tr>
-                <tr><td>1.0</td><td>42%</td><td>1.16</td><td>58%</td><td>3.89</td><td>+1.3%</td></tr>
-                <tr class="highlight-row"><td><strong>1.275 (calibrated)</strong></td><td><strong>62%</strong></td><td><strong>1.38</strong></td><td><strong>69.0%</strong></td><td>3.87</td><td><strong>+0.8%</strong></td></tr>
-                <tr><td>1.5</td><td>78%</td><td>0.78</td><td>39%</td><td>3.95</td><td>+2.9%</td></tr>
-                <tr><td>1.8 (very aggressive)</td><td>91%</td><td>0.64</td><td>32%</td><td>4.08</td><td>+6.3%</td></tr>
+                <tr><td>0.8 (aggressive)</td><td>28%</td><td>1.72</td><td>86%</td><td>3.86</td><td>+0.5%</td></tr>
+                <tr><td>1.0</td><td>42%</td><td>1.58</td><td>79%</td><td>3.87</td><td>+0.8%</td></tr>
+                <tr class="highlight-row"><td><strong>1.275 (calibrated)</strong></td><td><strong>62%</strong></td><td><strong>1.38</strong></td><td><strong>69%</strong></td><td>3.87</td><td><strong>+0.8%</strong></td></tr>
+                <tr><td>1.5</td><td>78%</td><td>1.22</td><td>61%</td><td>3.90</td><td>+1.6%</td></tr>
+                <tr><td>1.8 (very aggressive)</td><td>91%</td><td>1.09</td><td>54.5%</td><td>4.02</td><td>+4.7%</td></tr>
             </tbody>
         </table>
 
@@ -854,7 +854,7 @@
         <h3 id="k-granularity">6.2 K-Value Granularity</h3>
         <p>We examine whether finer-grained K value sets improve performance compared to binary {1, 2} selection.</p>
 
-        <p class="table-caption"><strong>Table 10:</strong> K-value granularity analysis. Binary K-value selection achieves best efficiency. Finer granularity offers marginal quality improvements at significant efficiency cost.</p>
+        <p class="table-caption"><strong>Table 11:</strong> K-value granularity analysis. Binary K-value selection achieves best efficiency. Finer granularity offers marginal quality improvements at significant efficiency cost.</p>
         <table>
             <thead>
                 <tr><th>K Values</th><th># Thresholds</th><th>Avg K</th><th>Compute</th><th>PPL</th><th>Notes</th></tr>
@@ -883,7 +883,7 @@
         <h3 id="token-characteristics">6.4 Token Characteristics and K Selection</h3>
         <p>To understand what distinguishes K=1 tokens from K=2 tokens, we analyzed token characteristics:</p>
 
-        <p class="table-caption"><strong>Table 11:</strong> Token characteristic comparison. K=1 tokens are more common, simpler, and easier to predict—exactly what we expect from entropy-guided selection.</p>
+        <p class="table-caption"><strong>Table 12:</strong> Token characteristic comparison. K=1 tokens are more common, simpler, and easier to predict—exactly what we expect from entropy-guided selection.</p>
         <table>
             <thead>
                 <tr><th>Characteristic</th><th>K=1 Tokens</th><th>K=2 Tokens</th><th>Significance</th></tr>

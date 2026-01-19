@@ -746,7 +746,7 @@
 
         <p><strong>Nota Tecnica:</strong> Poiché Nemotron 3 non supporta <code>output_router_logits=True</code>, abbiamo estratto i logit del router pre-top-K tramite hook forward sui moduli <code>backbone.layers.X.mixer.gate</code>.</p>
 
-        <p class="table-caption"><strong>Tabella 7b:</strong> Risultati validazione Nemotron 3 Nano: riduzione del calcolo del 33.3%.</p>
+        <p class="table-caption"><strong>Tabella 8:</strong> Risultati validazione Nemotron 3 Nano: riduzione del calcolo del 33.3%.</p>
         <table>
             <thead>
                 <tr><th>Caso di Test</th><th>Entropia Misurata</th><th>Entropia Max</th><th>Utilizzo</th><th>Risparmio</th></tr>
@@ -765,7 +765,7 @@
             <figcaption><strong>Figura 2:</strong> Confronto dell'utilizzo del calcolo su tutti e quattro i modelli. Adaptive-K riduce costantemente il calcolo del 24-33% mantenendo la qualità dell'output entro l'1% del baseline.</figcaption>
         </figure>
 
-        <p class="table-caption"><strong>Tabella 8:</strong> Riepilogo dei risultati Adaptive-K su tutti i modelli.</p>
+        <p class="table-caption"><strong>Tabella 9:</strong> Riepilogo dei risultati Adaptive-K su tutti i modelli.</p>
         <table>
             <thead>
                 <tr><th>Modello</th><th>K Base</th><th>K Medio Adaptive</th><th>Risparmio Calcolo</th><th>Aumento PPL</th><th>Δ Accuratezza</th></tr>
@@ -793,22 +793,22 @@
         <h2>Studi di Ablazione e Analisi</h2>
 
         <h3>6.1 Sensibilità delle Soglie</h3>
-        <p class="table-caption"><strong>Tabella 9:</strong> Analisi di sensibilità delle soglie su Mixtral. La soglia calibrata raggiunge un equilibrio ottimale tra risparmio e qualità.</p>
+        <p class="table-caption"><strong>Tabella 10:</strong> Analisi di sensibilità delle soglie su Mixtral. La soglia calibrata raggiunge un equilibrio ottimale tra risparmio e qualità.</p>
         <table>
             <thead>
                 <tr><th>Soglia θ₁</th><th>% Token K=1</th><th>K Medio</th><th>Calcolo</th><th>WikiText-2 PPL</th><th>PPL Δ</th></tr>
             </thead>
             <tbody>
-                <tr><td>0.8 (aggressivo)</td><td>28%</td><td>1.44</td><td>72%</td><td>3.91</td><td>+1.8%</td></tr>
-                <tr><td>1.0</td><td>42%</td><td>1.16</td><td>58%</td><td>3.89</td><td>+1.3%</td></tr>
-                <tr class="highlight-row"><td><strong>1.275 (calibrato)</strong></td><td><strong>62%</strong></td><td><strong>1.38</strong></td><td><strong>69.0%</strong></td><td>3.87</td><td><strong>+0.8%</strong></td></tr>
-                <tr><td>1.5</td><td>78%</td><td>0.78</td><td>39%</td><td>3.95</td><td>+2.9%</td></tr>
-                <tr><td>1.8 (molto aggressivo)</td><td>91%</td><td>0.64</td><td>32%</td><td>4.08</td><td>+6.3%</td></tr>
+                <tr><td>0.8 (aggressivo)</td><td>28%</td><td>1.72</td><td>86%</td><td>3.86</td><td>+0.5%</td></tr>
+                <tr><td>1.0</td><td>42%</td><td>1.58</td><td>79%</td><td>3.87</td><td>+0.8%</td></tr>
+                <tr class="highlight-row"><td><strong>1.275 (calibrato)</strong></td><td><strong>62%</strong></td><td><strong>1.38</strong></td><td><strong>69%</strong></td><td>3.87</td><td><strong>+0.8%</strong></td></tr>
+                <tr><td>1.5</td><td>78%</td><td>1.22</td><td>61%</td><td>3.90</td><td>+1.6%</td></tr>
+                <tr><td>1.8 (molto aggressivo)</td><td>91%</td><td>1.09</td><td>54.5%</td><td>4.02</td><td>+4.7%</td></tr>
             </tbody>
         </table>
 
         <h3>6.2 Granularità del Valore K</h3>
-        <p class="table-caption"><strong>Tabella 10:</strong> Analisi della granularità del valore K. La selezione binaria ottiene la migliore efficienza.</p>
+        <p class="table-caption"><strong>Tabella 11:</strong> Analisi della granularità del valore K. La selezione binaria ottiene la migliore efficienza.</p>
         <table>
             <thead>
                 <tr><th>Valori K</th><th># Soglie</th><th>K Medio</th><th>Calcolo</th><th>PPL</th><th>Note</th></tr>
@@ -825,7 +825,7 @@
         </div>
 
         <h3>6.3 Caratteristiche dei Token e Selezione K</h3>
-        <p class="table-caption"><strong>Tabella 11:</strong> Confronto caratteristiche dei token. I token K=1 sono più comuni, più semplici e più facili da prevedere.</p>
+        <p class="table-caption"><strong>Tabella 12:</strong> Confronto caratteristiche dei token. I token K=1 sono più comuni, più semplici e più facili da prevedere.</p>
         <table>
             <thead>
                 <tr><th>Caratteristica</th><th>Token K=1</th><th>Token K=2</th><th>Significatività</th></tr>
