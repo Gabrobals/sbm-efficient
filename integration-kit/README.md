@@ -81,7 +81,7 @@ Based on our experiments and production deployments:
 
 ## Support
 
-- Documentation: https://adaptive-k.vercel.app/whitepaper-extended.html
+- Documentation: https://adaptive-k.vercel.app/paper.html
 - Issues: https://github.com/Gabrobals/sbm-efficient/issues
 - Email: amministrazione@vertexdata.it
 

@@ -32,6 +32,6 @@ This demo shows how **Adaptive-K** dynamically selects the number of experts bas
 ## Links
 
 - 📄 [Paper](https://adaptive-k.vercel.app/paper.html)
-- 📖 [Whitepaper](https://adaptive-k.vertexdata.it/whitepaper.html)
+- 📖 [Whitepaper](https://adaptive-k.vercel.app/whitepaper.html)
 - 💻 [GitHub](https://github.com/Gabrobals/sbm-efficient)
 - 📦 [PyPI](https://pypi.org/project/adaptive-k-routing/)

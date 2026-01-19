@@ -338,7 +338,7 @@ with gr.Blocks(
     
     <p style="text-align: center; color: #6b7280;">
     📄 <a href="https://adaptive-k.vercel.app/paper.html">Paper</a> | 
-    📖 <a href="https://adaptive-k.vertexdata.it/whitepaper.html">Whitepaper</a> | 
+    📖 <a href="https://adaptive-k.vercel.app/whitepaper.html">Whitepaper</a> | 
     💻 <a href="https://github.com/Gabrobals/sbm-efficient">GitHub</a> | 
     📦 <a href="https://pypi.org/project/adaptive-k-routing/">PyPI</a>
     <br><br>

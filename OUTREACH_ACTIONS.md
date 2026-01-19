@@ -35,7 +35,7 @@ All with <0.5% perplexity impact.
 Happy to address any additional feedback or questions!
 
 ---
-📄 **Reference**: [Entropy-Guided Dynamic Expert Selection Whitepaper](https://adaptive-k.vercel.app/whitepaper.html)
+📄 **Reference**: [Entropy-Guided Dynamic Expert Selection Paper](https://adaptive-k.vercel.app/paper.html)
 🔬 **Validated Results**: [Interactive Dashboard](https://adaptive-k.vercel.app/dashboard.html)
 ```
 
@@ -96,7 +96,7 @@ router = AdaptiveKRouter(
 ```
 
 ### Resources
-- 📄 **Whitepaper**: https://adaptive-k.vercel.app/whitepaper.html
+- 📄 **Paper**: https://adaptive-k.vercel.app/paper.html
 - 📊 **Live Dashboard**: https://adaptive-k.vercel.app/dashboard.html
 - 🐍 **PyPI Package**: https://pypi.org/project/adaptive-k-routing/
 - 🔧 **GitHub**: https://github.com/Gabrobals/sbm-efficient
@@ -162,7 +162,7 @@ Key insight: routing entropy predicts when fewer experts are needed. Simple idea
 
 Try it: pip install adaptive-k-routing
 
-Paper: https://adaptive-k.vercel.app/whitepaper.html
+Paper: https://adaptive-k.vercel.app/paper.html
 ```
 
 ---

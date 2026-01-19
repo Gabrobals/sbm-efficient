@@ -44,7 +44,7 @@ Would you be interested in:
 3. A joint blog post on "The Complete Inference Stack"?
 
 **Resources**:
-- Whitepaper: https://adaptive-k.vertexdata.it/whitepaper-extended.html
+- Whitepaper: https://adaptive-k.vercel.app/paper.html
 - Live demo: https://huggingface.co/spaces/Gabrobals/adaptive-k-demo
 - PyPI: pip install adaptive-k-routing
 
@@ -159,7 +159,7 @@ This could be particularly valuable for:
 Would this be interesting to explore? Happy to collaborate on a proof-of-concept.
 
 Resources:
-- Our method: https://adaptive-k.vertexdata.it/whitepaper-extended.html
+- Our method: https://adaptive-k.vercel.app/paper.html
 - Demo: https://huggingface.co/spaces/Gabrobals/adaptive-k-demo
 ```
 

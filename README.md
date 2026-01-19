@@ -4,7 +4,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18282008.svg)](https://doi.org/10.5281/zenodo.18282008)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Demo](https://img.shields.io/badge/🤗-Live%20Demo-yellow)](https://huggingface.co/spaces/Gabrobals/adaptive-k-demo)
-[![Whitepaper](https://img.shields.io/badge/📄-Whitepaper-green)](https://adaptive-k.vercel.app/whitepaper-extended.html)
+[![Whitepaper](https://img.shields.io/badge/📄-Paper-green)](https://adaptive-k.vercel.app/paper.html)
 
 > **Reduce MoE inference costs by 30-50%** with entropy-guided dynamic expert selection.  
 > Same accuracy, dramatically lower compute. **Validated on 4 production models including Nemotron 3.**
@@ -87,7 +87,7 @@ python integration-kit/ab_test_framework.py --demo
 ## 🔗 Resources
 
 - **Website**: https://adaptive-k.vercel.app
-- **Whitepaper**: [Extended Technical Paper](https://adaptive-k.vercel.app/whitepaper-extended.html)
+- **Paper**: [Full Research Paper](https://adaptive-k.vercel.app/paper.html)
 - **Live Demo**: [HuggingFace Spaces](https://huggingface.co/spaces/Gabrobals/adaptive-k-demo)
 - **PyPI**: [adaptive-k-routing](https://pypi.org/project/adaptive-k-routing/)
 - **TensorRT-LLM PR**: [#10672](https://github.com/NVIDIA/TensorRT-LLM/pull/10672)
@@ -110,7 +110,7 @@ This repository contains the research implementation of **SBM (Superposed Bit Mo
 
 ### Key Papers & Documentation
 
-- [Extended Whitepaper](https://adaptive-k.vercel.app/whitepaper-extended.html) - 43 equations, 19 tables, full proofs
+- [Full Research Paper](https://adaptive-k.vercel.app/paper.html) - Complete methodology, experiments, and proofs
 - [SBM Concept](docs/SBM_EFFICIENT_CONCEPT.md) - Mathematical foundations
 - [Architecture](docs/SBM_EFFICIENT_ARCHITECTURE.md) - Architectural specifications
 - [Combination Experiments](docs/COMBINATION_EXPERIMENTS_PLAN.md) - Multiplicative savings validation

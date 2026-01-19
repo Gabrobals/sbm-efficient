@@ -38,10 +38,22 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://adaptive-k.vertexdata.it/paper.html</loc>
+    <lastmod>2026-01-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://adaptive-k.vertexdata.it/paper-it.html</loc>
+    <lastmod>2026-01-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://adaptive-k.vertexdata.it/whitepaper.html</loc>
     <lastmod>2026-01-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://adaptive-k.vertexdata.it/blog/moe-inference-optimization.html</loc>
