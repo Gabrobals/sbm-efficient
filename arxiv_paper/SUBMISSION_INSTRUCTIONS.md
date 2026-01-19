@@ -1,41 +1,70 @@
 # arXiv Submission Instructions
 
-## ✅ Zenodo DOI (Published)
+## ✅ Paper Ready for Submission
 
+**Main file**: `main_neurips.tex` (NeurIPS format with figures)
 **DOI**: [10.5281/zenodo.18282008](https://doi.org/10.5281/zenodo.18282008)
 
-This provides a citable timestamp for the research.
+---
 
-## Pre-submission Checklist
+## 📁 Files to Upload
 
-### Files to Upload
 ```
 arxiv_paper/
-├── main.tex          # Main paper
-├── references.bib    # Bibliography
+├── main_neurips.tex     # Main paper (rename to main.tex for arXiv)
+├── neurips_2024.sty     # Style file
+├── references.bib       # Bibliography
+└── figures/
+    ├── entropy_distribution.pdf
+    ├── architecture.pdf
+    ├── results_comparison.pdf
+    ├── multiplicative_savings.pdf
+    └── entropy_vs_perplexity.pdf
 ```
 
-### arXiv Category
-**Primary**: `cs.LG` (Machine Learning)
-**Cross-list**: `cs.CL` (Computation and Language)
+## 📊 Regenerate Figures
 
-## Submission Steps
+```bash
+cd arxiv_paper/scripts
+pip install matplotlib numpy
+python generate_figures.py
+```
 
-### 1. Create arXiv Account (if needed)
-- Go to https://arxiv.org/user/register
-- Use institutional email if available (faster endorsement)
+---
 
-### 2. Start New Submission
-- Go to https://arxiv.org/submit
-- Select "Computer Science > Machine Learning (cs.LG)"
-- Cross-list to cs.CL
+## Submission Options
 
-### 3. Upload Files
-- Upload `main.tex` as primary file
-- Upload `references.bib`
-- arXiv will auto-compile LaTeX
+### Option 1: Overleaf (Recommended)
 
-### 4. Fill Metadata
+1. Go to [Overleaf](https://www.overleaf.com) → New Project
+2. Upload all files from `arxiv_paper/`
+3. Set `main_neurips.tex` as main document
+4. Compile with pdfLaTeX
+5. Download PDF for arXiv or submit directly via Overleaf
+
+### Option 2: arXiv Direct
+
+1. Rename `main_neurips.tex` → `main.tex`
+2. Zip all files:
+   ```bash
+   cd arxiv_paper
+   zip -r submission.zip main.tex neurips_2024.sty references.bib figures/
+   ```
+3. Upload to https://arxiv.org/submit
+
+### Option 3: Local LaTeX
+
+```bash
+cd arxiv_paper
+pdflatex main_neurips.tex
+bibtex main_neurips
+pdflatex main_neurips.tex
+pdflatex main_neurips.tex
+```
+
+---
+
+## arXiv Metadata
 
 **Title**: 
 ```

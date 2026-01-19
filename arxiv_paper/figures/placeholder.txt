@@ -1,0 +1,8 @@
+This folder will contain the paper figures:
+
+1. entropy_distribution.pdf - Histogram of routing entropy
+2. architecture.pdf - Adaptive-K routing diagram  
+3. results_comparison.pdf - Bar chart of savings across models
+4. multiplicative_savings.pdf - Visualization of combined optimizations
+
+Generate these with the scripts in arxiv_paper/scripts/
