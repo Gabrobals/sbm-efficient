@@ -530,8 +530,14 @@
         <p>For Adaptive-K routing with variable $K(x)$, the expected cost is:</p>
         <div class="equation">$$C_{\text{adaptive}} = C_G + C_{\mathcal{H}} + \mathbb{E}_x[K(x)] \cdot C_E$$ <span class="equation-number">(8)</span></div>
         <p>where $C_{\mathcal{H}}$ is the entropy computation overhead. Since entropy computation requires only $O(N)$ operations compared to $O(d^2)$ for expert forward passes (where $d \gg N$ typically), we have $C_{\mathcal{H}} \ll C_E$, making this overhead negligible in practice.</p>
+        
+        <div class="note" style="background:#fff8e1;border-left:4px solid #ffc107;padding:1rem;margin:1rem 0;">
+            <strong>Note on Expert FLOPs (SwiGLU):</strong> For MoE architectures using SwiGLU (e.g., Mixtral, Qwen), each expert requires <strong>three</strong> linear projections: up-projection, gate-projection, and down-projection. The expert cost is therefore $C_E = 6 \cdot d \cdot d_{ff}$ FLOPs (not $4 \cdot d \cdot d_{ff}$ as in standard FFN). See <a href="#appendix-flops">Appendix B</a> for detailed derivation.
+        </div>
+        
         <p>The relative compute savings are therefore:</p>
         <div class="equation">$$\text{Savings} = 1 - \frac{C_{\text{adaptive}}}{C_{\text{baseline}}} \approx 1 - \frac{\mathbb{E}[K(x)]}{K_{\text{baseline}}}$$ <span class="equation-number">(9)</span></div>
+        <p style="font-size:0.9rem;color:#666;"><em>Note: The simplified savings formula assumes $C_G, C_{\mathcal{H}} \ll K \cdot C_E$, which holds in practice but introduces ~2-3% estimation error for small K. Exact savings accounting for all overhead are approximately 90% of simplified estimates.</em></p>
     </section>
 
     <section id="theory">
@@ -561,12 +567,16 @@
 
         <p>The rate-distortion function $R(D)$ characterizes the minimum rate (experts) required to achieve distortion at most $D$. While computing $R(D)$ exactly is intractable, we can establish the following relationship:</p>
 
-        <div class="proposition">
-            <div class="proposition-title">Proposition 3.2 (Entropy-Distortion Relationship)</div>
-            <p>Under mild regularity conditions on the expert functions, for tokens with routing entropy $\mathcal{H}(x) < \mathcal{H}^*$, there exists $K < K_{max}$ such that $\mathbb{E}[D_K(x)] < \epsilon$ for some small $\epsilon$. The threshold $\mathcal{H}^*$ depends on expert diversity and can be estimated empirically.</p>
+        <div class="proposition" style="background:#e8f5e9;border-left:4px solid #4caf50;">
+            <div class="proposition-title">Theorem 3.2 (Entropy-Distortion Relationship)</div>
+            <p>Let $\mathcal{E} = \{E_1, \ldots, E_N\}$ be a set of Lipschitz-continuous expert functions with Lipschitz constant $L$. Let $p(x) = (p_1(x), \ldots, p_N(x))$ be the routing distribution for input $x$, and let $p_{(i)}(x)$ denote the $i$-th largest probability. Then for any $\varepsilon > 0$, there exists $K^* \leq N$ such that:</p>
+            <div class="equation">$$\mathbb{E}_{x \sim \mathcal{D}}\left[\|y_{K^*}(x) - y_N(x)\|_2^2\right] \leq \varepsilon$$</div>
+            <p>with probability at least $1 - \delta$, where:</p>
+            <div class="equation">$$K^* = \min\left\{k : \sum_{i=1}^k p_{(i)}(x) \geq 1 - \sqrt{\frac{\varepsilon}{4L^2\|x\|_2^2}}\right\}$$</div>
+            <p><strong>Proof sketch:</strong> By Lipschitz continuity, $\|E_i(x) - E_j(x)\|_2 \leq 2L\|x\|_2$ for any experts $i, j$. The output approximation error is bounded by the contribution of excluded experts. If top-K captures $(1-\gamma)$ of probability mass, then distortion $\leq \gamma \cdot (2L\|x\|_2)^2$. Setting $\gamma = \sqrt{\varepsilon/(4L^2\|x\|^2)}$ gives the threshold. Full proof in <a href="#appendix-proof">Appendix C</a>.</p>
         </div>
 
-        <p>Intuitively, this proposition states that when the router is confident (low entropy), the output is well-approximated by a small number of experts. This provides theoretical justification for using entropy as the criterion for dynamic K selection.</p>
+        <p><strong>Practical implication:</strong> When the router is confident (low entropy), the routing probability is concentrated on a small number of experts, implying $K^*$ is small. This provides theoretical justification for using entropy as the criterion for dynamic K selection. The threshold $\mathcal{H}^*$ can be related to the effective number of experts $N_{eff} = e^{\mathcal{H}}$.</p>
 
         <h3 id="optimal-k">3.3 Optimal K Selection</h3>
         <p>Given the entropy-distortion relationship, we can formulate the K selection problem as an optimization over entropy thresholds. Let $\mathcal{K} = \{k_1 < k_2 < \cdots < k_m\}$ be the set of allowed K values and $\Theta = \{\theta_1 < \theta_2 < \cdots < \theta_{m-1}\}$ be the entropy thresholds. The K selection function is:</p>
@@ -781,12 +791,28 @@
             </tbody>
         </table>
 
-        <h3 id="nemotron">5.4 NVIDIA Nemotron 3 Nano (Validated January 2026)</h3>
-        <p>Nemotron 3 Nano represents the most complex MoE architecture we tested: a Mamba2-Transformer hybrid with 128 routed experts + 1 shared expert (always active), top-6 routing, and 30B total parameters (3.5B active). We validated Adaptive-K on 2× NVIDIA A100 40GB GPUs via Vast.ai.</p>
+        <h3 id="nemotron">5.4 NVIDIA Nemotron 3 Nano (Entropy Analysis, January 2026)</h3>
+        <p>Nemotron 3 Nano represents the most complex MoE architecture we tested: a Mamba2-Transformer hybrid with 128 routed experts + 1 shared expert (always active), top-6 routing, and 30B total parameters (3.5B active). We performed entropy analysis on 2× NVIDIA A100 40GB GPUs via Vast.ai.</p>
 
         <p><strong>Technical Note:</strong> Since Nemotron 3 does not support <code>output_router_logits=True</code>, we extracted pre-top-K router logits via forward hooks on the <code>backbone.layers.X.mixer.gate</code> modules, computing full 128-expert logits as <code>hidden_states @ router_weight.T</code>.</p>
 
-        <p class="table-caption"><strong>Table 8:</strong> Nemotron 3 Nano validation results. Adaptive-K achieves 33.3% compute reduction by reducing average K from 6 to 4.</p>
+        <div class="note" style="background:#e3f2fd;border-left:4px solid #2196f3;padding:1rem;margin:1rem 0;">
+            <strong>📊 Scope of Validation:</strong> The Nemotron results below are <em>theoretical projections</em> based on entropy distribution analysis. We validated:
+            <ul style="margin:0.5rem 0;">
+                <li>✅ Router logits extraction methodology</li>
+                <li>✅ Entropy distribution statistics</li>
+                <li>✅ K projection formulas</li>
+            </ul>
+            We did <strong>not</strong> validate:
+            <ul style="margin:0.5rem 0;">
+                <li>❌ Actual forward passes with variable K</li>
+                <li>❌ Perplexity with Adaptive-K routing</li>
+                <li>❌ Downstream task performance</li>
+            </ul>
+            Full empirical validation is pending.
+        </div>
+
+        <p class="table-caption"><strong>Table 8:</strong> Nemotron 3 Nano entropy analysis results. <strong>Projected</strong> Adaptive-K savings based on entropy thresholds (theoretical, not empirically validated).</p>
         <table>
             <thead>
                 <tr><th>Test Case</th><th>Mean Entropy</th><th>H/H<sub>max</sub></th><th>Projected K</th><th>Compute</th><th>Savings</th></tr>
@@ -806,7 +832,7 @@
             <figcaption><strong>Figure 2:</strong> Compute utilization comparison across all four models. Adaptive-K consistently reduces compute by 24-33% while maintaining output quality within 1% of baseline.</figcaption>
         </figure>
 
-        <p class="table-caption"><strong>Table 9:</strong> Summary of Adaptive-K results across all models.</p>
+        <p class="table-caption"><strong>Table 9:</strong> Summary of Adaptive-K results across all models. Note: Nemotron results are projections based on entropy analysis, pending full empirical validation.</p>
         <table>
             <thead>
                 <tr><th>Model</th><th>Base K</th><th>Adaptive Avg K</th><th>Compute Savings</th><th>PPL Increase</th><th>Accuracy Δ</th></tr>
@@ -815,9 +841,10 @@
                 <tr><td>Mixtral 8×7B</td><td>2</td><td>1.38</td><td>31.0%</td><td>+0.8%</td><td>−0.2%</td></tr>
                 <tr><td>Qwen1.5-MoE</td><td>4</td><td>2.71</td><td>32.4%</td><td>+0.9%</td><td>−0.2%</td></tr>
                 <tr><td>OLMoE-1B-7B</td><td>8</td><td>6.02</td><td>24.7%</td><td>+0.6%</td><td>—</td></tr>
-                <tr><td>Nemotron 3 Nano</td><td>6</td><td>4.00</td><td>33.3%</td><td>N/A</td><td>Validated Jan 2026</td></tr>
+                <tr style="background:#fff8e1;"><td>Nemotron 3 Nano*</td><td>6</td><td>4.00</td><td>33.3%*</td><td>N/A</td><td>*Projected</td></tr>
             </tbody>
         </table>
+        <p style="font-size:0.85rem;color:#666;margin-top:0.3rem;">*Nemotron results are theoretical projections from entropy analysis. Full empirical validation (perplexity, downstream tasks) pending.</p>
 
         <div class="result-box">
             <strong>Key Results:</strong>
@@ -969,14 +996,23 @@
         </ul>
 
         <h3>8.4 Multiplicative Savings Potential</h3>
-        <p>Adaptive-K composes <strong>multiplicatively</strong> with orthogonal optimizations:</p>
+        <p>Adaptive-K is <strong>compatible</strong> with orthogonal optimizations. Under the assumption of independent interaction, the theoretical combined savings would compose multiplicatively:</p>
         <div class="equation">$$\text{Total Compute} = C_{\text{base}} \cdot (1 - S_{AK}) \cdot (1 - S_{\text{quant}}) \cdot (1 - S_{\text{spec}})$$</div>
-        <p>Example: Adaptive-K (31%) + INT8 Quantization (33%) + Speculative Decoding (35%):</p>
-        <div class="equation">$$1 - (0.69 \times 0.67 \times 0.65) = 1 - 0.30 = \mathbf{70\%}$$ savings</div>
+        <p>Example (theoretical maximum): Adaptive-K (~28%) + INT8 Quantization (33%) + Speculative Decoding (35%):</p>
+        <div class="equation">$$1 - (0.72 \times 0.67 \times 0.65) = 1 - 0.31 \approx \mathbf{69\%}$$ theoretical savings</div>
+        
+        <div class="note" style="background:#ffebee;border-left:4px solid #f44336;padding:1rem;margin:1rem 0;">
+            <strong>⚠️ Important Disclaimer:</strong> The above is a <em>theoretical projection</em>, not an empirical measurement. In practice, optimizations may interact non-linearly:
+            <ul style="margin:0.5rem 0;">
+                <li>Quantization (INT8/INT4) can affect routing precision, potentially altering entropy distributions</li>
+                <li>Speculative decoding modifies token generation order, which may change optimal threshold calibration</li>
+            </ul>
+            <strong>Actual combined savings must be validated empirically.</strong> We leave this validation to future work.
+        </div>
         
         <figure>
             <img src="figures/multiplicative_savings.png" alt="Multiplicative savings composition">
-            <figcaption><strong>Figure 5:</strong> Multiplicative composition of efficiency techniques. Combined stack achieves up to 90.7% total compute reduction.</figcaption>
+            <figcaption><strong>Figure 5:</strong> Theoretical composition of efficiency techniques (actual combined performance requires empirical validation).</figcaption>
         </figure>
     </section>
 
